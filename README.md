@@ -19,6 +19,7 @@ Set up a local MariaDB server (can use Docker), and then run:
 
 ```bash
 $ cd website
+$ npm install
 $ npm run dev
 ```
 
