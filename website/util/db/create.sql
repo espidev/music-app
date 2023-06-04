@@ -1,31 +1,29 @@
 -- TODO add delete cascade
 -- TODO order for playlists and albums
+-- TODO add indexes
 
-CREATE TABLE account (
-    uuid VARCHAR(128) PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    name VARCHAR(255),
-    password_bcrypt VARCHAR(255),
+CREATE TABLE IF NOT EXISTS account (
+    uuid TEXT PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password_argon2 TEXT
 );
 
-CREATE TABLE artist (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS artist (
+    id SERIAL PRIMARY KEY,
     name TEXT,
-    account_uuid VARCHAR(128),
-    has_thumbnail BOOLEAN,
+    account_uuid TEXT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid)
 );
 
-CREATE TABLE album (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS album (
+    id SERIAL PRIMARY KEY,
     name TEXT,
-    account_uuid VARCHAR(128),
-    has_thumbnail BOOLEAN,
+    account_uuid TEXT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid)
 );
 
-CREATE TABLE album_to_artist (
-    account_uuid VARCHAR(128),
+CREATE TABLE IF NOT EXISTS album_to_artist (
+    account_uuid TEXT,
     album_id INT,
     artist_id INT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
@@ -33,33 +31,33 @@ CREATE TABLE album_to_artist (
     FOREIGN KEY (artist_id) REFERENCES artist(id)
 );
 
-CREATE TABLE playlist (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    account_uuid VARCHAR(128),
-    FOREIGN KEY (account_uuid) REFERENCES account(uuid)
-);
-
-CREATE TABLE genre (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    account_uuid VARCHAR(128),
-    FOREIGN KEY (account_uuid) REFERENCES account(uuid)
-);
-
-CREATE TABLE track (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS playlist (
+    id SERIAL PRIMARY KEY,
     name TEXT,
-    account_uuid VARCHAR(128),
-    artist_display_name TEXT,
-    uploaded_on DATETIME,
-    has_thumbnail BOOLEAN,
-    create_year INT,
-    audio_length INT, -- TODO?
-
-    FOREIGN KEY (account_uuid) REFERENCES account(uuid),
+    account_uuid TEXT,
+    FOREIGN KEY (account_uuid) REFERENCES account(uuid)
 );
 
-CREATE TABLE track_to_genre (
-    account_uuid VARCHAR(128),
+CREATE TABLE IF NOT EXISTS genre (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    account_uuid TEXT,
+    FOREIGN KEY (account_uuid) REFERENCES account(uuid)
+);
+
+CREATE TABLE IF NOT EXISTS track (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    account_uuid TEXT,
+    artist_display_name TEXT,
+    uploaded_on TIMESTAMP,
+    create_year INT,
+    audio_length INT, -- TODO (seconds lOl 1337)?
+    FOREIGN KEY (account_uuid) REFERENCES account(uuid)
+);
+
+CREATE TABLE IF NOT EXISTS track_to_genre (
+    account_uuid TEXT,
     track_id INT,
     genre_id INT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
@@ -67,18 +65,18 @@ CREATE TABLE track_to_genre (
     FOREIGN KEY (genre_id) REFERENCES genre(id) 
 );
 
-CREATE TABLE track_to_album (
-    account_uuid VARCHAR(128),
+CREATE TABLE IF NOT EXISTS track_to_album (
+    account_uuid TEXT,
     track_id INT,
     album_id INT,
-    order INT,
+    position INT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
     FOREIGN KEY (track_id) REFERENCES track(id),
     FOREIGN KEY (album_id) REFERENCES album(id) 
 );
 
-CREATE TABLE track_to_artist (
-    account_uuid VARCHAR(128),
+CREATE TABLE IF NOT EXISTS track_to_artist (
+    account_uuid TEXT,
     track_id INT,
     artist_id INT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
@@ -86,12 +84,12 @@ CREATE TABLE track_to_artist (
     FOREIGN KEY (artist_id) REFERENCES artist(id)
 );
 
-CREATE TABLE playlist_tracks (
-    account_uuid VARCHAR(128),
+CREATE TABLE IF NOT EXISTS playlist_tracks (
+    account_uuid TEXT,
     playlist_id INT,
     track_id INT,
-    order INT UNSIGNED NOT NULL,
-    added_on DATETIME,
+    position INT NOT NULL,
+    added_on TIMESTAMP,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
     FOREIGN KEY (playlist_id) REFERENCES playlist(id), 
     FOREIGN KEY (track_id) REFERENCES track(id)
