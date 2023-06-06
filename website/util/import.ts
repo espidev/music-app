@@ -1,6 +1,5 @@
 import pkg from 'pg';
 import { parseFile, selectCover } from "music-metadata";
-const { Client } = pkg;
 
 export async function importAudioFile(dbClient: pkg.Client, accountUuid: string, filePath: string) {
   const metadata = await parseFile(filePath);

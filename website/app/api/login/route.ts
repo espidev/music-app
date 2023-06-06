@@ -1,4 +1,5 @@
 import { getDB } from "@/util/db";
+import { DBAccount } from "@/util/models/account";
 import argon2 from "argon2";
 import jwt from 'jsonwebtoken';
 import { cookies } from "next/dist/client/components/headers";

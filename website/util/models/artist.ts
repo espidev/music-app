@@ -1,16 +1,16 @@
-type DBArtist = {
+export type DBArtist = {
   id: number
   name: string
   account_uuid: string
 };
 
-type APIArtist = {
+export type APIArtist = {
   id: number
   name: string
   thumbnail_src: string
 };
 
-function getAPIArtist(artist: DBArtist) {
+export function getAPIArtist(artist: DBArtist) {
   return {
     id: artist.id,
     name: artist.name,

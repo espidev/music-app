@@ -19,7 +19,7 @@ export async function checkAuthenticated() {
     return null;
   }
 
-  return decode.uuid;
+  return decode.data.uuid;
 }
 
 async function verifyToken(token: any, key: any) {

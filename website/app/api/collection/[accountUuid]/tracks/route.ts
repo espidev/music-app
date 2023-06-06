@@ -4,16 +4,16 @@ import { NextResponse } from "next/server";
 import { getAPITrack } from "@/util/models/track";
 
 // GET /collections/[accountUuid]/tracks
-// get tracks
+// get list of tracks
 
 export async function GET(request: Request, { params }: { params: { accountUuid: string } }) {
   const accountUuid = params.accountUuid;
   
   // check authorization
   const tokenUuid = await checkAuthenticated();
-  // if (tokenUuid === null || tokenUuid !== accountUuid) {
-  //   return NextResponse.json({ error: "not authorized" }, { status: 400 });
-  // }
+  if (tokenUuid === null || tokenUuid !== accountUuid) {
+    return NextResponse.json({ error: "not authorized" }, { status: 400 });
+  }
 
   const conn = await getDB();
 
@@ -47,8 +47,6 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     apiTrack.albums = track.albums;
     apiTrack.artists = track.artists;
     apiTrack.genres = track.genres;
-
-    console.log(track);
 
     return apiTrack;
   });

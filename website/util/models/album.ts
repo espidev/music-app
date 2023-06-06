@@ -1,16 +1,19 @@
-type DBAlbum = {
+import { APIArtist } from "./artist";
+
+export type DBAlbum = {
   id: number
   name: string
   account_uuid: string
 };
 
-type APIAlbum = {
+export type APIAlbum = {
   id: number
   name: string
   thumbnail_src: string
+  artists: APIArtist
 };
 
-function getAPIAlbum(album: DBAlbum) {
+export function getAPIAlbum(album: DBAlbum) {
   return {
     id: album.id,
     name: album.name,
