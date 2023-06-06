@@ -24,16 +24,8 @@ export async function POST(request: Request) {
 
   const account = res.rows[0];
 
-  // hash password
-  let hash: string;
-  try {
-    hash = await argon2.hash(password);
-  } catch (err) {
-    return NextResponse.json({ error: "internal server error" }, { status: 500 });
-  }
-
   // check password hashes
-  if (hash != account.password_argon2) {
+  if (!(await argon2.verify(account.password_argon2, password))) {
     return NextResponse.json({ error: "password does not match" }, { status: 403 });
   }
 

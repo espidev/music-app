@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   // insert account into db
   try {
-    await conn.query("INSERT INTO account (uuid, username, password_argon2) VALUES ($1, $2, $3)", [uuidv4(), username, password]);
+    await conn.query("INSERT INTO account (uuid, username, password_argon2) VALUES ($1, $2, $3)", [uuidv4(), username, hash]);
   } catch (err) {
     return NextResponse.json({ error: "internal server error" }, { status: 500 });
   }

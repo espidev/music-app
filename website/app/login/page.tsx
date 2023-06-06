@@ -46,7 +46,8 @@ export default function LoginPage() {
             onChange={e => setUsername(e.target.value)}
           />
 
-          <TextField 
+          <TextField
+            required
             id="password" 
             label="Password" 
             type="password"
@@ -56,6 +57,7 @@ export default function LoginPage() {
 
           <Button 
             variant="outlined"
+            disabled={password.length === 0}
             fullWidth
             sx={{ mt: 1, mb: 1 }}
             onClick={() => handleSubmit()}

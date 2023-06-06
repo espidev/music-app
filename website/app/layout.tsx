@@ -33,7 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <FluentProvider theme={teamsLightTheme}>
+        {/* <FluentProvider theme={teamsLightTheme}> */}
           <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <CssBaseline />
             <AppHeader />
@@ -45,7 +45,7 @@ export default function RootLayout({
             
             <MediaPlayer />
           </div>
-        </FluentProvider>
+        {/* </FluentProvider> */}
       </body>
     </html>
   )
