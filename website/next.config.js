@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
+
 import bundleAnalyzer from '@next/bundle-analyzer';
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})
+});
 
-const nextConfig = {
+const nextConfig = withBundleAnalyzer({
   swcMinify: true,
   modularizeImports: {
     "@mui/material": {
@@ -15,8 +16,6 @@ const nextConfig = {
       transform: "@mui/icons-material/{{member}}",
     },
   },
-}
+});
 
-export default async (phase, {defaultConfig}) => {
-  return withBundleAnalyzer(nextConfig);
-}
+export default nextConfig;

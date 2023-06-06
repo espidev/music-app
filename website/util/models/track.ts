@@ -1,4 +1,4 @@
-type DBTrack = {
+export type DBTrack = {
   id: number
   name: string
   account_uuid: string
@@ -8,7 +8,7 @@ type DBTrack = {
   audio_length: number
 };
 
-type APITrack = {
+export type APITrack = {
   id: number
   name: string
   artist_name: string
@@ -24,23 +24,23 @@ type APITrack = {
   genres: APITrackToGenre[]
 };
 
-type APITrackToAlbum = {
+export type APITrackToAlbum = {
   album_id: number
   album_name: number
   position: number
 };
 
-type APITrackToGenre = {
+export type APITrackToGenre = {
   genre_id: number,
   genre_name: string
 };
 
-type APITrackToArtist = {
+export type APITrackToArtist = {
   artist_id: number,
   artist_name: string,
 };
 
-function getAPITrack(track: DBTrack) {
+export function getAPITrack(track: DBTrack) {
   return {
     id: track.id,
     name: track.name,

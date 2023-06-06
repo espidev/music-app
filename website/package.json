@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import": "ts-node ./import-util.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -31,6 +32,7 @@
     "eslint-config-next": "13.4.3",
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
+    "music-metadata": "^8.1.4",
     "next": "13.4.3",
     "pg": "^8.11.0",
     "postcss": "8.4.23",
@@ -38,6 +40,7 @@
     "react-dom": "18.2.0",
     "react-pro-sidebar": "^1.1.0-alpha.1",
     "tailwindcss": "3.3.2",
+    "ts-node": "^10.9.1",
     "typescript": "5.0.4",
     "uuid": "^9.0.0"
   },

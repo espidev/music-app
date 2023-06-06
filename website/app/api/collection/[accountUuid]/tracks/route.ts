@@ -1,6 +1,7 @@
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
 import { NextResponse } from "next/server";
+import { getAPITrack } from "@/util/models/track";
 
 // GET /collections/[accountUuid]/tracks
 // get tracks
@@ -10,9 +11,9 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   
   // check authorization
   const tokenUuid = await checkAuthenticated();
-  if (tokenUuid === null || tokenUuid !== accountUuid) {
-    return NextResponse.json({ error: "not authorized" }, { status: 400 });
-  }
+  // if (tokenUuid === null || tokenUuid !== accountUuid) {
+  //   return NextResponse.json({ error: "not authorized" }, { status: 400 });
+  // }
 
   const conn = await getDB();
 
@@ -25,19 +26,20 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   // fetch the list of tracks
   const trackRes = await conn.query(
     `
-    SELECT track.*, 
-      JSON_AGG(artist.*) as artist, 
-      JSON_AGG(album.*) as album,
-      JSON_AGG(genre.*) as genre 
-    FROM track
-      INNER JOIN track_to_artist ON track.id = track_to_artist.track_id
-      INNER JOIN artist ON track_to_artist.artist_id = artist.id
-      INNER JOIN track_to_album ON track.id = track_to_album.track_id
-      INNER JOIN album ON track_to_album.album_id = album.id
-      INNER JOIN track_to_genre ON track.id = track_to_genre.track_id
-      INNER JOIN genre ON track_to_genre.genre_id = genre.id
-      WHERE account_uuid = $1::text 
-      ORDER BY track.name DESC
+    SELECT t.*, 
+      JSON_AGG(artist.*) as artists, 
+      JSON_AGG(album.*) as albums,
+      JSON_AGG(genre.*) as genres
+    FROM track as t
+      LEFT OUTER JOIN track_to_artist ON t.id = track_to_artist.track_id
+      LEFT OUTER JOIN artist ON track_to_artist.artist_id = artist.id
+      LEFT OUTER JOIN track_to_album ON t.id = track_to_album.track_id
+      LEFT OUTER JOIN album ON track_to_album.album_id = album.id
+      LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
+      LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
+      WHERE t.account_uuid = $1::text 
+      GROUP BY t.id
+      ORDER BY t.name DESC
     `, [accountUuid]);
   
   const tracks = trackRes.rows.map(track => {
@@ -45,6 +47,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     apiTrack.albums = track.albums;
     apiTrack.artists = track.artists;
     apiTrack.genres = track.genres;
+
+    console.log(track);
 
     return apiTrack;
   });
