@@ -2,6 +2,31 @@
 
 The website and backend is in the `website` folder. The file storage server is in the `filestore` folder.
 
+#### Developing
+
+Set up the local PostgreSQL server:
+
+```bash
+$ docker-compose -f db-docker-compose.yml up -d
+```
+
+Initialize the database (only needs to be run once):
+
+```bash
+$ cd setup
+$ npm install
+$ npm start
+$ cd ..
+```
+
+Start the webserver:
+
+```bash
+$ cd website
+$ npm install
+$ npm run dev
+```
+
 #### Testing
 
 Docker is used for consistent deployments:
@@ -10,30 +35,20 @@ Docker is used for consistent deployments:
 $ cd website
 $ docker build . -t music-app:latest
 $ cd ..
-$ docker compose up
+$ docker-compose up
 ```
 
-#### Developing
-
-Set up a local MariaDB server (can use Docker), and then run:
-
-```bash
-$ cd website
-$ npm install
-$ npm run dev
-```
-
-#### Loading and interacting with MariaDB in Docker
+#### Loading and interacting with PostgreSQL in Docker
 
 With the Docker Compose stack up:
 
 ```bash
-$ docker exec -it cs348_db_1 mariadb --user root -pchange-me
+$ docker exec -it cs348_db_1 psql postgresql://postgres:password@localhost/musicapp
 
-# Should now be in the MariaDB CLI
+# Should now be in the Postgres CLI
 ```
 
-We can run a few commands to do some basic queries in the MariaDB CLI:
+We can run a few commands to do some basic queries in the Postgres CLI:
 
 ```bash
 CREATE DATABASE test;

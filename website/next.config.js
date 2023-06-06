@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {}
 
-module.exports = nextConfig
+export default async (phase, {defaultConfig}) => {
+  return nextConfig;
+}
