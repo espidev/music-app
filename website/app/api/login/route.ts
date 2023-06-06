@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "account not found" }, { status: 400 });
   }
 
-  const account = res.rows[0];
+  const account = res.rows[0] as DBAccount;
 
   // check password hashes
   if (!(await argon2.verify(account.password_argon2, password))) {
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   }
 
   const token = jwt.sign({ 
-    data: { uuid: account.uuid }, 
+    data: { uuid: account.uuid, username: account.username }, 
     exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7) // expires in a week 
   }, process.env.JWT_KEY!);
 
