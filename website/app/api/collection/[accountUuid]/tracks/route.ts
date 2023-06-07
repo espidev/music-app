@@ -2,6 +2,9 @@ import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
 import { NextResponse } from "next/server";
 import { getAPITrack } from "@/util/models/track";
+import { getAPIAlbum } from "@/util/models/album";
+import { getAPIArtist } from "@/util/models/artist";
+import { getAPIGenre } from "@/util/models/genre";
 
 // GET /collections/[accountUuid]/tracks
 // get list of tracks
@@ -43,15 +46,15 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     `, [accountUuid]);
   
   const tracks = trackRes.rows.map(track => {
-    const apiTrack = getAPITrack(track);
-    apiTrack.albums = track.albums;
-    apiTrack.artists = track.artists;
-    apiTrack.genres = track.genres;
+    const apiTrack: any = getAPITrack(track);
+    apiTrack.albums = track.albums.filter((album: any) => album).map((album: any) => getAPIAlbum(album));
+    apiTrack.artists = track.artists.filter((artist: any) => artist).map((artist: any) => getAPIArtist(artist));
+    apiTrack.genres = track.genres.filter((genre: any) => genre).map((genre: any) => getAPIGenre(genre));
 
     return apiTrack;
   });
 
-  return NextResponse.json({ tracks }, { status: 200 });
+  return NextResponse.json(tracks, { status: 200 });
 }
 
 

@@ -17,27 +17,6 @@ export type APITrack = {
   audio_src: string
   audio_length: number
   create_year: number
-
-  // manually fill from query
-  albums: APITrackToAlbum[]
-  artists: APITrackToArtist[]
-  genres: APITrackToGenre[]
-};
-
-export type APITrackToAlbum = {
-  album_id: number
-  album_name: number
-  position: number
-};
-
-export type APITrackToGenre = {
-  genre_id: number,
-  genre_name: string
-};
-
-export type APITrackToArtist = {
-  artist_id: number,
-  artist_name: string,
 };
 
 export function getAPITrack(track: DBTrack) {

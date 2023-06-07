@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   // check authorization
   const tokenUuid = await checkAuthenticated();
   if (tokenUuid === null || tokenUuid !== accountUuid) {
-    return NextResponse.json({ error: "not authorized" }, { status: 400 });
+    return NextResponse.json({ error: "not authorized" }, { status: 401 });
   }
 
   const conn = await getDB();
@@ -21,7 +21,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   // query db for account
   const accountRes = await conn.query("SELECT * FROM account WHERE uuid = $1::text", [accountUuid]);
   if (accountRes.rowCount < 1) {
-    return NextResponse.json({ error: "account not found" }, { status: 400 });
+    return NextResponse.json({ error: "account not found" }, { status: 404 });
   }
 
   // fetch the list of albums
@@ -44,5 +44,5 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     return apiAlbum;
   });
 
-  return NextResponse.json({ albums }, { status: 200 });
+  return NextResponse.json(albums, { status: 200 });
 }

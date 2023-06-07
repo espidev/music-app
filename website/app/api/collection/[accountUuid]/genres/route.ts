@@ -33,5 +33,5 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   
   const genres = genreRes.rows.map(genre => getAPIGenre(genre));
 
-  return NextResponse.json({ genres }, { status: 200 });
+  return NextResponse.json(genres, { status: 200 });
 }

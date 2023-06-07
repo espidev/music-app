@@ -34,5 +34,5 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   
   const artists = artistRes.rows.map(artist => getAPIArtist(artist));
 
-  return NextResponse.json({ artists }, { status: 200 });
+  return NextResponse.json(artists, { status: 200 });
 }
