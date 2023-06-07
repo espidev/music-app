@@ -8,5 +8,5 @@ export async function GET(request: Request, { params }: { params: { trackId: str
     return NextResponse.json({ error: "invalid track id" }, { status: 400 });
   }
 
-  return await fetch(`http://${process.env.FILESTORE_HOST}:${process.env.FILESTORE_PORT}/track/${trackId}`);
+  return await fetch(`http://${process.env.FILESTORE_HOST}:${process.env.FILESTORE_PORT}/track-thumbnail/${trackId}`);
 }

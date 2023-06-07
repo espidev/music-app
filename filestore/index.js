@@ -32,25 +32,8 @@ app.get('/', (req, res) => {
   res.send('filestore is online');
 })
 
-app.get('/album-thumbnail/:albumId', async (req, res) => {
-  const albumId = req.params.albumId;
-  const filePath = `${__dirname}/files/album-thumbnails/${albumId}`;
-  res.set('Content-Type', (await fileTypeFromFile(filePath)).mime)
-  res.sendFile(filePath);
-});
-
-app.post('/album-thumbnail/:albumId', async (req, res) => {
-  const albumId = req.params.albumId;
-  const file = req.file;
-
-  if (file === undefined || file === null) {
-    res.sendStatus(400);
-    return;
-  }
-
-  await rename(file.path, `files/album-thumbnails/${albumId}`);
-  res.sendStatus(200);
-})
+addFileGetRoute('/album-thumbnail/:albumId', 'albumId', 'files/album-thumbnails');
+addFilePostRoute('/album-thumbnail/:albumId', 'albumId', 'files/album-thumbnails');
 
 app.delete('/album-thumbnail/:albumId', async (req, res) => {
   const albumId = req.params.albumId;
@@ -58,25 +41,8 @@ app.delete('/album-thumbnail/:albumId', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/artist-thumbnail/:artistId', async (req, res) => {
-  const artistId = req.params.artistId;
-  const filePath = `${__dirname}/files/artist-thumbnails/${artistId}`;
-  res.set('Content-Type', (await fileTypeFromFile(filePath)).mime)
-  res.sendFile(filePath);
-});
-
-app.post('/artist-thumbnail/:artistId', async (req, res) => {
-  const artistId = req.params.artistId;
-  const file = req.file;
-
-  if (file === undefined || file === null) {
-    res.sendStatus(400);
-    return;
-  }
-
-  await rename(file.path, `files/artist-thumbnails/${artistId}`);
-  res.sendStatus(200);
-})
+addFileGetRoute('/artist-thumbnail/:artistId', 'artistId', 'files/artist-thumbnails');
+addFilePostRoute('/artist-thumbnail/:artistId', 'artistId', 'files/artist-thumbnails');
 
 app.delete('/artist-thumbnail/:artistId', async (req, res) => {
   const artistId = req.params.artistId;
@@ -84,25 +50,8 @@ app.delete('/artist-thumbnail/:artistId', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/track-thumbnail/:trackId', async (req, res) => {
-  const trackId = req.params.trackId;
-  const filePath = `${__dirname}/files/track-thumbnails/${trackId}`;
-  res.set('Content-Type', (await fileTypeFromFile(filePath)).mime)
-  res.sendFile(filePath);
-});
-
-app.post('/track-thumbnail/:trackId', upload.single("file"), async (req, res) => {
-  const trackId = req.params.trackId;
-  const file = req.file;
-  
-  if (file === undefined || file === null) {
-    res.sendStatus(400);
-    return;
-  }
-
-  await rename(file.path, `files/track-thumbnails/${trackId}`);
-  res.sendStatus(200);
-});
+addFileGetRoute('/track-thumbnail/:trackId', 'trackId', 'files/track-thumbnails');
+addFilePostRoute('/track-thumbnail/:trackId', 'trackId', 'files/track-thumbnails');
 
 app.delete('/track-thumbnail/:trackId', async (req, res) => {
   const trackId = req.params.trackId;
@@ -110,25 +59,8 @@ app.delete('/track-thumbnail/:trackId', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/track/:trackId', async (req, res) => {
-  const trackId = req.params.trackId;
-  const filePath = `${__dirname}/files/tracks/${trackId}`;
-  res.set('Content-Type', (await fileTypeFromFile(filePath)).mime)
-  res.sendFile(filePath);
-});
-
-app.post('/track/:trackId', upload.single("file"), async (req, res) => {
-  const trackId = req.params.trackId;
-  const file = req.file;
-
-  if (file === undefined || file === null) {
-    res.sendStatus(400);
-    return;
-  }
-
-  await rename(file.path, `files/tracks/${trackId}`);
-  res.sendStatus(200);
-})
+addFileGetRoute('/track/:trackId', 'trackId', 'files/tracks');
+addFilePostRoute('/track/:trackId', 'trackId', 'files/tracks');
 
 app.delete('/track/:trackId', async (req, res) => {
   const trackId = req.params.trackId;
@@ -139,3 +71,34 @@ app.delete('/track/:trackId', async (req, res) => {
 app.listen(port, () => {
   console.log(`filestore is listening on port ${port}`);
 })
+
+function addFileGetRoute(routeName, paramName, folderPath) {
+  app.get(routeName, async (req, res) => {
+    
+    try {
+      const paramValue = req.params[paramName];
+      const filePath = `${__dirname}/${folderPath}/${paramValue}`;
+      res.set('Content-Type', (await fileTypeFromFile(filePath)).mime)
+      res.sendFile(filePath);
+    } catch (e) {
+      console.error(e);
+      res.sendStatus(404);
+    }
+
+  });
+}
+
+function addFilePostRoute(routeName, paramName, folderPath) {
+  app.post(routeName, upload.single('file'), async (req, res) => {
+    const paramValue = req.params[paramName];
+    const file = req.file;
+
+    if (file === undefined || file === null) {
+      res.sendStatus(400);
+      return;
+    }
+
+    await rename(file.path, `${folderPath}/${paramValue}`);
+    res.sendStatus(200);
+  });
+}
