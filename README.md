@@ -19,7 +19,14 @@ $ npm start
 $ cd ..
 ```
 
-Start the webserver:
+Start the filestore server:
+```bash
+$ cd filestore
+$ npm install
+$ npm start
+```
+
+In another terminal session, start the webserver:
 
 ```bash
 $ cd website

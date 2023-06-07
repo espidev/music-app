@@ -1,7 +1,13 @@
 import pkg from 'pg';
 import { parseFile, selectCover } from "music-metadata";
+import FormData from 'form-data';
+import { Duplex } from 'stream';
+import { createReadStream } from 'fs';
+import axios from 'axios';
+import tmp from 'tmp';
+import { appendFile } from 'fs/promises';
 
-export async function importAudioFile(dbClient: pkg.Client, accountUuid: string, filePath: string) {
+export async function importAudioFile(dbClient: pkg.Client, accountUuid: string, filePath: string, fileStoreUrl: string) {
   const metadata = await parseFile(filePath);
 
   const cover = selectCover(metadata.common.picture);
@@ -39,49 +45,56 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
 
     const trackId = res.rows[0].id;
 
-    // insert artist if they don't exist
-    await dbClient.query(`
-      INSERT INTO artist(name, account_uuid) VALUES ($1, $2) 
-        ON CONFLICT DO NOTHING;
-    `, [albumArtist, accountUuid]);
+    if (albumArtist) {
+      // insert artist if they don't exist
+      await dbClient.query(`
+        INSERT INTO artist(name, account_uuid) VALUES ($1, $2) 
+          ON CONFLICT DO NOTHING;
+      `, [albumArtist, accountUuid]);
 
-    // insert artist relationship
-    await dbClient.query(`
-      INSERT INTO track_to_artist(account_uuid, track_id, artist_id) 
-        VALUES (
-          $1, 
-          $2, 
-          (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
-        )
-    `, [accountUuid, trackId, albumArtist]);
+      // insert artist relationship
+      await dbClient.query(`
+        INSERT INTO track_to_artist(account_uuid, track_id, artist_id) 
+          VALUES (
+            $1, 
+            $2, 
+            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
+          )
+      `, [accountUuid, trackId, albumArtist]);
+    }
 
-    // insert album if they don't exist
-    await dbClient.query(`
-      INSERT INTO album(name, account_uuid) VALUES ($1, $2)
-        ON CONFLICT DO NOTHING
-    `, [albumName, accountUuid]);
+    if (albumName) {
+      // insert album if they don't exist
+      await dbClient.query(`
+        INSERT INTO album(name, account_uuid, album_artist) VALUES ($1, $2, $3)
+          ON CONFLICT DO NOTHING
+      `, [albumName, accountUuid, albumArtist]);
 
-    // insert album relationship
-    await dbClient.query(`
-      INSERT INTO track_to_album(account_uuid, track_id, album_id, position)
-        VALUES (
-          $1,
-          $2,
-          (SELECT id FROM album WHERE name = $3 AND account_uuid = $1),
-          $4
-        )
-    `, [accountUuid, trackId, albumName, albumTrackNum]);
+      // insert album relationship
+      await dbClient.query(`
+        INSERT INTO track_to_album(account_uuid, track_id, album_id, position)
+          VALUES (
+            $1,
+            $2,
+            (SELECT id FROM album WHERE name = $3 AND account_uuid = $1),
+            $4
+          )
+      `, [accountUuid, trackId, albumName, albumTrackNum]);
+    }
 
-    // insert album-artist relationship
-    await dbClient.query(`
-      INSERT INTO album_to_artist(account_uuid, album_id, artist_id)
-        VALUES (
-          $1,
-          (SELECT id FROM album WHERE name = $2 AND account_uuid = $1),
-          (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
-        )
-        ON CONFLICT DO NOTHING
-    `, [accountUuid, albumName, albumArtist]);
+    if (albumName && albumArtist) {
+      // insert album-artist relationship
+      //TODO use album id and artist id, because there can be multiple albums with the same name
+      await dbClient.query(`
+        INSERT INTO album_to_artist(account_uuid, album_id, artist_id)
+          VALUES (
+            $1,
+            (SELECT id FROM album WHERE name = $2 AND account_uuid = $1),
+            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
+          )
+          ON CONFLICT DO NOTHING
+      `, [accountUuid, albumName, albumArtist]);
+    }
 
     if (genres) {
 
@@ -104,6 +117,29 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
       }
     }
 
+    
+    // upload cover to filestore
+    if (cover) {
+      // temporarily write to disk
+      const tmpobj = tmp.fileSync();
+      await appendFile(tmpobj.name, cover.data);
+
+      const formData = new FormData();
+      formData.append('file', createReadStream(tmpobj.name));
+      
+      await axios.post(`${fileStoreUrl}/track-thumbnail/${trackId}`, formData, { headers: formData.getHeaders() });
+      
+      tmpobj.removeCallback();
+    }
+    
+    // upload file to filestore
+    {
+      const formData = new FormData();
+      formData.append('file', createReadStream(filePath));
+      
+      await axios.post(`${fileStoreUrl}/track/${trackId}`, formData, { headers: formData.getHeaders() });
+    }
+    
     await dbClient.query('COMMIT');
 
   } catch (e) {

@@ -2,19 +2,21 @@
 
 import { apiPostRegister } from "@/components/apiclient";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const router = useRouter();
+
   const handleSubmit = () => {
     apiPostRegister(username, password)
       .then(res => {
-        redirect('/login');
+        router.push('/login');
       })
       .catch(err => {
         // TODO display popup with error message

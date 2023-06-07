@@ -20,14 +20,14 @@ export async function POST(request: Request) {
   // query db for account
   const res = await conn.query("SELECT * FROM account WHERE username = $1::text", [username]);
   if (res.rowCount < 1) {
-    return NextResponse.json({ error: "account not found" }, { status: 400 });
+    return NextResponse.json({ error: "account not found" }, { status: 404 });
   }
 
   const account = res.rows[0] as DBAccount;
 
   // check password hashes
   if (!(await argon2.verify(account.password_argon2, password))) {
-    return NextResponse.json({ error: "password does not match" }, { status: 403 });
+    return NextResponse.json({ error: "password does not match" }, { status: 400 });
   }
 
   const token = jwt.sign({ 

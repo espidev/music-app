@@ -13,4 +13,4 @@ const client = new Client({
 });
 await client.connect();
 
-importAudioFile(client, "bed889a7-c7e4-4f6d-9921-a8d2713cefbd", "/home/devin/Music/voices call/Auvic - Voices Call- Remastered/Auvic - Voices Call- Remastered - 01 Future Mornings.mp3");
+importAudioFile(client, "4f67ff10-560e-461e-afcf-806ecdae588c", "/home/devin/Music/Devin's Everything/Acro & UgokuBall - Journey.opus", "http://localhost:3001");

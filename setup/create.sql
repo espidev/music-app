@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS artist (
 CREATE TABLE IF NOT EXISTS album (
     id SERIAL PRIMARY KEY,
     name TEXT,
+    album_artist TEXT,
     account_uuid TEXT,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid),
-    UNIQUE (name, account_uuid) 
+    UNIQUE (name, account_uuid, album_artist)
 );
 
 CREATE TABLE IF NOT EXISTS album_to_artist (

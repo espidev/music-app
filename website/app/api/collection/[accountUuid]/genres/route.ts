@@ -1,11 +1,10 @@
-
-// GET /collections/[accountUuid]/artists
-// get list of artists
-
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
-import { getAPIArtist } from "@/util/models/artist";
+import { getAPIGenre } from "@/util/models/genre";
 import { NextResponse } from "next/server";
+
+// GET /collections/[accountUuid]/genres
+// get list of genres
 
 export async function GET(request: Request, { params }: { params: { accountUuid: string } }) {
   const accountUuid = params.accountUuid;
@@ -24,15 +23,15 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     return NextResponse.json({ error: "account not found" }, { status: 404 });
   }
 
-  // fetch the list of artists
-  const artistRes = await conn.query(
+  // fetch the list of albums
+  const genreRes = await conn.query(
     `
-    SELECT * FROM artist
+    SELECT * FROM genre
       WHERE account_uuid = $1::text 
-      ORDER BY artist.name DESC
+      ORDER BY genre.name DESC
     `, [accountUuid]);
   
-  const artists = artistRes.rows.map(artist => getAPIArtist(artist));
+  const genres = genreRes.rows.map(genre => getAPIGenre(genre));
 
-  return NextResponse.json({ artists }, { status: 200 });
+  return NextResponse.json({ genres }, { status: 200 });
 }

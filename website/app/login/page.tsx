@@ -3,16 +3,19 @@
 import { apiPostLogin } from "@/components/apiclient";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const router = useRouter();
+
   const handleSubmit = () => {
     apiPostLogin(username, password)
       .then(res => {
-        // TODO set client cookie with username
+        router.push('/');
       })
       .catch(err => {
         // TODO display popup with error message
