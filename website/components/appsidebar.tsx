@@ -1,4 +1,5 @@
 'use client'
+
 import { AlbumOutlined, FolderOutlined, MusicNoteOutlined, PersonOutlineOutlined, QueueMusicOutlined, UploadFileOutlined } from "@mui/icons-material";
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 

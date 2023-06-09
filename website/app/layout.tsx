@@ -2,6 +2,7 @@
 
 import AppHeader from '@/components/appheader';
 import AppSidebar from '@/components/appsidebar';
+import { AppStateProvider } from '@/components/appstateprovider';
 import MediaPlayer from '@/components/mediaplayer';
 import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
 import { CssBaseline } from '@mui/material';
@@ -34,17 +35,25 @@ export default function RootLayout({
       </head>
       <body>
         {/* <FluentProvider theme={teamsLightTheme}> */}
-          <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-            <CssBaseline />
-            <AppHeader />
+          <AppStateProvider value={{
+            isLoggedIn: false,
+            isPlaying: false,
+            currentTrackId: "",
+          }}>
 
-            <div style={{ display: "flex", flex: "1" }}>
-              <AppSidebar />
-              {children}
+            <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+              <CssBaseline />
+              <AppHeader />
+
+              <div style={{ display: "flex", flex: "1" }}>
+                <AppSidebar />
+                {children}
+              </div>
+              
+              <MediaPlayer />
             </div>
             
-            <MediaPlayer />
-          </div>
+          </AppStateProvider>
         {/* </FluentProvider> */}
       </body>
     </html>

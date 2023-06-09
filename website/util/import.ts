@@ -1,7 +1,6 @@
 import pkg from 'pg';
 import { parseFile, selectCover } from "music-metadata";
 import FormData from 'form-data';
-import { Duplex } from 'stream';
 import { createReadStream } from 'fs';
 import axios from 'axios';
 import tmp from 'tmp';

@@ -1,5 +1,5 @@
 import { getDB } from "@/util/db";
-import { DBAccount } from "@/util/models/account";
+import { DBAccount, getAPIAccount } from "@/util/models/account";
 import argon2 from "argon2";
 import jwt from 'jsonwebtoken';
 import { cookies } from "next/dist/client/components/headers";
@@ -38,5 +38,5 @@ export async function POST(request: Request) {
   const cookieStore = cookies();
   cookieStore.set('token', token);
 
-  return NextResponse.json({ token }, { status: 200 });
+  return NextResponse.json({ token, account: getAPIAccount(account) }, { status: 200 });
 }

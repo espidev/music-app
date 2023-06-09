@@ -1,25 +1,12 @@
 'use client'
 
 import { Button, Typography } from "@mui/material";
-import { getCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import { redirect } from 'next/navigation';
-import jwtDecode from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useAppStateContext } from "./appstateprovider";
 
 export default function AppHeader() {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-
-  // TODO hook with cookie change
-  useEffect(() => {
-    const jwt = getCookie("token");
-    setIsLoggedIn(jwt !== undefined && jwt !== '');
-
-    if (isLoggedIn) {
-      setUsername((jwtDecode(jwt as string) as any).data.username);
-    }
-  });
+  const appstate = useAppStateContext();
 
   return (
     <div style={{ 
@@ -37,17 +24,18 @@ export default function AppHeader() {
       <div style={{ flexGrow: "1" }}></div>
       
       { 
-        isLoggedIn ? 
+        appstate.isLoggedIn ? 
       
         <>
           <Typography style={{ paddingRight: "16px" }}>
-            Hello, { username }
+            Hello, { appstate.loggedInUsername }
           </Typography>
           <Button 
             href="/login" 
             variant="outlined" 
             style={{ color: "white", borderColor: "white" }}
             onClick={() => {
+              appstate.setLoggedOut();
               setCookie("token", undefined);
               redirect('/logout');
             }}

@@ -24,21 +24,21 @@ export function apiPostRegister(username: string, password: string) {
 export function apiGetCollectionAlbums(accountUuid: string) {
   return axios({
     method: 'get',
-    url: `/collection/${accountUuid}/albums`
+    url: `/api/collection/${accountUuid}/albums`
   });
 }
 
 export function apiGetCollectionArtists(accountUuid: string) {
   return axios({
     method: 'get',
-    url: `/collection/${accountUuid}/artists`
+    url: `/api/collection/${accountUuid}/artists`
   });
 }
 
 export function apiGetCollectionTracks(accountUuid: string) {
   return axios({
     method: 'get',
-    url: `/collection/${accountUuid}/tracks`
+    url: `/api/collection/${accountUuid}/tracks`
   });
 }
 
