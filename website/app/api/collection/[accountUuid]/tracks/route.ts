@@ -42,7 +42,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
       WHERE t.account_uuid = $1::text 
       GROUP BY t.id
-      ORDER BY t.name DESC
+      ORDER BY t.name ASC
     `, [accountUuid]);
   
   const tracks = trackRes.rows.map(track => {

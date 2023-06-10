@@ -1,0 +1,170 @@
+.footer-panel {
+  padding: 1em;
+  box-shadow: 10px 10px 10px 10px #AAAAAA;
+  display: flex;
+  flex-direction: row; 
+  background-color: white;
+  overflow: hidden;
+  justify-content: space-between;
+  height: 5em;
+  align-items: center;
+}
+
+.footer-panel .left-side {
+  margin: -0.375em;
+  padding: 0.375em;
+  float: left;
+  min-width: 20em;
+}
+
+.footer-panel .track-title {
+  font-size: 16px;
+  font-weight: bold;
+  vertical-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.footer-panel .track-artist {
+  font-size: 14px;
+  vertical-align: center;
+}
+
+.footer-panel .track-image {
+  float: left;
+  width: 3em;
+  height: 3em;
+  object-fit: contain;
+}
+
+.footer-panel .track-image-span {
+  float: left;
+  margin-right: 1em;
+  vertical-align: center;
+}
+
+.media-clickable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  float: left;
+  margin: 0 0.5em 0 0.5em;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.5s;
+  text-align: center;
+  font-size: 1.125em;
+  color: #06c;
+  user-select: none;
+}
+
+.media-clickable:hover {
+  background-color: #bee1f4;
+  cursor: pointer;
+}
+
+/* rhap audio styling: replaces https://github.com/lhz516/react-h5-audio-player/blob/master/src/styles.scss */
+
+/* (right-component) */
+.rhap_controls-section {
+  float: right;
+  vertical-align: middle;
+}
+
+.rhap_header {
+  margin-bottom: 0;
+}
+
+.rhap_footer {
+  margin-top: 0;
+}
+
+.rhap_container {
+  flex: 1;
+}
+
+.rhap_main {
+  display: flex;
+  outline: none;
+  height: 100%;
+}
+
+.rhap_progress-section {
+  display: flex;
+  flex: 3 1 auto;
+  align-items: center;
+  margin: 0 1em 0 1em;
+  outline: none;
+}
+
+.rhap_progress-container {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  flex: 1 0 auto;
+  align-self: center;
+  margin: 0 calc(10px + 1%);
+  cursor: pointer;
+  -webkit-user-select: none;
+  outline: none;
+}
+
+.rhap_progress-container:focus, .rhap_progress-section:focus, .rhap_controls-section:focus, .rhap_main:focus, *:focus {
+  outline: none;
+}
+
+.rhap_time {
+  color: #333;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  width: 48px;
+}
+
+.rhap_progress-bar {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
+.rhap_progress-filled {
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  background-color: #868686;
+  border-radius: 2px;
+}
+
+.rhap_progress-bar-show-download {
+  background-color: rgba(221, 221, 221, 0.5);
+}
+
+.rhap_download-progress {
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
+.rhap_progress-indicator {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  top: -8px;
+  background: white;
+  border-radius: 50px;
+  box-shadow: rgba(134, 134, 134, .5) 0 0 5px;
+  outline: none;
+}

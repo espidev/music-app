@@ -1,6 +1,6 @@
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
-import { getAPIAlbum } from "@/util/models/album";
+import { DBAlbum, getAPIAlbum } from "@/util/models/album";
 import { getAPIArtist } from "@/util/models/artist";
 import { getAPIGenre } from "@/util/models/genre";
 import { getAPITrack } from "@/util/models/track";
@@ -9,27 +9,26 @@ import { NextResponse } from "next/server";
 // GET /collections/[accountUuid]/albums/[albumId]/tracks
 // get an album's track list
 
-export async function GET(request: Request, { params }: { params: { albumId: string, accountUuid: string } }) {
+export async function GET(request: Request, { params }: { params: { albumId: string } }) {
   const albumId = params.albumId;
-  const accountUuid = params.accountUuid;
   
   // check authorization
   const tokenUuid = await checkAuthenticated();
-  if (tokenUuid === null || tokenUuid !== accountUuid) {
+  if (tokenUuid === null) {
     return NextResponse.json({ error: "not authorized" }, { status: 401 });
   }
 
   const conn = await getDB();
 
-  // query db for account
-  const accountRes = await conn.query("SELECT * FROM account WHERE uuid = $1::text", [accountUuid]);
-  if (accountRes.rowCount < 1) {
-    return NextResponse.json({ error: "account not found" }, { status: 400 });
-  }
-
   const albumRes = await conn.query(`SELECT * FROM album WHERE album.id = $1 LIMIT 1`, [albumId]);
   if (albumRes.rowCount < 1) {
     return NextResponse.json({ error: "album not found" }, { status: 404 });
+  }
+
+  const dbAlbum = albumRes.rows[0] as DBAlbum;
+
+  if (tokenUuid !== dbAlbum.account_uuid) {
+    return NextResponse.json({ error: "not authorized" }, { status: 401 });
   }
 
   const album: any = getAPIAlbum(albumRes.rows[0]);

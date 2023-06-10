@@ -1,3 +1,7 @@
+import { DBAlbum } from "./album";
+import { DBArtist } from "./artist";
+import { DBGenre } from "./genre";
+
 export type DBTrack = {
   id: number
   name: string
@@ -17,6 +21,11 @@ export type APITrack = {
   audio_src: string
   audio_length: number
   create_year: number
+
+  // optional to be filled
+  albums: DBAlbum[]
+  artists: DBArtist[]
+  genres: DBGenre[]
 };
 
 export function getAPITrack(track: DBTrack) {
@@ -25,8 +34,8 @@ export function getAPITrack(track: DBTrack) {
     name: track.name,
     artist_name: track.artist_display_name,
     uploaded_on: track.uploaded_on,
-    thumbnail_src: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*", // TODO
-    audio_src: "", // TODO
+    thumbnail_src: `/api/track/${track.id}/thumbnail`,
+    audio_src: `/api/track/${track.id}/stream`,
     create_year: track.create_year,
     audio_length: track.audio_length,
   } as APITrack;

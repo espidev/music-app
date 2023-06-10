@@ -2,6 +2,7 @@
 
 import { apiPostLogin } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
+import { useLoginStateContext } from "@/components/loginstateprovider";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,14 +12,14 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const appstate = useAppStateContext();
+  const loginState = useLoginStateContext();
 
   const router = useRouter();
 
   const handleSubmit = () => {
     apiPostLogin(username, password)
       .then(res => {
-        appstate.setLoggedIn(res.data.account);
+        loginState.setLoggedIn(res.data.account);
         router.push('/');
       })
       .catch(err => {

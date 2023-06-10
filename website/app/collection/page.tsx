@@ -3,21 +3,34 @@
 import { apiGetCollectionTracks } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
+import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import '@/components/tracktable.css';
+import { useLoginStateContext } from "@/components/loginstateprovider";
+
 export default function CollectionPage() {
-  const appstate = useAppStateContext();
+  const appState = useAppStateContext();
+  const loginState = useLoginStateContext();
   const router = useRouter();
 
   const [tracks, setTracks] = useState([] as APITrack[]);
 
   useEffect(() => {
-    if (!appstate.isLoggedIn) {
-      router.push('/login');
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
     }
 
-    apiGetCollectionTracks(appstate.loggedInUserUuid)
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+
+    // load tracks
+    apiGetCollectionTracks(loginState.loggedInUserUuid)
       .then((res) => {
         setTracks(res.data as APITrack[]);
       })
@@ -25,15 +38,54 @@ export default function CollectionPage() {
         console.error(err);
         // TODO UI error popup
       });
-  }, []);
+  }, [loginState]);
+
+  if (!loginState.loggedInStateValid) {
+    return <></>;
+  }
+
+  const handleTrackClick = (track: APITrack) => {
+    appState.changeTrack(track);
+  };
 
   return (
-    <ul>
-      {
-        tracks.map((track, index) => (
-          <li key={index}>{track.name}</li>
-        ))
-      }
-    </ul>
+    <Box sx={{ height: 1 }}>
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h6">Tracks</Typography>
+      </Box>
+
+      <table className="trackTable">
+        <thead>
+          <tr>
+            <th className="trackListPictureCell" />
+            <th className="trackListNameCell">Name</th>
+            <th>Artist</th>
+            <th>Album</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th>Length</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {
+            tracks.map((track, index) => (
+              <tr key={index}>
+                <td className="trackListPictureCell">
+                  <img className="trackImage" src={track.thumbnail_src} />
+                </td>
+                <td onClick={() => handleTrackClick(track)}>{track.name}</td>
+                <td>{track.artist_name}</td>
+                <td>{track.albums.length > 0 ? track.albums[0].name : ''}</td>
+                <td>{track.create_year}</td>
+                <td>{track.genres.length > 0 ? track.genres[0].name : ''}</td>
+                <td>{track.audio_length}</td>
+              </tr>
+            ))
+          }
+
+        </tbody>
+      </table>
+    </Box>
   );
 }

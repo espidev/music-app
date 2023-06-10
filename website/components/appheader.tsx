@@ -3,10 +3,10 @@
 import { Button, Typography } from "@mui/material";
 import { setCookie } from 'cookies-next';
 import { redirect } from 'next/navigation';
-import { useAppStateContext } from "./appstateprovider";
+import { useLoginStateContext } from "./loginstateprovider";
 
 export default function AppHeader() {
-  const appstate = useAppStateContext();
+  const loginState = useLoginStateContext();
 
   return (
     <div style={{ 
@@ -17,27 +17,27 @@ export default function AppHeader() {
       flexWrap: "wrap",
       alignItems: "center",
     }}>
+
       <Typography variant="h6">
         Music App
       </Typography>
 
-      <div style={{ flexGrow: "1" }}></div>
-      
+      <div style={{ flexGrow: "1" }} />
+
       { 
-        appstate.isLoggedIn ? 
+        loginState.isLoggedIn ? 
       
         <>
           <Typography style={{ paddingRight: "16px" }}>
-            Hello, { appstate.loggedInUsername }
+            Hello, { loginState.loggedInUsername }
           </Typography>
           <Button 
             href="/login" 
             variant="outlined" 
             style={{ color: "white", borderColor: "white" }}
             onClick={() => {
-              appstate.setLoggedOut();
-              setCookie("token", undefined);
-              redirect('/logout');
+              loginState.setLoggedOut();
+              redirect('/login');
             }}
           >
             Logout

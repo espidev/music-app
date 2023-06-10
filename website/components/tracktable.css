@@ -1,0 +1,69 @@
+.trackImage {
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.trackTable > tbody > tr > td.trackListPictureCell, .trackTable > thead > tr > th.trackListPictureCell {
+  padding: 0.5em 0 0.5em 0.5em;
+  width: 4em;
+}
+
+.trackTable > tbody > tr > td.trackListNameCell, .trackTable > thead > tr > th.trackListNameCell {
+  padding: 0.5em 0 0.5em 0;
+}
+
+.trackTable {
+  text-rendering: optimizeLegibility;
+  border-bottom-color: rgb(128, 128, 128);
+  line-height: 2em;
+  border-collapse: collapse;
+  width: 99%;
+}
+
+.trackTable > thead > tr {
+  line-height: 21px;
+}
+
+.trackTable > thead > tr > th {
+  text-align: left;
+  padding: 0.5em 0.5em 1em 0.5em;
+  color: rgb(21, 21, 21, 0.8);
+  border-bottom: 1px solid #d2d2d2;
+  font-size: 14px;
+}
+
+.trackTable > tbody > tr {
+  line-height: 20px;
+  box-sizing: border-box;
+  display: table-row;
+  vertical-align: middle;
+}
+
+.trackTable > tbody :hover {
+  background-color: #dddddd;
+  color: #018786;
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.trackTable > tbody > tr > td {
+  border-top: 1px solid #d2d2d2;
+  vertical-align: center;
+  text-align: left;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  color: rgb(21, 21, 21);
+
+  font-size: 14px;
+}
+
+table.sortable > thead > tr > th {
+  cursor: pointer;
+}
+
+table.sortable > thead > tr > th:hover {
+  color: #018786;
+}
+
+th.selected {
+  color: #018786;
+}
