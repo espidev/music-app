@@ -40,16 +40,15 @@ export default function RootLayout({
             currentTrackId: "",
           }}>
 
-            <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+            <AppHeader />
+            <AppSidebar />
+            
+            <div style={{ height: "100vh" }}>
               <CssBaseline />
-              <AppHeader />
 
-              <div style={{ display: "flex", flex: "1", alignItems: "stretch" }}>
-                <AppSidebar />
-                <div style={{ flexGrow: "1" }}>
-                  {children}
-                </div>
-               </div>
+              <div style={{ marginLeft: "16em", marginTop: "4.5em", marginBottom: "5em" }}>
+                {children}
+              </div>
               
               <MediaPlayer />
             </div>

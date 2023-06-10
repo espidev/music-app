@@ -1,37 +1,69 @@
 'use client'
 
 import { AlbumOutlined, FolderOutlined, MusicNoteOutlined, PersonOutlineOutlined, QueueMusicOutlined, UploadFileOutlined } from "@mui/icons-material";
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import '@/components/appsidebar.css'
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AppSidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
-    <Sidebar>
-      <Menu>
+    <div className="sidebar">
+      <ListItemButton 
+        className="sidebar-button" 
+        selected={pathname === '/collection'} 
+        onClick={() => router.push(`/collection`)}
+      >
+        <ListItemIcon><MusicNoteOutlined /></ListItemIcon>
+        <ListItemText primary="Tracks" />
+      </ListItemButton>
 
-        <MenuItem icon={ <MusicNoteOutlined /> }>
-          Tracks
-        </MenuItem>
+      <ListItemButton 
+        className="sidebar-button"
+        selected={pathname === '/collection/albums'}
+        onClick={() => router.push(`/collection/albums`)}
+      >
+        <ListItemIcon><AlbumOutlined /></ListItemIcon>
+        <ListItemText primary="Albums" />
+      </ListItemButton>
 
-        <MenuItem icon={ <AlbumOutlined /> }>
-          Albums
-        </MenuItem>
+      <ListItemButton 
+        className="sidebar-button"
+        selected={pathname === '/collection/artists'}
+        onClick={() => router.push(`/collection/artists`)}
+      >
+        <ListItemIcon><PersonOutlineOutlined /></ListItemIcon>
+        <ListItemText primary="Artists" />
+      </ListItemButton>
 
-        <MenuItem icon={ <PersonOutlineOutlined /> }>
-          Artists
-        </MenuItem>
+      <ListItemButton
+        className="sidebar-button"
+        selected={pathname === '/collection/genres'}
+        onClick={() => router.push(`/collection/genres`)}
+      >
+        <ListItemIcon><FolderOutlined /></ListItemIcon>
+        <ListItemText primary="Genres" />
+      </ListItemButton>
 
-        <MenuItem icon={ <FolderOutlined /> }>
-          Genres
-        </MenuItem>
+      <ListItemButton 
+        className="sidebar-button"
+        selected={pathname === '/collection/playlists'}
+        onClick={() => router.push(`/collection/playlists`)}
+      >
+        <ListItemIcon><QueueMusicOutlined /></ListItemIcon>
+        <ListItemText primary="Playlists" />
+      </ListItemButton>
 
-        <MenuItem icon={ <QueueMusicOutlined /> }>
-          Playlists
-        </MenuItem>
-
-        <MenuItem icon={ <UploadFileOutlined /> }>
-          Upload
-        </MenuItem>
-      </Menu>
-    </Sidebar>
+      <ListItemButton 
+        className="sidebar-button"
+        selected={pathname === '/collection/upload'}
+        onClick={() => router.push(`/collection/upload`)}
+      >
+        <ListItemIcon><UploadFileOutlined /></ListItemIcon>
+        <ListItemText primary="Upload" />
+      </ListItemButton>
+    </div>
   );
 }

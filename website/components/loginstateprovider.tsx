@@ -75,3 +75,18 @@ export default function LoginStateReducer(state: any, action: any) {
       };
   }
 }
+
+export function useLoginCheckEffect(router: any, loginState: any) {
+  useEffect(() => {
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
+    }
+
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+  }, [loginState]);
+}

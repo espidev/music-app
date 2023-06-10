@@ -1,28 +1,27 @@
 'use client'
 
 import { Button, Typography } from "@mui/material";
-import { setCookie } from 'cookies-next';
 import { redirect } from 'next/navigation';
 import { useLoginStateContext } from "./loginstateprovider";
+
+import '@/components/appheader.css';
 
 export default function AppHeader() {
   const loginState = useLoginStateContext();
 
+  const handleLogout = () => {
+    loginState.setLoggedOut();
+    redirect('/login');
+  }
+
   return (
-    <div style={{ 
-      padding: "12px", 
-      background: "#1abc9c", 
-      color: "white", 
-      display: "flex", 
-      flexWrap: "wrap",
-      alignItems: "center",
-    }}>
+    <div className="app-header">
 
       <Typography variant="h6">
         Music App
       </Typography>
 
-      <div style={{ flexGrow: "1" }} />
+      <div className="right-component" />
 
       { 
         loginState.isLoggedIn ? 
@@ -31,26 +30,15 @@ export default function AppHeader() {
           <Typography style={{ paddingRight: "16px" }}>
             Hello, { loginState.loggedInUsername }
           </Typography>
-          <Button 
-            href="/login" 
-            variant="outlined" 
-            style={{ color: "white", borderColor: "white" }}
-            onClick={() => {
-              loginState.setLoggedOut();
-              redirect('/login');
-            }}
-          >
+
+          <Button href="/login" variant="outlined" className="click-button" onClick={handleLogout}>
             Logout
           </Button>
         </>
 
         :
         
-        <Button 
-          href="/login" 
-          variant="outlined" 
-          style={{ color: "white", borderColor: "white" }}
-        >
+        <Button href="/login" variant="outlined" className="click-button">
           Login
         </Button>
       }

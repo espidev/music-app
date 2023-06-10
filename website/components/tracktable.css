@@ -17,7 +17,8 @@
   border-bottom-color: rgb(128, 128, 128);
   line-height: 2em;
   border-collapse: collapse;
-  width: 99%;
+  margin-left: 1em;
+  width: 95%;
 }
 
 .trackTable > thead > tr {
@@ -41,7 +42,7 @@
 
 .trackTable > tbody :hover {
   background-color: #dddddd;
-  color: #018786;
+  color: rgb(25, 118, 210);
   cursor: pointer;
   transition: color 0.1s;
 }
@@ -61,9 +62,9 @@ table.sortable > thead > tr > th {
 }
 
 table.sortable > thead > tr > th:hover {
-  color: #018786;
+  color: rgb(25, 118, 210);
 }
 
 th.selected {
-  color: #018786;
+  color: rgb(25, 118, 210);
 }

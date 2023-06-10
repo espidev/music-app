@@ -6,6 +6,7 @@ import { APITrack } from "@/util/models/track";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import format from 'format-duration';
 
 import '@/components/tracktable.css';
 import { useLoginStateContext } from "@/components/loginstateprovider";
@@ -79,7 +80,7 @@ export default function CollectionPage() {
                 <td>{track.albums.length > 0 ? track.albums[0].name : ''}</td>
                 <td>{track.create_year}</td>
                 <td>{track.genres.length > 0 ? track.genres[0].name : ''}</td>
-                <td>{track.audio_length}</td>
+                <td>{format(track.audio_length * 1000 )}</td>
               </tr>
             ))
           }
