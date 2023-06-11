@@ -39,8 +39,12 @@ $ npm run dev
 Docker is used for consistent deployments:
 
 ```bash
-$ cd website
-$ docker build . -t music-app:latest
+$ cd filestore
+$ docker build . -t cs348-filestore:latest
+$ cd ../setup
+$ docker build . -t cs348-setup:latest
+$ cd ../website
+$ docker build . -t cs348-music-app:latest
 $ cd ..
 $ docker-compose up
 ```

@@ -10,6 +10,10 @@ export type APIGenre = {
 };
 
 export function getAPIGenre(genre: DBGenre) {
+  if (!genre) {
+    return null;
+  }
+
   return {
     id: genre.id,
     name: genre.name,

@@ -39,7 +39,10 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   
   const albums = albumRes.rows.map(album => {
     const apiAlbum = getAPIAlbum(album);
-    apiAlbum.artists = album.artists.map((artist: any) => getAPIArtist(artist));
+
+    if (apiAlbum) {
+      apiAlbum.artists = album.artists.map((artist: any) => getAPIArtist(artist));
+    }
 
     return apiAlbum;
   });

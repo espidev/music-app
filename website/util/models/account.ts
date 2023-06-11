@@ -10,6 +10,10 @@ export type APIAccount = {
 };
 
 export function getAPIAccount(account: DBAccount) {
+  if (!account) {
+    return null;
+  }
+
   return {
     uuid: account.uuid,
     username: account.username,

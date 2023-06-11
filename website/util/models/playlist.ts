@@ -10,6 +10,10 @@ export type APIPlaylist = {
 };
 
 export function getDBPlaylist(playlist: DBPlaylist) {
+  if (!playlist) {
+    return playlist;
+  }
+
   return {
     id: playlist.id,
     name: playlist.name,

@@ -16,6 +16,10 @@ export type APIAlbum = {
 };
 
 export function getAPIAlbum(album: DBAlbum) {
+  if (!album) {
+    return null;
+  }
+
   return {
     id: album.id,
     name: album.name,

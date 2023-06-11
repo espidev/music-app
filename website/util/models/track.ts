@@ -29,6 +29,10 @@ export type APITrack = {
 };
 
 export function getAPITrack(track: DBTrack) {
+  if (!track) {
+    return null;
+  }
+
   return {
     id: track.id,
     name: track.name,

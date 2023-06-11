@@ -11,6 +11,10 @@ export type APIArtist = {
 };
 
 export function getAPIArtist(artist: DBArtist) {
+  if (!artist) {
+    return null;
+  }
+
   return {
     id: artist.id,
     name: artist.name,
