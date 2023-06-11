@@ -2,7 +2,7 @@
 
 .idea
 
-
+cache/
 
 # dependencies
 /node_modules

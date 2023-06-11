@@ -5,6 +5,8 @@ import { getAPITrack } from "@/util/models/track";
 import { getAPIAlbum } from "@/util/models/album";
 import { getAPIArtist } from "@/util/models/artist";
 import { getAPIGenre } from "@/util/models/genre";
+import { mkdir, unlink, writeFile } from "fs/promises";
+import { importAudioFile } from "@/util/import";
 
 // GET /collections/[accountUuid]/tracks
 // get list of tracks
@@ -73,9 +75,44 @@ export async function POST(request: Request, { params }: { params: { accountUuid
 
   // write file to filesystem
   const formData = await request.formData();
-  // formData.get("file")!.stream();
+  const file = formData.get("file") as any;
 
-  // extract metadata
+  if (!file) {
+    return NextResponse.json({ error: 'invalid file' }, { status: 400 });
+  }
 
-  // insert into db
+  const arrayBuffer = await file.arrayBuffer();
+
+  // create cache folder if not exists
+  await mkdir('cache', { recursive: true });
+
+  const fileName = 'cache/' + file.name;
+
+  // write form
+  try {
+    await writeFile(fileName, toBuffer(arrayBuffer), { flag: 'wx' });
+
+    const db = await getDB();
+
+    // insert into db
+    const filestore = `http://${process.env.FILESTORE_HOST}:${process.env.FILESTORE_PORT}`;
+    await importAudioFile(db, accountUuid, fileName, filestore);
+  } catch (e) {
+    console.error(e);
+    await unlink(fileName);
+    return NextResponse.json({ error: 'an error occurred' }, { status: 500 });
+  }
+  
+  await unlink(fileName);
+
+  return NextResponse.json({ status: 'success' }, { status: 200 });
+}
+
+function toBuffer(arrayBuffer : ArrayBuffer) {
+  const buffer = Buffer.alloc(arrayBuffer.byteLength);
+  const view = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < buffer.length; ++i) {
+    buffer[i] = view[i];
+  }
+  return buffer;
 }

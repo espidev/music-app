@@ -7,6 +7,7 @@ import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import format from 'format-duration';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import '@/components/tracktable.css';
 import { useLoginStateContext } from "@/components/loginstateprovider";
@@ -73,7 +74,10 @@ export default function CollectionPage() {
             tracks.map((track, index) => (
               <tr key={index}>
                 <td className="trackListPictureCell">
-                  <img className="trackImage" src={track.thumbnail_src} />
+                  <LazyLoadImage 
+                    className="trackImage"
+                    src={track.thumbnail_src}
+                  />
                 </td>
                 <td onClick={() => handleTrackClick(track)}>{track.name}</td>
                 <td>{track.artist_name}</td>

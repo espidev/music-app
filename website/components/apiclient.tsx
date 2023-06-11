@@ -42,6 +42,13 @@ export function apiGetCollectionTracks(accountUuid: string) {
   });
 }
 
-export function apiPostCollectionTracks(accountUuid: string) {
-  // TODO
+export function apiPostCollectionTracks(accountUuid: string, formData: FormData) {
+  return axios({
+    method: 'post',
+    url: `/api/collection/${accountUuid}/tracks`,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  })
 }

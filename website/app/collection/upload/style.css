@@ -1,0 +1,13 @@
+.drop-area {
+  background-color: rgba(245, 245, 245, 0.9);
+  padding: 4em 3em 4em 3em;
+  border-radius: 0.5em;
+  text-align: center;
+  cursor: pointer;
+  max-width: 30em;
+  margin: auto
+}
+
+.drop-area:hover {
+  background-color: rgba(240, 240, 240, 0.9);
+}

@@ -1,6 +1,7 @@
 .trackImage {
   width: 2.5em;
   height: 2.5em;
+  object-fit: contain;
 }
 
 .trackTable > tbody > tr > td.trackListPictureCell, .trackTable > thead > tr > th.trackListPictureCell {
