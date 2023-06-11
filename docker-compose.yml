@@ -5,6 +5,8 @@ services:
     image: cs348-filestore:latest
     ports:
       - 3001:3001
+    volumes:
+      - filestore:/files
 
   setup:
     image: cs348-setup:latest
@@ -42,3 +44,4 @@ services:
 
 volumes:
   postgres:
+  filestore:
