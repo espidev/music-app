@@ -1,7 +1,8 @@
 FROM node:20
 
-COPY . .
+WORKDIR /app
 
+COPY . .
 RUN npm install
 
 CMD npm start

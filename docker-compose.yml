@@ -6,7 +6,7 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - filestore:/files
+      - filestore:/app/files
 
   setup:
     image: cs348-setup:latest

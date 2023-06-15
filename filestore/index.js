@@ -5,6 +5,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { fileTypeFromFile } from 'file-type';
+import mv from 'mv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -98,7 +99,14 @@ function addFilePostRoute(routeName, paramName, folderPath) {
       return;
     }
 
-    await rename(file.path, `${folderPath}/${paramValue}`);
-    res.sendStatus(200);
+    mv(file.path, `${folderPath}/${paramValue}`, (err => {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+        return;
+      }
+
+      res.sendStatus(200);
+    }))
   });
 }
