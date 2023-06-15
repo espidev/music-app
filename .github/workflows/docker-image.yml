@@ -28,10 +28,9 @@ jobs:
     - name: Go to setup folder
       run: cd setup
     - name: Build the docker image
-      run: docker build . --file Dockerfile --tag cs348-setup:$(date +%s)
-      
+      run: docker build . --file Dockerfile --tag cs348-setup:$(date +%s)    
 
-build-music-app:
+  build-music-app:
   
     runs-on: ubuntu-latest
     
