@@ -1,0 +1,43 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build-filestore:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Go to filestore folder
+      run: cd filestore
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag cs348-filestore:$(date +%s)
+  
+  build-setup:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Go to setup folder
+      run: cd setup
+    - name: Build the docker image
+      run: docker build . --file Dockerfile --tag cs348-setup:$(date +%s)
+      
+
+build-music-app:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Go to web folder
+      run: cd website
+    - name: Build the docker image
+      run: docker build . --file Dockerfile --tag cs348-music-app:$(date +%s)
