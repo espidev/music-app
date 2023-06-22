@@ -1,0 +1,46 @@
+# Feature 1 result
+
+                 uuid                 | username |                                          password_argon2
+--------------------------------------+----------+---------------------------------------------------------------------------------------------------
+ b3837b5a-7b11-47f5-80be-b445febe6f09 | test1    | $argon2id$v=19$m=65536,t=3,p=4$ZXgHIpByCKQ6+7pS45glIA$/4XjKe6AVmPznFaeNdPSCAMIn7x0ty6vRaFegl5jQSM
+(1 row)
+
+
+
+# Feature 2 result
+
+ id |     name      |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length |                                       artists                                        |
+  albums                                                            |                                          genres
+----+---------------+--------------------------------------+---------------------+-------------------------+-------------+--------------+--------------------------------------------------------------------------------------+---------------------------------------------------------
+--------------------------------------------------------------------+------------------------------------------------------------------------------------------
+ 42 | birb march    | b3837b5a-7b11-47f5-80be-b445febe6f09 | park bird           | 2023-06-22 04:06:04.384 |        2018 |          139 | [{"id":42,"name":"park bird","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":19,"name":"birb march","album_artist":"park bird"
+,"account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]            | [{"id":44,"name":"Chill","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]
+ 43 | Chord Ex      | b3837b5a-7b11-47f5-80be-b445febe6f09 | android52           | 2023-06-22 04:55:32.853 |        2020 |          199 | [{"id":43,"name":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":20,"name":"FUTURE GROOVE PRODUCT","album_artist":
+"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":45,"name":"Future Groove","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]
+ 44 | Future Groove | b3837b5a-7b11-47f5-80be-b445febe6f09 | android52           | 2023-06-22 04:58:47.089 |        2020 |          196 | [{"id":43,"name":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":20,"name":"FUTURE GROOVE PRODUCT","album_artist":
+"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":45,"name":"Future Groove","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]
+(3 rows)
+
+
+
+
+# Feature 3 result
+
+ id |     name      |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length | album_track |                                       artists                                        |
+                albums                                                            |                                          genres
+----+---------------+--------------------------------------+---------------------+-------------------------+-------------+--------------+-------------+--------------------------------------------------------------------------------------+-------------------------------------------
+----------------------------------------------------------------------------------+------------------------------------------------------------------------------------------
+ 44 | Future Groove | b3837b5a-7b11-47f5-80be-b445febe6f09 | android52           | 2023-06-22 04:58:47.089 |        2020 |          196 |           1 | [{"id":43,"name":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":20,"name":"FUTURE GROOVE PRODUCT","
+album_artist":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":45,"name":"Future Groove","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]
+ 43 | Chord Ex      | b3837b5a-7b11-47f5-80be-b445febe6f09 | android52           | 2023-06-22 04:55:32.853 |        2020 |          199 |           6 | [{"id":43,"name":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":20,"name":"FUTURE GROOVE PRODUCT","
+album_artist":"android52","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}] | [{"id":45,"name":"Future Groove","account_uuid":"b3837b5a-7b11-47f5-80be-b445febe6f09"}]
+(2 rows)
+
+
+
+# Feature 4 result
+
+ id |    name    |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length
+----+------------+--------------------------------------+---------------------+-------------------------+-------------+--------------
+ 42 | birb march | b3837b5a-7b11-47f5-80be-b445febe6f09 | park bird           | 2023-06-22 04:06:04.384 |        2018 |          139
+(2 rows)
