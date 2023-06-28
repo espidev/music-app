@@ -11,6 +11,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import '@/components/tracktable.css';
 import { useLoginStateContext } from "@/components/loginstateprovider";
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 
 export default function CollectionPage() {
   const appState = useAppStateContext();
@@ -18,6 +19,7 @@ export default function CollectionPage() {
   const router = useRouter();
 
   const [tracks, setTracks] = useState([] as APITrack[]);
+  const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   useEffect(() => {
     // wait for credentials to be loaded
@@ -37,8 +39,8 @@ export default function CollectionPage() {
         setTracks(res.data as APITrack[]);
       })
       .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
         console.error(err);
-        // TODO UI error popup
       });
   }, [loginState]);
 
@@ -52,6 +54,8 @@ export default function CollectionPage() {
 
   return (
     <Box sx={{ height: 1 }}>
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Tracks</Typography>
       </Box>

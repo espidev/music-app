@@ -5,11 +5,13 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   const router = useRouter();
 
@@ -19,12 +21,15 @@ export default function RegisterPage() {
         router.push('/login');
       })
       .catch(err => {
-        // TODO display popup with error message
+        setAlerts([...alerts, { severity: "error", message: "Issue with registration, see console for details." }]);
+        console.error(err);
       });
   };
 
   return (
     <Container maxWidth="xs">
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+
       <Box 
         sx={{
           my: 4,

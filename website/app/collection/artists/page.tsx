@@ -1,5 +1,6 @@
 'use client'
 
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { apiGetCollectionArtists } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIArtist } from "@/util/models/artist";
@@ -12,6 +13,7 @@ export default function CollectionArtistsPage() {
   const router = useRouter();
 
   const [artists, setArtists] = useState([] as APIArtist[]);
+  const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   useEffect(() => {
     // wait for credentials to be loaded
@@ -25,14 +27,14 @@ export default function CollectionArtistsPage() {
       return;
     }
 
-    // load albums
+    // load artists
     apiGetCollectionArtists(loginState.loggedInUserUuid)
       .then(res => {
         setArtists(res.data as APIArtist[]);
       })
       .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching artists, see console for details." }]);
         console.error(err);
-        // TODO UI error popup
       })
   }, [loginState]);
 
@@ -42,6 +44,8 @@ export default function CollectionArtistsPage() {
 
   return (
     <Box sx={{ height: 1 }}>
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Artists</Typography>
       </Box>

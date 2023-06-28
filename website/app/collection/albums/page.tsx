@@ -1,5 +1,6 @@
 'use client'
 
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { apiGetCollectionAlbums } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIAlbum } from "@/util/models/album";
@@ -12,6 +13,7 @@ export default function CollectionAlbumsPage() {
   const router = useRouter();
 
   const [albums, setAlbums] = useState([] as APIAlbum[]);
+  const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   useEffect(() => {
     // wait for credentials to be loaded
@@ -31,8 +33,8 @@ export default function CollectionAlbumsPage() {
         setAlbums(res.data as APIAlbum[]);
       })
       .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching albums, see console for details." }]);
         console.error(err);
-        // TODO UI error popup
       })
   }, [loginState]);
 
@@ -42,6 +44,8 @@ export default function CollectionAlbumsPage() {
 
   return (
     <Box sx={{ height: 1 }}>
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+      
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Albums</Typography>
       </Box>

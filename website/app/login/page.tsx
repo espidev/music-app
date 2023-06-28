@@ -1,7 +1,7 @@
 'use client'
 
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { apiPostLogin } from "@/components/apiclient";
-import { useAppStateContext } from "@/components/appstateprovider";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { useState } from "react";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [alerts, setAlerts] = useState<AlertEntry[]>([]);
 
   const loginState = useLoginStateContext();
 
@@ -23,12 +24,15 @@ export default function LoginPage() {
         router.push('/');
       })
       .catch(err => {
-        // TODO display popup with error message
+        setAlerts([...alerts, { severity: "error", message: "Invalid credentials!" }]);
+        console.error(err);
       });
   };
 
   return (
     <Container maxWidth="xs">
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+
       <Box 
         sx={{
           my: 4,

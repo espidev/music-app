@@ -8,12 +8,14 @@ import { useDropzone } from 'react-dropzone'
 
 import '@/app/collection/upload/style.css';
 import { apiPostCollectionTracks } from "@/components/apiclient";
+import AlertComponent, { AlertEntry } from "@/components/alerts";
 
 export default function CollectionUploadPage() {
   const router = useRouter();
   const loginState = useLoginStateContext();
 
   const [files, setFiles] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     console.log(acceptedFiles);
@@ -44,13 +46,16 @@ export default function CollectionUploadPage() {
           setFiles(newFiles);
         })
         .catch(err => {
-          // TODO display error popup
+          setAlerts([...alerts, { severity: "error", message: "Error uploading file, see console for details." }]);
+          console.error(err);
         });
     }
   };
 
   return (
     <Box sx={{ height: 1 }}>
+      <AlertComponent alerts={alerts} setAlerts={setAlerts} />
+
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Upload</Typography>
 
