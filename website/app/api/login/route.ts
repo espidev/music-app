@@ -23,6 +23,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "account not found" }, { status: 404 });
   }
 
+  await conn.end();
+
   const account = res.rows[0] as DBAccount;
 
   // check password hashes

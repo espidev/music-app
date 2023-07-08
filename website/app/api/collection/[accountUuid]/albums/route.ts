@@ -36,6 +36,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       GROUP BY album_to_artist.account_uuid, a.id, album_to_artist.album_id, album_to_artist.artist_id, artist.id
       ORDER BY a.name DESC
     `, [accountUuid]);
+
+  await conn.end();
   
   const albums = albumRes.rows.map(album => {
     const apiAlbum = getAPIAlbum(album);

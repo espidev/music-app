@@ -52,6 +52,8 @@ export async function GET(request: Request, { params }: { params: { albumId: str
       ORDER BY track_to_album.position ASC
   `, [album.id]);
 
+  await conn.end();
+
   const tracks = trackRes.rows.map(track => {
     const apiTrack: any = getAPITrack(track);
     apiTrack.albums = track.albums.filter((album: any) => album).map((album: any) => getAPIAlbum(album));

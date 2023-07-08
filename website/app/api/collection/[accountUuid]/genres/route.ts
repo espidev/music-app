@@ -30,6 +30,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       WHERE account_uuid = $1::text 
       ORDER BY genre.name DESC
     `, [accountUuid]);
+
+  await conn.end();
   
   const genres = genreRes.rows.map(genre => getAPIGenre(genre));
 

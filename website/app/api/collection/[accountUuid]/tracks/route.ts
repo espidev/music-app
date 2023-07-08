@@ -46,6 +46,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       GROUP BY t.id
       ORDER BY t.name ASC
     `, [accountUuid]);
+
+  await conn.end();
   
   const tracks = trackRes.rows.map(track => {
     const apiTrack: any = getAPITrack(track);

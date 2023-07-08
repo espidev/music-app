@@ -22,6 +22,8 @@ export async function GET(request: Request, { params }: { params: { albumId: str
     return NextResponse.json({ error: "album not found" }, { status: 404 });
   }
 
+  await conn.end();
+
   const dbAlbum = albumRes.rows[0] as DBAlbum;
   if (tokenUuid !== dbAlbum.account_uuid) {
     return NextResponse.json({ error: "not authorized" }, { status: 401 });
