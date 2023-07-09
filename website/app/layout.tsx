@@ -43,7 +43,7 @@ export default function RootLayout({
             <AppHeader />
             <AppSidebar />
             
-            <div style={{ height: "100vh" }}>
+            <div style={{ height: "100vh", zIndex: 1 }}>
               <CssBaseline />
 
               <div style={{ marginLeft: "16em", marginTop: "4.5em", marginBottom: "5em" }}>

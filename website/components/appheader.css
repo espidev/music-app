@@ -2,8 +2,8 @@
   padding: 1em;
   background: rgba(25, 118, 210, 0.9);
   backdrop-filter: blur(3px);
-  color: white; 
-  display: flex; 
+  color: white;
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   position: fixed;
@@ -12,7 +12,7 @@
 }
 
 .app-header .right-component {
-  flex-grow: 1
+  flex-grow: 1;
 }
 
 .app-header .click-button {
