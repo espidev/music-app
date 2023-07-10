@@ -1,13 +1,11 @@
 'use client'
 
+import { useEffect, useState } from "react";
 import { apiGetCollectionTracks } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
-import '@/components/tracktable.css';
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import TrackTable from "@/components/trackTable";
