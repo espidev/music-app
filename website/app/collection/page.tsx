@@ -1,18 +1,16 @@
 'use client'
 
+
+import { useEffect, useState } from "react";
 import { apiGetCollectionTracks, apiGetCollectionSearch } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
 import {Grid, TextField, Typography, InputAdornment} from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import format from 'format-duration';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-
-import '@/components/tracktable.css';
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
+import TrackTable from "@/components/trackTable";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 
@@ -86,41 +84,10 @@ export default function CollectionPage() {
         }} onChange={handleSearch}/>
       </Grid>
 
-      <table className="trackTable">
-        <thead>
-          <tr>
-            <th className="trackListPictureCell" />
-            <th className="trackListNameCell">Name</th>
-            <th>Artist</th>
-            <th>Album</th>
-            <th>Year</th>
-            <th>Genre</th>
-            <th>Length</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          {
-            tracks.map((track, index) => (
-              <tr key={index}>
-                <td className="trackListPictureCell">
-                  <LazyLoadImage 
-                    className="trackImage"
-                    src={track.thumbnail_src}
-                  />
-                </td>
-                <td onClick={() => handleTrackClick(track)}>{track.name}</td>
-                <td>{track.artist_name}</td>
-                <td>{track.albums.length > 0 ? track.albums[0].name : ''}</td>
-                <td>{track.create_year}</td>
-                <td>{track.genres.length > 0 ? track.genres[0].name : ''}</td>
-                <td>{format(track.audio_length * 1000 )}</td>
-              </tr>
-            ))
-          }
-
-        </tbody>
-      </table>
+      {/* Weird. paddingBottom works but not marginBottom. */}
+      <Grid sx={{ paddingBottom: '5em' }}>
+        <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+      </Grid>
     </Grid>
   );
 }

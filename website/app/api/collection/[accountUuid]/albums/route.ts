@@ -27,7 +27,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   // fetch the list of albums
   const albumRes = await conn.query(
     `
-    SELECT *, 
+    SELECT a.*,
       JSON_AGG(artist.*) as artists
     FROM album as a
       LEFT OUTER JOIN album_to_artist ON a.id = album_to_artist.album_id

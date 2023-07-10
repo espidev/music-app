@@ -3,7 +3,7 @@ import { getDB } from "@/util/db";
 import { DBAlbum, getAPIAlbum } from "@/util/models/album";
 import { NextResponse } from "next/server";
 
-// GET /collections/[accountUuid]/albums/[albumId]
+// GET /api/album/[albumId]
 // get an album
 
 export async function GET(request: Request, { params }: { params: { albumId: string } }) {

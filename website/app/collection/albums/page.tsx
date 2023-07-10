@@ -4,9 +4,11 @@ import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { apiGetCollectionAlbums } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIAlbum } from "@/util/models/album";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AlbumCard from "@/components/albumCard";
+
 
 export default function CollectionAlbumsPage() {
   const loginState = useLoginStateContext();
@@ -43,12 +45,28 @@ export default function CollectionAlbumsPage() {
   }
 
   return (
-    <Box sx={{ height: 1 }}>
+    <Box sx={{
+      position: 'absolute',
+      // zIndex:-1,
+      // backgroundColor: 'pink',
+      }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
       
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{ padding: 2, zIndex: -1 }}>
         <Typography variant="h6">Albums</Typography>
       </Box>
+
+      <Grid sx={{
+          display: "flex",
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          // backgroundColor: 'red',
+          marginBottom: '5em',
+        }}>
+        {albums.map((album, index) => {
+          return <AlbumCard album={album} key={index} />;
+        })}
+      </Grid>
     </Box>
   );
 }
