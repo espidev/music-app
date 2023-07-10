@@ -6,7 +6,7 @@ import { getAPIGenre } from "@/util/models/genre";
 import { getAPITrack } from "@/util/models/track";
 import { NextResponse } from "next/server";
 
-// GET /collections/[accountUuid]/albums/[albumId]/tracks
+// GET /api/album/[albumId]/tracks
 // get an album's track list
 
 export async function GET(request: Request, { params }: { params: { albumId: string } }) {

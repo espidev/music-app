@@ -4,9 +4,10 @@ import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { apiGetCollectionArtists } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIArtist } from "@/util/models/artist";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ArtistCard from "@/components/artistCard";
 
 export default function CollectionArtistsPage() {
   const loginState = useLoginStateContext();
@@ -43,12 +44,21 @@ export default function CollectionArtistsPage() {
   }
 
   return (
-    <Box sx={{ height: 1 }}>
+    <Box sx={{ position: 'absolute', }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Artists</Typography>
       </Box>
+
+      <Grid container spacing={2} sx={{ padding: 2, display: "flex",
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          marginBottom: '4em', }}>
+        {artists.map((artist) => (
+          <ArtistCard key={artist.id} artist={artist} />
+        ))}
+      </Grid>
     </Box>
   );
 }

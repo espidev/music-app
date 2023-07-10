@@ -28,6 +28,20 @@ export function apiGetCollectionAlbums(accountUuid: string) {
   });
 }
 
+export function apiGetCollectionAlbum(albumId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/album/${albumId}`
+  });
+}
+
+export function apiGetCollectionAlbumTracks(albumId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/album/${albumId}/tracks`
+  });
+}
+
 export function apiGetCollectionArtists(accountUuid: string) {
   return axios({
     method: 'get',
