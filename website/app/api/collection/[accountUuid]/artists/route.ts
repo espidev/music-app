@@ -31,6 +31,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       WHERE account_uuid = $1::text 
       ORDER BY artist.name DESC
     `, [accountUuid]);
+
+  await conn.end();
   
   const artists = artistRes.rows.map(artist => getAPIArtist(artist));
 

@@ -8,8 +8,8 @@ import { getAPIGenre } from "@/util/models/genre";
 import { mkdir, unlink, writeFile } from "fs/promises";
 import { importAudioFile } from "@/util/import";
 
-// GET /collections/[accountUuid]/tracks
-// get list of tracks
+// GET /collections/[accountUuid]/search
+// Search for tracks
 
 export async function GET(request: Request, { params }: { params: { accountUuid: string } }) {
   const accountUuid = params.accountUuid;
@@ -28,6 +28,11 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     return NextResponse.json({ error: "account not found" }, { status: 404 });
   }
 
+  // get url parameter
+  const query = request.url.split("?")[1];
+  const p = new URLSearchParams(query);
+  const search = p.get("q");
+
   // fetch the list of tracks
   const trackRes = await conn.query(
     `
@@ -42,10 +47,16 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       LEFT OUTER JOIN album ON track_to_album.album_id = album.id
       LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
-      WHERE t.account_uuid = $1::text 
+      WHERE t.account_uuid = $1::text AND (
+        t.name ILIKE $2 OR
+        t.artist_display_name ILIKE $2 OR
+        t.create_year::text ILIKE $2 OR
+        album.name ILIKE $2 OR
+        genre.name ILIKE $2
+      )
       GROUP BY t.id
       ORDER BY t.name ASC
-    `, [accountUuid]);
+    `, [accountUuid, `%${search}%`]);
 
   await conn.end();
   
@@ -54,67 +65,8 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     apiTrack.albums = track.albums.filter((album: any) => album).map((album: any) => getAPIAlbum(album));
     apiTrack.artists = track.artists.filter((artist: any) => artist).map((artist: any) => getAPIArtist(artist));
     apiTrack.genres = track.genres.filter((genre: any) => genre).map((genre: any) => getAPIGenre(genre));
-
     return apiTrack;
   });
 
   return NextResponse.json(tracks, { status: 200 });
-}
-
-
-
-// POST /collections/[accountUuid]/tracks
-// upload a file
-
-export async function POST(request: Request, { params }: { params: { accountUuid: string } }) {
-  const accountUuid = params.accountUuid;
-  
-  // check authorization
-  const tokenUuid = await checkAuthenticated();
-  if (tokenUuid === null || tokenUuid !== accountUuid) {
-    return NextResponse.json({ error: "not authorized" }, { status: 401 });
-  }
-
-  // write file to filesystem
-  const formData = await request.formData();
-  const file = formData.get("file") as any;
-
-  if (!file) {
-    return NextResponse.json({ error: 'invalid file' }, { status: 400 });
-  }
-
-  const arrayBuffer = await file.arrayBuffer();
-
-  // create cache folder if not exists
-  await mkdir('cache', { recursive: true });
-
-  const fileName = 'cache/' + file.name;
-
-  // write form
-  try {
-    await writeFile(fileName, toBuffer(arrayBuffer), { flag: 'wx' });
-
-    const db = await getDB();
-
-    // insert into db
-    const filestore = `http://${process.env.FILESTORE_HOST}:${process.env.FILESTORE_PORT}`;
-    await importAudioFile(db, accountUuid, fileName, filestore);
-  } catch (e) {
-    console.error(e);
-    await unlink(fileName);
-    return NextResponse.json({ error: 'an error occurred' }, { status: 500 });
-  }
-  
-  await unlink(fileName);
-
-  return NextResponse.json({ status: 'success' }, { status: 200 });
-}
-
-function toBuffer(arrayBuffer : ArrayBuffer) {
-  const buffer = Buffer.alloc(arrayBuffer.byteLength);
-  const view = new Uint8Array(arrayBuffer);
-  for (let i = 0; i < buffer.length; ++i) {
-    buffer[i] = view[i];
-  }
-  return buffer;
 }

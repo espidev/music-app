@@ -146,5 +146,5 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
     throw e;
   }
 
-  dbClient.end();
+  await dbClient.end();
 }

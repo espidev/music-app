@@ -56,6 +56,13 @@ export function apiGetCollectionTracks(accountUuid: string) {
   });
 }
 
+export function apiGetCollectionSearch(accountUuid: string, query: string) {
+  return axios({
+      method: 'get',
+      url: `/api/collection/${accountUuid}/search?q=${query}`
+  });
+}
+
 export function apiPostCollectionTracks(accountUuid: string, formData: FormData) {
   return axios({
     method: 'post',

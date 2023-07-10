@@ -1,14 +1,18 @@
 'use client'
 
+
 import { useEffect, useState } from "react";
-import { apiGetCollectionTracks } from "@/components/apiclient";
+import { apiGetCollectionTracks, apiGetCollectionSearch } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
-import { Box, Typography } from "@mui/material";
+import {Grid, TextField, Typography, InputAdornment} from "@mui/material";
+import { Search } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import TrackTable from "@/components/trackTable";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 export default function CollectionPage() {
   const appState = useAppStateContext();
@@ -49,18 +53,41 @@ export default function CollectionPage() {
     appState.changeTrack(track);
   };
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Reset if empty
+    if (event.target.value === '') {
+        apiGetCollectionTracks(loginState.loggedInUserUuid)
+            .then((res) => {
+                setTracks(res.data as APITrack[]);
+            });
+        return;
+    }
+
+    // Call API to search for tracks
+    apiGetCollectionSearch(loginState.loggedInUserUuid, event.target.value).then((res) => {
+      setTracks(res.data as APITrack[]);
+    });
+  }
+
   return (
-    <Box>
+    <Grid sx={{ height: 1 }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
-      <Box sx={{ padding: 2 }}>
+      <Grid sx={{ padding: 2 }} container direction="row" justifyContent="space-between">
         <Typography variant="h6">Tracks</Typography>
-      </Box>
+        <TextField id="Search" label="Search" variant="outlined" InputProps={{
+          startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+          ),
+        }} onChange={handleSearch}/>
+      </Grid>
 
       {/* Weird. paddingBottom works but not marginBottom. */}
-      <Box sx={{ paddingBottom: '5em' }}>
+      <Grid sx={{ paddingBottom: '5em' }}>
         <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 }
