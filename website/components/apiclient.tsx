@@ -28,17 +28,24 @@ export function apiGetCollectionAlbums(accountUuid: string) {
   });
 }
 
-export function apiGetCollectionAlbum(albumId: string) {
+export function apiGetAlbum(albumId: string) {
   return axios({
     method: 'get',
     url: `/api/album/${albumId}`
   });
 }
 
-export function apiGetCollectionAlbumTracks(albumId: string) {
+export function apiGetAlbumTracks(albumId: string) {
   return axios({
     method: 'get',
     url: `/api/album/${albumId}/tracks`
+  });
+}
+
+export function apiGetAlbumsSearch(query: string) {
+  return axios({
+    method: 'get',
+    url: `/api/album/search?q=${query}`
   });
 }
 

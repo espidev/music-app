@@ -1,13 +1,12 @@
 'use client'
 
-import format from 'format-duration';
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIAlbum } from '@/util/models/album';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertEntry } from '@/components/alerts';
-import { apiGetCollectionAlbum, apiGetCollectionAlbumTracks } from '@/components/apiclient';
+import { apiGetAlbum, apiGetAlbumTracks } from '@/components/apiclient';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { APITrack } from '@/util/models/track';
 import TrackTable from "@/components/trackTable";
@@ -38,13 +37,13 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
     }
 
     // load album content
-    apiGetCollectionAlbum(albumId)
+    apiGetAlbum(albumId)
       .then(res => {
           console.log(res.data);
           setAlbum(res.data as APIAlbum);
 
           // Fetch and set the tracks
-          apiGetCollectionAlbumTracks(albumId).then(res_tracks => {
+          apiGetAlbumTracks(albumId).then(res_tracks => {
             setTracks(res_tracks.data as APITrack[]);
           })
       })

@@ -1,13 +1,14 @@
 'use client'
 
-import AlertComponent, { AlertEntry } from "@/components/alerts";
-import { apiGetCollectionAlbums } from "@/components/apiclient";
-import { useLoginStateContext } from "@/components/loginstateprovider";
-import { APIAlbum } from "@/util/models/album";
-import { Box, Typography, Grid } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { apiGetCollectionAlbums, apiGetAlbumsSearch } from "@/components/apiclient";
+import { useLoginStateContext } from "@/components/loginstateprovider";
+import { useRouter } from "next/navigation";
+import { APIAlbum } from "@/util/models/album";
+import AlertComponent, { AlertEntry } from "@/components/alerts";
+import { Typography, Grid, InputAdornment, TextField } from "@mui/material";
 import AlbumCard from "@/components/albumCard";
+import { Search } from "@mui/icons-material";
 
 
 export default function CollectionAlbumsPage() {
@@ -44,29 +45,47 @@ export default function CollectionAlbumsPage() {
     return <></>;
   }
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Reset if empty
+    if (event.target.value === '') {
+      apiGetCollectionAlbums(loginState.loggedInUserUuid)
+            .then((res) => {
+                setAlbums(res.data as APIAlbum[]);
+            });
+        return;
+    }
+
+    // Call API to search for tracks
+    apiGetAlbumsSearch(event.target.value).then((res) => {
+      setAlbums(res.data as APIAlbum[]);
+    });
+  }
+
   return (
-    <Box sx={{
-      position: 'absolute',
-      // zIndex:-1,
-      // backgroundColor: 'pink',
-      }}>
+    <Grid sx={{ position: 'absolute', width: 0.83 }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
       
-      <Box sx={{ padding: 2, zIndex: -1 }}>
+      <Grid sx={{ padding: 2 }} container direction="row" justifyContent="space-between">
         <Typography variant="h6">Albums</Typography>
-      </Box>
+        <TextField id="Search" label="Search" variant="outlined" InputProps={{
+          startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+          ),
+        }} onChange={handleSearch}/>
+      </Grid>
 
       <Grid sx={{
           display: "flex",
           flexWrap: 'wrap',
           justifyContent: 'center',
-          // backgroundColor: 'red',
           marginBottom: '5em',
         }}>
         {albums.map((album, index) => {
           return <AlbumCard album={album} key={index} />;
         })}
       </Grid>
-    </Box>
+    </Grid>
   );
 }
