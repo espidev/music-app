@@ -50,14 +50,17 @@ export default function CollectionPage() {
   };
 
   return (
-    <Box sx={{ height: 1 }}>
+    <Box>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6">Tracks</Typography>
       </Box>
 
-      <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+      {/* Weird. paddingBottom works but not marginBottom. */}
+      <Box sx={{ paddingBottom: '5em' }}>
+        <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+      </Box>
     </Box>
   );
 }
