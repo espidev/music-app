@@ -56,6 +56,27 @@ export function apiGetCollectionArtists(accountUuid: string) {
   });
 }
 
+export function apiGetArtist(artistId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/artist/${artistId}`
+  });
+}
+
+export function apiGetArtistTracks(artistId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/artist/${artistId}/tracks`
+  });
+}
+
+export function apiGetArtistAlbums(artistId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/artist/${artistId}/albums`
+  });
+}
+
 export function apiGetCollectionTracks(accountUuid: string) {
   return axios({
     method: 'get',

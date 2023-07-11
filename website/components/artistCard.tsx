@@ -19,7 +19,12 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       position: 'relative',
       overflow: 'hidden',
       borderRadius: '0.5em',
-      }}>
+      }}
+      onClick={() => {
+        router.push(`/collection/artists/${props.artist.id}`);
+      }}
+      >
+        
       <CardActionArea>
         <CardMedia
           component="img"

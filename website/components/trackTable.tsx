@@ -48,7 +48,7 @@ function PositionedMenu(props: PositionedMenuProps) {
   );
 }
 
-export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void }) {
+export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortColumn, setSortColumn] = useState('id');
@@ -136,6 +136,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                 Name
               </TableSortLabel>
             </TableCell>
+            {!props.hideArtistCol ? 
             <TableCell>
               <TableSortLabel
                 active={sortColumn === 'artist_name'}
@@ -144,7 +145,10 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
               >
                 Artist
               </TableSortLabel>
-            </TableCell>
+              </TableCell>
+              :
+              <></>
+            }
             <TableCell>
               <TableSortLabel
                 active={sortColumn === 'albums'}
@@ -204,7 +208,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                 </Grid>
               </TableCell>
               <TableCell onClick={() => props.handleTrackClick(track)}>{track.name}</TableCell>
-              <TableCell>{track.artist_name}</TableCell>
+              {!props.hideArtistCol ? <TableCell>{track.artist_name}</TableCell> : <></>}
               <TableCell>{track.albums.length > 0 ? track.albums[0].name : ''}</TableCell>
               <TableCell>{track.create_year}</TableCell>
               <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
