@@ -12,6 +12,19 @@ import { APITrack } from '@/util/models/track';
 import TrackTable from "@/components/trackTable";
 import { useAppStateContext } from "@/components/appstateprovider";
 
+function formatDuration(duration: number): string {
+  const minutes = Math.floor(duration / 60);
+  const seconds = duration % 60;
+
+  if (duration < 3600) {
+    return `${minutes} minutes ${seconds} seconds`;
+  } else {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours} hours and ${remainingMinutes} minutes`;
+  }
+}
+
 export default function CollectionAlbumPage({params} : {params: {albumId: string}}) {
   const appState = useAppStateContext();
   const loginState = useLoginStateContext();
@@ -19,7 +32,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
 
   const albumId = params.albumId;
 
-  // const [albums, setAlbums] = useState([] as APIAlbum[]);
   const [album, setAlbum] = useState<APIAlbum>();
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
@@ -64,20 +76,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
   const handleTrackClick = (track: APITrack) => {
     appState.changeTrack(track);
   }
-
-  function formatDuration(duration: number): string {
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
-  
-    if (duration < 3600) {
-      return `${minutes} minutes ${seconds} seconds`;
-    } else {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      return `${hours} hours and ${remainingMinutes} minutes`;
-    }
-  }
-  
 
   const totalTime = formatDuration(tracks.reduce((acc, track) => acc + track.audio_length, 0));
   const trackLength = tracks.length;
