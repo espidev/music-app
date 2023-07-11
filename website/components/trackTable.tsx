@@ -90,7 +90,6 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
     const sorted = [...props.tracks].sort((a, b) => {
       // `albums` and `genres` are arrays from which we display 1 element
       if (column === 'albums' || column === 'genres') {
-        console.log("sorting by albums or genres: ", a[column]);
         return arrCompare(a, b, column, isAsc);
       }
       if (typeof a[column] === 'string') {
@@ -113,7 +112,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
   const [addedToPlaylist, setAddedToPlaylist] = useState(false);
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
-    console.log("handleMenuClick: ref.current: ", ref.current);
+    // console.log("handleMenuClick: ref.current: ", ref.current);
     // setAnchorEl(event.currentTarget);
     setAnchorEl(ref.current);
   };

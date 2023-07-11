@@ -1,11 +1,8 @@
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
 import { NextResponse } from "next/server";
-import { getAPITrack } from "@/util/models/track";
 import { getAPIAlbum } from "@/util/models/album";
-import { getAPIArtist } from "@/util/models/artist";
-// import { getAPIGenre } from "@/util/models/genre";
-import {useSearchParams} from "next/navigation";
+// import {useSearchParams} from "next/navigation";
 
 // GET /api/album/[albumId]/tracks/search
 // Search for tracks
@@ -32,8 +29,6 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   const query = request.url.split("?")[1];
   const p = new URLSearchParams(query);
   const search = p.get("q");
-
-  console.log("search: ", search)
 
   // fetch the list of albums and their tracks
   const albumRes = await conn.query(

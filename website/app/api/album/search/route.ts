@@ -5,7 +5,7 @@ import { getAPIAlbum } from "@/util/models/album";
 // GET /api/album/search
 // Search for albums
 
-export async function GET(request: Request) {
+export async function GET(request: Request, { params }: { params: {} }) {
   const conn = await getDB();
 
   // get url parameter
