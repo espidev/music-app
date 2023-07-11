@@ -57,7 +57,7 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
           VALUES (
             $1, 
             $2, 
-            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
+            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1 LIMIT 1)
           )
       `, [accountUuid, trackId, albumArtist]);
     }
@@ -75,7 +75,7 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
           VALUES (
             $1,
             $2,
-            (SELECT id FROM album WHERE name = $3 AND account_uuid = $1),
+            (SELECT id FROM album WHERE name = $3 AND account_uuid = $1 LIMIT 1),
             $4
           )
       `, [accountUuid, trackId, albumName, albumTrackNum]);
@@ -88,8 +88,8 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
         INSERT INTO album_to_artist(account_uuid, album_id, artist_id)
           VALUES (
             $1,
-            (SELECT id FROM album WHERE name = $2 AND account_uuid = $1),
-            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1)
+            (SELECT id FROM album WHERE name = $2 AND account_uuid = $1 LIMIT 1),
+            (SELECT id FROM artist WHERE name = $3 AND account_uuid = $1 LIMIT 1)
           )
           ON CONFLICT DO NOTHING
       `, [accountUuid, albumName, albumArtist]);
@@ -110,7 +110,7 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
             VALUES (
               $1,
               $2,
-              (SELECT id FROM genre WHERE name = $3 AND account_uuid = $1)
+              (SELECT id FROM genre WHERE name = $3 AND account_uuid = $1 LIMIT 1)
             )
         `, [accountUuid, trackId, genre]);
       }

@@ -29,12 +29,14 @@ export default function CollectionUploadPage() {
     return <></>;
   }
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     for (let i = 0; i < files.length; i++) {
       const formData = new FormData();
       formData.append("file", files[i].file, (files[i].file as any).name);
 
-      apiPostCollectionTracks(loginState.loggedInUserUuid, formData)
+      // TODO don't block here
+      // we currently have a race condition for uploading so we'll do it sequentially for now
+      await apiPostCollectionTracks(loginState.loggedInUserUuid, formData)
         .then(res => {
           const newFiles = files.map((file: any, index) => {
             if (index === i) {
