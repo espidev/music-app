@@ -9,7 +9,7 @@ export default function ArtistCard(props: { artist: APIArtist }) {
 
   return (
     <Card sx={{ 
-      maxWidth: '12em',
+      width: '12em',
       zIndex: 0,
       margin: '0.5em',
       marginLeft: '0.375em',
@@ -28,7 +28,7 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          image={props.artist.thumbnail_src}
+          image={`/api/artist/${props.artist.id}/thumbnail`}
           alt="artist_cover"
           sx={{ height: '10em',  objectFit: 'cover' }}
         />

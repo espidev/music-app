@@ -9,8 +9,8 @@ export default function AlbumCard(props: { album: APIAlbum }) {
   const router = useRouter();
 
   return (
-    <Card sx={{ 
-      maxWidth: '12em',
+    <Card sx={{
+      width: '12em',
       zIndex: 0,
       margin: '0.5em',
       marginLeft: '0.375em',
@@ -28,9 +28,9 @@ export default function AlbumCard(props: { album: APIAlbum }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          image={props.album.thumbnail_src}
+          image={`/api/album/${props.album.id}/thumbnail`}
           alt="album_cover"
-          sx={{ height: '10em',  objectFit: 'cover' }}
+          sx={{ height: '10em', objectFit: 'cover' }}
         />
         <CardContent>
           <Typography gutterBottom variant="subtitle2" component="div">
