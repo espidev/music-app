@@ -101,8 +101,11 @@ export default function CollectionArtistPage({
   const totalTime = formatDuration(
     tracks.reduce((acc, track) => acc + track.audio_length, 0)
   );
+  
   const trackLength = tracks.length;
-  const suffix = trackLength === 1 ? "song" : "songs";
+  const trackSuffix = trackLength === 1 ? "song" : "songs";
+  const albumLength = albums.length;
+  const albumSuffix = albumLength === 1 ? "album" : "albums";
 
   return (
     <div>
@@ -110,7 +113,6 @@ export default function CollectionArtistPage({
         <div
           style={{
             display: "flex",
-            // backgroundColor: 'pink',
             margin: "auto",
             alignItems: "center",
             zIndex: 2,
@@ -132,7 +134,7 @@ export default function CollectionArtistPage({
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="h3">{artist.name}</Typography>
             <Typography variant="subtitle2" sx={{marginTop: '1em'}}>
-              {trackLength} {suffix} • {totalTime}
+              {trackLength} {trackSuffix} • {albumLength} {albumSuffix} • {totalTime}
             </Typography>
             <Button
               variant="outlined"

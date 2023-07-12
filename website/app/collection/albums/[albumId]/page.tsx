@@ -87,7 +87,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
         <div style={
           {
             display: 'flex',
-            // backgroundColor: 'pink',
             margin: 'auto',
             alignItems: 'center',
             zIndex: 2,
@@ -102,7 +101,12 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
 
           <div style={{ display: 'flex', flexDirection: "column"}}>
             <Typography variant="h3">{album.name}</Typography>
-            <Typography variant="h6">{album.album_artist}</Typography>
+            <Typography
+              variant="h6"
+              sx={{ cursor: 'pointer' }}
+              onClick={() => { router.push(`/collection/artists/${album.album_artist}`); }}>
+                {album.album_artist}
+            </Typography>
             <Typography variant="subtitle2">{trackLength} {suffix} • {totalTime}</Typography>
             <Button variant="outlined"  style={{ width: '5vw', marginTop: '2em', color: 'black' }}>
               <PlayArrowIcon fontSize="medium" style={{ color: '#000', marginLeft: '-0.3em' }} />Play
