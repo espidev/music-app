@@ -36,11 +36,12 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
         artist_display_name,
         uploaded_on,
         create_year,
-        audio_length
+        audio_length,
+        num_of_times_played
       )
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id;
-    `, [trackName, accountUuid, artistDisplayName, new Date().toISOString(), trackYear, Math.round(trackDuration!)]);
+    `, [trackName, accountUuid, artistDisplayName, new Date().toISOString(), trackYear, Math.round(trackDuration!), 0]);
 
     const trackId = res.rows[0].id;
 
@@ -83,7 +84,7 @@ export async function importAudioFile(dbClient: pkg.Client, accountUuid: string,
 
     if (albumName && albumArtist) {
       // insert album-artist relationship
-      //TODO use album id and artist id, because there can be multiple albums with the same name
+      // TODO use album id and artist id, because there can be multiple albums with the same name
       await dbClient.query(`
         INSERT INTO album_to_artist(account_uuid, album_id, artist_id)
           VALUES (
