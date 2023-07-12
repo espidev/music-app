@@ -1,5 +1,41 @@
 # music-app
 
+This is a web application to manage and play music collections.
+
+The production data is at: https://drive.google.com/file/d/1bCoon3Nj-6nh-_RE9vNY4kQnDKoq9Fye/view?usp=sharing
+
+The testing data is at: https://drive.google.com/file/d/11nd32AImDeLA856__QpqkyL5lRC_An66/view?usp=drive_link
+
+It supports the following features:
+
+- Multi-user account creation/authentication
+  - https://github.com/Raymo111/cs348/blob/main/website/app/login/page.tsx
+  - https://github.com/Raymo111/cs348/blob/main/website/app/register/page.tsx
+- Fetch songs with info
+  - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/tracks/route.ts
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/page.tsx
+- Album views, with sorting
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/albums
+  - https://github.com/Raymo111/cs348/tree/main/website/app/api/album/%5BalbumId%5D
+  - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/albums/route.ts
+- Searching for tracks by name, artist, creation year, genre, etc.
+  - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/tracks/search/route.ts
+- Playlists
+  - To be implemented
+- Hot charts
+  - To be implemented
+- Music player applet in the webpage footer
+- Web uploader to add music
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/upload/page.tsx
+  - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/tracks/route.ts
+  - https://github.com/Raymo111/cs348/blob/main/website/util/import.ts
+- Asset storage service
+  - https://github.com/Raymo111/cs348/tree/main/filestore
+- Song queueing
+  - To be implemented
+- Song favouriting
+  - To be implemented
+
 The website and backend is in the `website` folder. The file storage server is in the `filestore` folder.
 
 #### Developing
