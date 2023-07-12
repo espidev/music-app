@@ -51,7 +51,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
     // load album content
     apiGetAlbum(albumId)
       .then(res => {
-          console.log(res.data);
           setAlbum(res.data as APIAlbum);
 
           // Fetch and set the tracks
@@ -96,7 +95,7 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
             component="img"
             alt="album_cover"
             sx={{ width: "15em", height: "15em", objectFit: "cover", padding: 2, margin: 2 }}
-            src={album.thumbnail_src}
+            src={`/api/album/${album.id}/thumbnail`}
           />
 
           <div style={{ display: 'flex', flexDirection: "column"}}>

@@ -61,7 +61,6 @@ export default function CollectionArtistPage({
     // load artist content
     apiGetArtist(artistId)
       .then((res) => {
-        console.log(res.data);
         setArtist(res.data as APIArtist);
 
         // Fetch and set the tracks
@@ -83,7 +82,6 @@ export default function CollectionArtistPage({
         ]);
         console.error(err);
       });
-    // load albums
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -128,7 +126,7 @@ export default function CollectionArtistPage({
               padding: 2,
               margin: 2,
             }}
-            src={artist.thumbnail_src}
+            src={albums.length > 0 ? `/api/album/${albums[0].id}/thumbnail` : (tracks.length > 0 ? `/api/track/${tracks[0].id}/thumbnail` : '')}
           />
 
           <div style={{ display: "flex", flexDirection: "column" }}>
