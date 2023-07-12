@@ -1,6 +1,6 @@
 -- Feature 1 (Accounts) --
 
-SELECT * FROM account WHERE username = 'username';
+SELECT * FROM account WHERE username = 'milestone2';
 
 
 
@@ -17,9 +17,9 @@ SELECT t.*,
       LEFT OUTER JOIN album ON track_to_album.album_id = album.id
       LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
-      WHERE t.account_uuid = 'b3837b5a-7b11-47f5-80be-b445febe6f09'
+      WHERE t.account_uuid = '8272eaae-593b-47e7-b095-19fd943b006d'
       GROUP BY t.id
-      ORDER BY t.name ASC;
+      ORDER BY t.name ASC LIMIT 10;
 
 
 
@@ -57,12 +57,12 @@ SELECT t.*,
      LEFT OUTER JOIN album ON track_to_album.album_id = album.id
      LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
      LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
-     WHERE t.account_uuid = 'b3837b5a-7b11-47f5-80be-b445febe6f09' AND (
-       t.name ILIKE '%birb%' OR
-       t.artist_display_name ILIKE '%birb%' OR
-       t.create_year::text ILIKE '%birb%' OR
-       album.name ILIKE '%birb%' OR
-       genre.name ILIKE '%birb%'
+     WHERE t.account_uuid = '8272eaae-593b-47e7-b095-19fd943b006d' AND (
+       t.name ILIKE '%a%' OR
+       t.artist_display_name ILIKE '%a%' OR
+       t.create_year::text ILIKE '%a%' OR
+       album.name ILIKE '%a%' OR
+       genre.name ILIKE '%a%'
      )
      GROUP BY t.id
      ORDER BY t.name ASC LIMIT 10;
@@ -70,6 +70,7 @@ SELECT t.*,
 
 
 -- Feature 5 (Playlists) --
+-- This is a playlist that we created. --
 
 SELECT t.*,
   JSON_AGG(artist.*) as artists,
@@ -83,7 +84,7 @@ SELECT t.*,
   LEFT OUTER JOIN album ON track_to_album.album_id = album.id
   LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
   LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
-  WHERE tp.playlist_id = 1
+  WHERE tp.playlist_id = 2
   GROUP BY t.id, tp.position
   ORDER BY tp.position ASC;
 
@@ -96,7 +97,6 @@ SELECT artist.*,
   FROM track
   INNER JOIN track_to_artist ON track.id = track_to_artist.track_id
   INNER JOIN artist ON track_to_artist.artist_id = artist.id
-  WHERE track.account_uuid = 'b3837b5a-7b11-47f5-80be-b445febe6f09'
+  WHERE track.account_uuid = '8272eaae-593b-47e7-b095-19fd943b006d'
   GROUP BY artist.id
-  ORDER BY total_plays DESC;
-
+  ORDER BY total_plays DESC LIMIT 10;

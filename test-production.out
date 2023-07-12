@@ -1,0 +1,133 @@
+# Feature 1 result
+
+                 uuid                 |  username  |                                          password_argon2
+--------------------------------------+------------+---------------------------------------------------------------------------------------------------
+ 8272eaae-593b-47e7-b095-19fd943b006d | milestone2 | $argon2id$v=19$m=65536,t=3,p=4$H3MIooZpBjMGior1OCXPlA$oSi2rRC5wvkA4Vk6zkue/vddjiZvBLmIVIax/+RTL3g
+(1 row)
+
+
+
+
+# Feature 2 result
+
+ id |        name        |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length | num_of_times_played |                                       artists                                        |
+                               albums                                                              |                                          genres
+----+--------------------+--------------------------------------+---------------------+-------------------------+-------------+--------------+---------------------+--------------------------------------------------------------------------------------+------------------------------
+---------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------
+ 82 | BASSLINE 5000      | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.919 |        2017 |          182 |                   0 | [{"id":56,"name":"Android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":29,"name":"Anime Wav G
+roove Vol. 1&2","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 93 | birb march         | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:28.465 |        2018 |          139 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":43,"name":"birb march"
+,"album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]                | [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 92 | Cave Slimes        | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:28.346 |        2018 |          154 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":40,"name":"Collecting
+Pieces","album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]         | [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 81 | Chord Ex           | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.83  |        2020 |          199 |                   0 | [{"id":52,"name":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":32,"name":"FUTURE GROO
+VE PRODUCT","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 94 | cyanine            | 8272eaae-593b-47e7-b095-19fd943b006d | jioyi               | 2023-07-12 01:27:28.536 |        2017 |          191 |                   0 | [{"id":68,"name":"jioyi","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [null]
+                                                                                                   | [{"id":74,"name":"Drum & Bass","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 96 | Cyberspace / ETIA. | 8272eaae-593b-47e7-b095-19fd943b006d | ETIA.               | 2023-07-12 01:27:28.789 |        2020 |          208 |                   0 | [{"id":70,"name":"ETIA.","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [{"id":45,"name":"AD:PIANO IV
+ -monochrome-","album_artist":"ETIA.","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]      | [{"id":67,"name":"Soundtrack","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 72 | Dawn               | 8272eaae-593b-47e7-b095-19fd943b006d | Couple N            | 2023-07-12 01:27:23.625 |        2020 |          217 |                   0 | [{"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}, +| [{"id":23,"name":"Magical Pie
+ces","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},            +| [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},        +
+    |                    |                                      |                     |                         |             |              |                     |  {"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]  |  {"id":23,"name":"Magical Pie
+ces","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]             |  {"id":48,"name":"Electronic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 80 | Delicious Groove   | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.727 |        2017 |          181 |                   0 | [{"id":52,"name":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":29,"name":"Anime Wav G
+roove Vol. 1&2","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 91 | Dungeon Crawl      | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:27.736 |        2018 |          139 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":40,"name":"Collecting
+Pieces","album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]         | [{"id":71,"name":"Bossa Nova","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 71 | Flying Magic       | 8272eaae-593b-47e7-b095-19fd943b006d | Couple N            | 2023-07-12 01:27:23.452 |        2020 |          180 |                   0 | [{"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}, +| [{"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},     +| [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},        +
+    |                    |                                      |                     |                         |             |              |                     |  {"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]  |  {"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]      |  {"id":48,"name":"Electronic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+(10 rows)
+
+
+
+
+
+# Feature 3 result
+
+ id |        name         |             account_uuid             |   artist_display_name    |       uploaded_on       | create_year | audio_length | num_of_times_played | album_track |                                     artists                                      |
+                                      albums                                                     |                                        genres
+----+---------------------+--------------------------------------+--------------------------+-------------------------+-------------+--------------+---------------------+-------------+----------------------------------------------------------------------------------+--------------
+-------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------
+ 75 | Personal Reality    | 8272eaae-593b-47e7-b095-19fd943b006d | Auvic                    | 2023-07-12 01:27:24.096 |        2015 |          361 |                   0 |           6 | [{"id":47,"name":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":24,"na
+me":"Voices Call","album_artist":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":51,"name":"Glitch Hop","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 73 | Indignation         | 8272eaae-593b-47e7-b095-19fd943b006d | Auvic ft. Pipo Fernandez | 2023-07-12 01:27:23.757 |        2015 |          229 |                   0 |             | [{"id":47,"name":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":24,"na
+me":"Voices Call","album_artist":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":51,"name":"Glitch Hop","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 76 | Music Is A Movement | 8272eaae-593b-47e7-b095-19fd943b006d | Auvic                    | 2023-07-12 01:27:24.266 |        2015 |          202 |                   0 |             | [{"id":47,"name":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":24,"na
+me":"Voices Call","album_artist":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":51,"name":"Glitch Hop","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 77 | Heal Me             | 8272eaae-593b-47e7-b095-19fd943b006d | Auvic                    | 2023-07-12 01:27:24.404 |        2015 |          254 |                   0 |             | [{"id":47,"name":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":24,"na
+me":"Voices Call","album_artist":"Auvic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":51,"name":"Glitch Hop","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+(4 rows)
+
+
+
+# Feature 4 result
+
+ id |        name        |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length | num_of_times_played |                                       artists                                        |
+                               albums                                                              |                                          genres
+----+--------------------+--------------------------------------+---------------------+-------------------------+-------------+--------------+---------------------+--------------------------------------------------------------------------------------+------------------------------
+---------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------
+ 82 | BASSLINE 5000      | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.919 |        2017 |          182 |                   0 | [{"id":56,"name":"Android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":29,"name":"Anime Wav G
+roove Vol. 1&2","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 93 | birb march         | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:28.465 |        2018 |          139 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":43,"name":"birb march"
+,"album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]                | [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 92 | Cave Slimes        | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:28.346 |        2018 |          154 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":40,"name":"Collecting
+Pieces","album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]         | [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 81 | Chord Ex           | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.83  |        2020 |          199 |                   0 | [{"id":52,"name":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":32,"name":"FUTURE GROO
+VE PRODUCT","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 94 | cyanine            | 8272eaae-593b-47e7-b095-19fd943b006d | jioyi               | 2023-07-12 01:27:28.536 |        2017 |          191 |                   0 | [{"id":68,"name":"jioyi","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [null]
+                                                                                                   | [{"id":74,"name":"Drum & Bass","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 96 | Cyberspace / ETIA. | 8272eaae-593b-47e7-b095-19fd943b006d | ETIA.               | 2023-07-12 01:27:28.789 |        2020 |          208 |                   0 | [{"id":70,"name":"ETIA.","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [{"id":45,"name":"AD:PIANO IV
+ -monochrome-","album_artist":"ETIA.","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]      | [{"id":67,"name":"Soundtrack","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 72 | Dawn               | 8272eaae-593b-47e7-b095-19fd943b006d | Couple N            | 2023-07-12 01:27:23.625 |        2020 |          217 |                   0 | [{"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}, +| [{"id":23,"name":"Magical Pie
+ces","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},            +| [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},        +
+    |                    |                                      |                     |                         |             |              |                     |  {"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]  |  {"id":23,"name":"Magical Pie
+ces","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]             |  {"id":48,"name":"Electronic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 80 | Delicious Groove   | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.727 |        2017 |          181 |                   0 | [{"id":52,"name":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":29,"name":"Anime Wav G
+roove Vol. 1&2","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 91 | Dungeon Crawl      | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:27.736 |        2018 |          139 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":40,"name":"Collecting
+Pieces","album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]         | [{"id":71,"name":"Bossa Nova","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 71 | Flying Magic       | 8272eaae-593b-47e7-b095-19fd943b006d | Couple N            | 2023-07-12 01:27:23.452 |        2020 |          180 |                   0 | [{"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}, +| [{"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},     +| [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},        +
+    |                    |                                      |                     |                         |             |              |                     |  {"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]  |  {"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]      |  {"id":48,"name":"Electronic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+(10 rows)
+
+
+
+
+# Feature 5 result
+
+ id |           name            |             account_uuid             | artist_display_name |       uploaded_on       | create_year | audio_length | num_of_times_played |                                          artists                                           |
+                                            albums                                                             |                                          genres
+----+---------------------------+--------------------------------------+---------------------+-------------------------+-------------+--------------+---------------------+--------------------------------------------------------------------------------------------+-----------------
+---------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------
+81 | Chord Ex           | 8272eaae-593b-47e7-b095-19fd943b006d | android52           | 2023-07-12 01:27:24.83  |        2020 |          199 |                   0 | [{"id":52,"name":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":32,"name":"FUTURE GROO
+VE PRODUCT","album_artist":"android52","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]     | [{"id":56,"name":"Future Groove","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 71 | Flying Magic       | 8272eaae-593b-47e7-b095-19fd943b006d | Couple N            | 2023-07-12 01:27:23.452 |        2020 |          180 |                   0 | [{"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}, +| [{"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},     +| [{"id":47,"name":"Chill","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"},        +
+    |                    |                                      |                     |                         |             |              |                     |  {"id":45,"name":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]  |  {"id":22,"name":"ここにいる
+(I'm Here)","album_artist":"Couple N","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]      |  {"id":48,"name":"Electronic","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+ 91 | Dungeon Crawl      | 8272eaae-593b-47e7-b095-19fd943b006d | park bird           | 2023-07-12 01:27:27.736 |        2018 |          139 |                   0 | [{"id":64,"name":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}] | [{"id":40,"name":"Collecting
+Pieces","album_artist":"park bird","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]         | [{"id":71,"name":"Bossa Nova","account_uuid":"8272eaae-593b-47e7-b095-19fd943b006d"}]
+(3 rows)
+
+
+
+
+# Feature 6 result
+
+ id |        name        |             account_uuid             | total_plays
+----+--------------------+--------------------------------------+-------------
+ 45 | Couple N           | 8272eaae-593b-47e7-b095-19fd943b006d |           25
+ 47 | Auvic              | 8272eaae-593b-47e7-b095-19fd943b006d |           13
+ 52 | android52          | 8272eaae-593b-47e7-b095-19fd943b006d |           6
+ 56 | Android52          | 8272eaae-593b-47e7-b095-19fd943b006d |           5
+ 57 | Aevi               | 8272eaae-593b-47e7-b095-19fd943b006d |           2
+ 58 | Acro               | 8272eaae-593b-47e7-b095-19fd943b006d |           2
+ 59 | 汪蘇瀧 Wang Sulong  | 8272eaae-593b-47e7-b095-19fd943b006d |           2
+ 60 | 周杰倫 Jay Chou     | 8272eaae-593b-47e7-b095-19fd943b006d |           1
+ 61 | やどりぎ            | 8272eaae-593b-47e7-b095-19fd943b006d |           0
+ 62 | yuigot             | 8272eaae-593b-47e7-b095-19fd943b006d |           0
+(10 rows)
