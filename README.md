@@ -21,6 +21,8 @@ It supports the following features:
 - Hot charts
   - To be implemented
 - Music player applet in the webpage footer
+  - https://github.com/Raymo111/cs348/blob/main/website/components/mediaplayer.tsx
+  - https://github.com/Raymo111/cs348/blob/main/website/components/appstateprovider.tsx
 - Web uploader to add music
   - https://github.com/Raymo111/cs348/blob/main/website/app/collection/upload/page.tsx
   - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/tracks/route.ts
