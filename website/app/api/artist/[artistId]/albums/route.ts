@@ -2,8 +2,6 @@ import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
 import { DBArtist, getAPIArtist } from "@/util/models/artist";
 import { getAPIAlbum } from "@/util/models/album";
-import { getAPITrack } from "@/util/models/track";
-import { getAPIGenre } from "@/util/models/genre";
 import { NextResponse } from "next/server";
 
 // GET /api/artist/[artistId]/albums
