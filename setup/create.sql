@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS track (
     uploaded_on TIMESTAMP,
     create_year INT,
     audio_length INT,
+    num_of_times_played INT NOT NULL DEFAULT 0,
     FOREIGN KEY (account_uuid) REFERENCES account(uuid)
 );
 

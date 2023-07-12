@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { apiGetCollectionTracks, apiGetCollectionSearch } from "@/components/apiclient";
+import { apiGetCollectionTracks, apiGetCollectionTracksSearch } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
 import {Grid, TextField, Typography, InputAdornment} from "@mui/material";
@@ -64,7 +64,7 @@ export default function CollectionPage() {
     }
 
     // Call API to search for tracks
-    apiGetCollectionSearch(loginState.loggedInUserUuid, event.target.value).then((res) => {
+    apiGetCollectionTracksSearch(loginState.loggedInUserUuid, event.target.value).then((res) => {
       setTracks(res.data as APITrack[]);
     });
   }

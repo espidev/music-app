@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { apiGetCollectionAlbums, apiGetAlbumsSearch } from "@/components/apiclient";
+import { apiGetCollectionAlbums, apiGetCollectionAlbumsSearch } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { useRouter } from "next/navigation";
 import { APIAlbum } from "@/util/models/album";
@@ -56,7 +56,7 @@ export default function CollectionAlbumsPage() {
     }
 
     // Call API to search for tracks
-    apiGetAlbumsSearch(event.target.value).then((res) => {
+    apiGetCollectionAlbumsSearch(loginState.loggedInUserUuid, event.target.value).then((res) => {
       setAlbums(res.data as APIAlbum[]);
     });
   }

@@ -42,10 +42,10 @@ export function apiGetAlbumTracks(albumId: string) {
   });
 }
 
-export function apiGetAlbumsSearch(query: string) {
+export function apiGetCollectionAlbumsSearch(accountUuid: string, query: string) {
   return axios({
     method: 'get',
-    url: `/api/album/search?q=${query}`
+    url: `/api/collection/${accountUuid}/albums/search?q=${query}`
   });
 }
 
@@ -84,10 +84,10 @@ export function apiGetCollectionTracks(accountUuid: string) {
   });
 }
 
-export function apiGetCollectionSearch(accountUuid: string, query: string) {
+export function apiGetCollectionTracksSearch(accountUuid: string, query: string) {
   return axios({
       method: 'get',
-      url: `/api/collection/${accountUuid}/search?q=${query}`
+      url: `/api/collection/${accountUuid}/tracks/search?q=${query}`
   });
 }
 
