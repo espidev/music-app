@@ -2,10 +2,6 @@
 
 This is a web application to manage and play music collections.
 
-The production data is at: https://drive.google.com/file/d/1bCoon3Nj-6nh-_RE9vNY4kQnDKoq9Fye/view?usp=sharing
-
-The testing data is at: https://drive.google.com/file/d/11nd32AImDeLA856__QpqkyL5lRC_An66/view?usp=drive_link
-
 It supports the following features:
 
 - Multi-user account creation/authentication
@@ -35,10 +31,20 @@ It supports the following features:
   - To be implemented
 - Song favouriting
   - To be implemented
+ 
+---
+
+The production data is at: https://drive.google.com/file/d/1bCoon3Nj-6nh-_RE9vNY4kQnDKoq9Fye/view?usp=sharing
+
+The testing data is at: https://drive.google.com/file/d/11nd32AImDeLA856__QpqkyL5lRC_An66/view?usp=drive_link
+
+In order to load the data into the web application, please use the **upload tab** and batch upload all of the song files to be imported into the database.
+
+---
 
 The website and backend is in the `website` folder. The file storage server is in the `filestore` folder.
 
-#### Developing
+### Developing
 
 Set up the local PostgreSQL server:
 
@@ -70,7 +76,7 @@ $ npm install
 $ npm run dev
 ```
 
-#### Testing
+### Testing
 
 Docker is used for consistent deployments:
 
@@ -85,7 +91,7 @@ $ cd ..
 $ docker-compose up
 ```
 
-#### Loading and interacting with PostgreSQL in Docker
+### Loading and interacting with PostgreSQL in Docker
 
 With the Docker Compose stack up:
 
