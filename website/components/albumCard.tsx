@@ -30,7 +30,7 @@ export default function AlbumCard(props: { album: APIAlbum }) {
         <CardMedia
           component="img"
           height="140"
-          image={props.album.thumbnail_src}
+          image={`/api/album/${props.album.id}/thumbnail`}
           alt="album_cover"
         />
         <CardContent>

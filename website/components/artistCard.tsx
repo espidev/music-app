@@ -29,7 +29,7 @@ export default function ArtistCard(props: { artist: APIArtist }) {
         <CardMedia
           component="img"
           height="140"
-          image={props.artist.thumbnail_src}
+          image={`/api/artist/${props.artist.id}/thumbnail`}
           alt="artist_cover"
         />
         <CardContent>

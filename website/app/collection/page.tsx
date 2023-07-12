@@ -11,8 +11,6 @@ import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import TrackTable from "@/components/trackTable";
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
 
 export default function CollectionPage() {
   const appState = useAppStateContext();
