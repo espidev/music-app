@@ -28,9 +28,9 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
           image={props.artist.thumbnail_src}
           alt="artist_cover"
+          sx={{ height: '10em',  objectFit: 'cover' }}
         />
         <CardContent>
           <Typography gutterBottom variant="subtitle2" component="div">

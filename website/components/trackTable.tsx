@@ -6,6 +6,7 @@ import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel,
 import {styled} from '@mui/system';
 import React from "react";
 import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 interface PositionedMenuProps {
   anchorEl: HTMLElement | null;
@@ -49,6 +50,7 @@ function PositionedMenu(props: PositionedMenuProps) {
 }
 
 export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+  const router = useRouter();
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortColumn, setSortColumn] = useState('id');
@@ -208,9 +210,12 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                 </Grid>
               </TableCell>
               <TableCell onClick={() => props.handleTrackClick(track)}>{track.name}</TableCell>
-              {!props.hideArtistCol ? <TableCell>{track.artist_name}</TableCell> : <></>}
-              <TableCell>{track.albums.length > 0 ? track.albums[0].name : ''}</TableCell>
+              {!props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>}
+              <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
+                {track.albums.length > 0 ? track.albums[0].name : ''}
+              </TableCell>
               <TableCell>{track.create_year}</TableCell>
+              {/* TODO: onClick for genre */}
               <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
               <TableCell>{format(track.audio_length * 1000)}</TableCell>
               <TableCell onClick={() => {}}>

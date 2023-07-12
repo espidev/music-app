@@ -2,7 +2,6 @@ import React from "react";
 import { APIAlbum } from "@/util/models/album";
 import { Typography, Card, CardActions, CardActionArea, CardContent, CardMedia, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 
@@ -29,9 +28,9 @@ export default function AlbumCard(props: { album: APIAlbum }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
           image={props.album.thumbnail_src}
           alt="album_cover"
+          sx={{ height: '10em',  objectFit: 'cover' }}
         />
         <CardContent>
           <Typography gutterBottom variant="subtitle2" component="div">

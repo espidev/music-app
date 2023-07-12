@@ -131,7 +131,7 @@ export default function CollectionArtistPage({
 
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="h3">{artist.name}</Typography>
-            <Typography variant="subtitle2">
+            <Typography variant="subtitle2" sx={{marginTop: '1em'}}>
               {trackLength} {suffix} • {totalTime}
             </Typography>
             <Button
