@@ -48,7 +48,8 @@ export default function CollectionPage() {
   }
 
   const handleTrackClick = (track: APITrack) => {
-    appState.changeTrack(track);
+    appState.changeQueue(tracks, tracks.indexOf(track));
+    appState.playCurrentTrack();
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

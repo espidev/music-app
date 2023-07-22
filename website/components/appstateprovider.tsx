@@ -6,12 +6,21 @@ import { createContext, useContext, useEffect, useReducer, useState } from "reac
 const initialState = {
   isPlaying: false,
   currentTrack: null as APITrack | null,
+  
+  queuePosition: 0 as number,
+  trackQueue: [] as APITrack[],
+  originalTrackQueue: [] as APITrack[],
 
   // dispatch
-  changeTrack: null as any,
+  changeQueue: null as any,
   playCurrentTrack: null as any,
   pauseCurrentTrack: null as any,
   stopCurrentTrack: null as any,
+
+  goToNextTrack: null as any,
+  goToPreviousTrack: null as any,
+  shuffleQueue: null as any,
+  unshuffleQueue: null as any,
 };
 
 export const AppStateContext = createContext(initialState);
@@ -20,19 +29,31 @@ export function AppStateProvider({ children }: any) {
 
   const [state, dispatch] = useReducer(AppStateReducer, initialState);
 
-  const changeTrack = (track: APITrack) => dispatch({type: 'change-track', track});
+  const changeQueue = (queue: APITrack[], position: number) => dispatch({type: 'change-queue', queue, position});
   const playCurrentTrack = () => dispatch({type: 'play'});
   const pauseCurrentTrack = () => dispatch({type: 'pause'});
   const stopCurrentTrack = () => dispatch({type: 'stop'});
+
+  const goToNextTrack = () => dispatch({type: 'go-to-next-track'});
+  const goToPreviousTrack = () => dispatch({type: 'go-to-previous-track'});
+  const shuffleQueue = () => dispatch({type: 'shuffle-queue'});
+  const unshuffleQueue = () => dispatch({type: 'unshuffle-queue'});
 
   return (
     <AppStateContext.Provider value={{
       isPlaying: state.isPlaying,
       currentTrack: state.currentTrack,
-      changeTrack,
+      queuePosition: state.queuePosition,
+      trackQueue: state.trackQueue,
+      originalTrackQueue: state.originalTrackQueue,
+      changeQueue,
       playCurrentTrack,
       pauseCurrentTrack,
       stopCurrentTrack,
+      goToNextTrack,
+      goToPreviousTrack,
+      shuffleQueue,
+      unshuffleQueue,
     }}>
       {children}
     </AppStateContext.Provider>
@@ -45,10 +66,15 @@ export function useAppStateContext() {
 
 export default function AppStateReducer(state: any, action: any) {
   switch (action.type) {
-    case 'change-track':
+    case 'change-queue':
       return {
         ...state,
-        currentTrack: action.track,
+        isPlaying: false,
+        currentTrack: (action.queue !== null && action.queue.length > 0) ? action.queue[action.position] : null,
+
+        queuePosition: action.position,
+        trackQueue: action.queue,
+        originalTrackQueue: action.queue,
       };
     case 'play':
       return {
@@ -64,7 +90,46 @@ export default function AppStateReducer(state: any, action: any) {
       return {
         ...state,
         isPlaying: false,
-        currentTrackId: "",
-      }
+        currentTrack: null,
+
+        queuePosition: 0,
+        trackQueue: [],
+        originalTrackQueue: [],
+      };
+    case 'go-to-next-track':
+      const newPosition = state.queuePosition + 1;
+      return {
+        ...state,
+        currentTrack: (newPosition < state.trackQueue.length()) ? state.trackQueue[newPosition] : null,
+
+        queuePosition: newPosition,
+      };
+    case 'go-to-previous-track':
+      const newQPosition = state.queuePosition - 1;
+      return {
+        ...state,
+        currentTrack: (newQPosition >= 0) ? state.trackQueue[newQPosition] : null,
+
+        queuePosition: newQPosition,
+      };
+    case 'shuffle-queue':
+      const queueClone = [...state.originalTrackQueue];
+      shuffleArray(state.queuePosition, queueClone);
+      return {
+        ...state,
+        trackQueue: queueClone,
+      };
+    case 'unshuffle-queue':
+      return {
+        ...state,
+        trackQueue: state.originalTrackQueue,
+      }; // TODO update position of track is in new queue???
+  }
+}
+
+function shuffleArray(startIndex: number, array: any[]) {
+  for (let i = array.length - 1; i > (startIndex + 1); i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
   }
 }

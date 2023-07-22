@@ -73,7 +73,8 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
   }
 
   const handleTrackClick = (track: APITrack) => {
-    appState.changeTrack(track);
+    appState.changeQueue(tracks, tracks.indexOf(track));
+    appState.playCurrentTrack();
   }
 
   const totalTime = formatDuration(tracks.reduce((acc, track) => acc + track.audio_length, 0));
