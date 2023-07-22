@@ -138,6 +138,10 @@ export default function CollectionArtistPage({
             <Button
               variant="outlined"
               style={{ width: "5vw", marginTop: "2em", color: "black" }}
+              onClick={() => {
+                appState.changeQueue(tracks, 0);
+                appState.playCurrentTrack();
+              }}
             >
               <PlayArrowIcon
                 fontSize="medium"
