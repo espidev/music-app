@@ -3,10 +3,19 @@
 import { APITrack } from "@/util/models/track";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 
+export enum RepeatType {
+  OFF,
+  REPEAT,
+  REPEAT_ONCE,
+};
+
 const initialState = {
   isPlaying: false,
+  isShuffled: false,
+  repeatType: RepeatType.OFF,
+
   currentTrack: null as APITrack | null,
-  
+
   queuePosition: 0 as number,
   trackQueue: [] as APITrack[],
   originalTrackQueue: [] as APITrack[],
@@ -21,6 +30,7 @@ const initialState = {
   goToPreviousTrack: null as any,
   shuffleQueue: null as any,
   unshuffleQueue: null as any,
+  toggleRepeat: null as any,
 };
 
 export const AppStateContext = createContext(initialState);
@@ -38,10 +48,13 @@ export function AppStateProvider({ children }: any) {
   const goToPreviousTrack = () => dispatch({type: 'go-to-previous-track'});
   const shuffleQueue = () => dispatch({type: 'shuffle-queue'});
   const unshuffleQueue = () => dispatch({type: 'unshuffle-queue'});
+  const toggleRepeat = () => dispatch({type: 'toggle-repeat'});
 
   return (
     <AppStateContext.Provider value={{
       isPlaying: state.isPlaying,
+      isShuffled: state.isShuffled,
+      repeatType: state.repeatType,
       currentTrack: state.currentTrack,
       queuePosition: state.queuePosition,
       trackQueue: state.trackQueue,
@@ -54,6 +67,7 @@ export function AppStateProvider({ children }: any) {
       goToPreviousTrack,
       shuffleQueue,
       unshuffleQueue,
+      toggleRepeat,
     }}>
       {children}
     </AppStateContext.Provider>
@@ -70,6 +84,7 @@ export default function AppStateReducer(state: any, action: any) {
       return {
         ...state,
         isPlaying: false,
+        isShuffled: false,
         currentTrack: (action.queue !== null && action.queue.length > 0) ? action.queue[action.position] : null,
 
         queuePosition: action.position,
@@ -97,10 +112,20 @@ export default function AppStateReducer(state: any, action: any) {
         originalTrackQueue: [],
       };
     case 'go-to-next-track':
-      const newPosition = state.queuePosition + 1;
+      let newPosition = state.queuePosition + 1;
+
+      if (state.repeatType === RepeatType.REPEAT) {
+        if (newPosition >= state.trackQueue.length) {
+          newPosition = 0;
+        }
+      } else if (state.repeatType === RepeatType.REPEAT_ONCE) {
+        newPosition--;
+      }
+
       return {
         ...state,
-        currentTrack: (newPosition < state.trackQueue.length()) ? state.trackQueue[newPosition] : null,
+        isPlaying: (newPosition < state.trackQueue.length) ? state.isPlaying : false,
+        currentTrack: (newPosition < state.trackQueue.length) ? state.trackQueue[newPosition] : null,
 
         queuePosition: newPosition,
       };
@@ -108,6 +133,7 @@ export default function AppStateReducer(state: any, action: any) {
       const newQPosition = state.queuePosition - 1;
       return {
         ...state,
+        isPlaying: (newQPosition >= 0) ? state.isPlaying : false,
         currentTrack: (newQPosition >= 0) ? state.trackQueue[newQPosition] : null,
 
         queuePosition: newQPosition,
@@ -117,13 +143,20 @@ export default function AppStateReducer(state: any, action: any) {
       shuffleArray(state.queuePosition, queueClone);
       return {
         ...state,
+        isShuffled: true,
         trackQueue: queueClone,
       };
     case 'unshuffle-queue':
       return {
         ...state,
+        isShuffled: false,
         trackQueue: state.originalTrackQueue,
       }; // TODO update position of track is in new queue???
+    case 'toggle-repeat':
+      return {
+        ...state,
+        repeatType: (state.repeatType === RepeatType.OFF) ? RepeatType.REPEAT : ((state.repeatType === RepeatType.REPEAT) ? RepeatType.REPEAT_ONCE : RepeatType.OFF)
+      };
   }
 }
 

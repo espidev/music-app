@@ -1,5 +1,6 @@
 'use client'
 
+import { RepeatType } from '@/components/appstateprovider';
 import { AppStateContext, useAppStateContext } from "./appstateprovider";
 import { useContext, useRef, useState, useEffect } from "react";
 import AudioPlayer from 'react-h5-audio-player';
@@ -13,7 +14,11 @@ import {
   ShuffleOutlined, 
   SkipNextOutlined, 
   SkipPreviousOutlined, 
-  QueueMusicOutlined 
+  QueueMusicOutlined, 
+  RepeatOn,
+  RepeatOneOn,
+  RepeatOnOutlined,
+  RepeatOneOnOutlined
 } from "@mui/icons-material";
 import { useLoginStateContext } from "./loginstateprovider";
 
@@ -66,7 +71,7 @@ export default function MediaPlayer() {
   }
 
   const PreviousButton = (
-    <li className="media-clickable" onClick={() => {}}><SkipPreviousOutlined /></li>
+    <li className="media-clickable" onClick={() => appState.goToPreviousTrack()}><SkipPreviousOutlined /></li>
   );
 
   const PlayPauseButton = (
@@ -76,17 +81,22 @@ export default function MediaPlayer() {
   );
 
   const NextButton = (
-      <li className="media-clickable" onClick={() => {}}><SkipNextOutlined /></li>
+      <li className="media-clickable" onClick={() => appState.goToNextTrack()}><SkipNextOutlined /></li>
   );
   const QueueButton = (
       <li className="media-clickable"><QueueMusicOutlined /></li>
   );
   const RepeatButton = (
-      <li className="media-clickable"><RepeatOutlined /></li>
+      <li className="media-clickable" onClick={() => appState.toggleRepeat()}>
+        {
+          appState.repeatType === RepeatType.OFF ? <RepeatOutlined /> :
+            appState.repeatType === RepeatType.REPEAT ? <RepeatOnOutlined /> : <RepeatOneOnOutlined />
+        }
+      </li>
   );
   const ShuffleButton = (
-      <li className="media-clickable" onClick={() => {}}>
-          {false ? <ShuffleOnOutlined /> : <ShuffleOutlined />}
+      <li className="media-clickable" onClick={() => {appState.isShuffled ? appState.unshuffleQueue() : appState.shuffleQueue()}}>
+          {appState.isShuffled ? <ShuffleOnOutlined /> : <ShuffleOutlined />}
       </li>
   );
 
@@ -112,7 +122,7 @@ export default function MediaPlayer() {
         src={streamLink}
         onPlay={() => appState.playCurrentTrack()}
         onPause={() => appState.pauseCurrentTrack()}
-        onEnded={() => {}} // TODO
+        onEnded={() => appState.goToNextTrack()}
         customControlsSection={[PreviousButton, PlayPauseButton, NextButton, QueueButton, RepeatButton, ShuffleButton]}
       />
     </nav>
