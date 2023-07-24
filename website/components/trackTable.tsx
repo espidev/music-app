@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import format from 'format-duration';
 import { APITrack } from "@/util/models/track";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem } from '@mui/material';
+import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem, ListItemIcon, Typography } from '@mui/material';
 import {styled} from '@mui/system';
 import React from "react";
-import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined } from "@mui/icons-material";
+import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 
@@ -96,29 +96,52 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
         </Button>
 
         <Menu
-            id="positioned-menu"
-            aria-labelledby="positioned-button"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleMenuClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-          >
-            <MenuItem onClick={handleMenuClose}>
-              {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
+          id="positioned-menu"
+          aria-labelledby="positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          
+          <MenuItem onClick={handleMenuClose}>
+            <ListItemIcon>
+              { isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> }
+            </ListItemIcon>
+            <Typography variant="inherit">
               Favourite
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
+            </Typography>
+          </MenuItem>
+
+          <MenuItem onClick={handleMenuClose}>
+            <ListItemIcon>
+              { addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined /> }
+            </ListItemIcon>
+            <Typography variant="inherit">
               Add to playlist
-            </MenuItem>
-          </Menu>
+            </Typography>
+          </MenuItem>
+          
+          <MenuItem onClick={() => {
+            appState.playTrackNext(track);
+            handleMenuClose();
+          }}>
+            <ListItemIcon>
+              <QueueMusicOutlined />
+            </ListItemIcon>
+            <Typography variant="inherit">
+              Play next
+            </Typography>
+          </MenuItem>
+
+        </Menu>
       </TableCell>
     </StyledTableRow>
   );

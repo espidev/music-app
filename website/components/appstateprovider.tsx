@@ -22,6 +22,7 @@ const initialState = {
 
   // dispatch
   changeQueue: null as any,
+  playTrackNext: null as any,
   playCurrentTrack: null as any,
   pauseCurrentTrack: null as any,
   stopCurrentTrack: null as any,
@@ -40,6 +41,7 @@ export function AppStateProvider({ children }: any) {
   const [state, dispatch] = useReducer(AppStateReducer, initialState);
 
   const changeQueue = (queue: APITrack[], position: number) => dispatch({type: 'change-queue', queue, position});
+  const playTrackNext = (track: APITrack) => dispatch({type: 'play-track-next', track});
   const playCurrentTrack = () => dispatch({type: 'play'});
   const pauseCurrentTrack = () => dispatch({type: 'pause'});
   const stopCurrentTrack = () => dispatch({type: 'stop'});
@@ -60,6 +62,7 @@ export function AppStateProvider({ children }: any) {
       trackQueue: state.trackQueue,
       originalTrackQueue: state.originalTrackQueue,
       changeQueue,
+      playTrackNext,
       playCurrentTrack,
       pauseCurrentTrack,
       stopCurrentTrack,
@@ -91,6 +94,19 @@ export default function AppStateReducer(state: any, action: any) {
         trackQueue: action.queue,
         originalTrackQueue: action.queue,
       };
+    case 'play-track-next':
+      
+      let cloneQueue = [...state.trackQueue];
+      cloneQueue.splice(state.queuePosition + 1, 0, action.track);
+
+      let cloneOriginalQueue = [...state.originalTrackQueue];
+      cloneOriginalQueue.splice(state.queuePosition + 1, 0, action.track);
+
+      return {
+        ...state,
+        trackQueue: cloneQueue,
+        originalTrackQueue: cloneOriginalQueue,
+      }
     case 'play':
       return {
         ...state,
