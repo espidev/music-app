@@ -101,3 +101,25 @@ export function apiPostCollectionTracks(accountUuid: string, formData: FormData)
     }
   })
 }
+
+export function apiGetCollectionPlaylists(accountUuid: string) {
+  return axios({
+    method: 'get',
+    url: `/api/collection/${accountUuid}/playlists`
+  });
+}
+
+export function apiGetPlaylist(playlistId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/playlist/${playlistId}`
+  });
+}
+
+export function apiGetPlaylistTracks(playlistId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/playlist/${playlistId}/tracks`
+  });
+}
+
