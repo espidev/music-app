@@ -29,6 +29,7 @@ export function getDBPlaylist(playlist: DBPlaylist) {
   } as APIPlaylist;
 }
 
+// Not working; recheck format
 export function getAPIPlaylistTrack(dbPlaylistTrack: any): APIPlaylistTrack {
   // Convert the database representation (dbPlaylistTrack) to the API representation (APIPlaylistTrack)
   const apiPlaylistTrack: APIPlaylistTrack = {

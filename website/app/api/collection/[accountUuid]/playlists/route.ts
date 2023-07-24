@@ -1,4 +1,3 @@
-// Import required libraries and functions
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
 import { getDBPlaylist, getAPIPlaylistTrack } from "@/util/models/playlist";
@@ -59,7 +58,7 @@ export async function POST(request: Request, { params }: { params: { accountUuid
   // Get the playlist data from the request body
   const { name, description } = await request.json();
 
-  // Validate the input data (e.g., ensure name is not empty)
+  // Validate
   if (!name || name.trim() === "") {
     return NextResponse.json({ error: "Playlist name must not be empty." }, { status: 400 });
   }

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { APIPlaylist } from "@/util/models/playlist";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { Typography, Grid } from "@mui/material";
-// Import components for playlist cards or list items (if available)
 
 export default function CollectionPlaylistsPage() {
   const loginState = useLoginStateContext();
