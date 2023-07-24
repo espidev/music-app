@@ -9,44 +9,118 @@ import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAdd
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 
-interface PositionedMenuProps {
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
-}
+const StyledTableRow = styled(TableRow)(
+  ({theme}) => ({
+      padding: 0,
+      margin: 0,
+      "&:hover": {backgroundColor: "rgba(0, 0, 0, 0.1)", transition: "all 0.2s ease-in-out"},
+      cursor: "pointer",
+  })
+);
 
-// function PositionedMenu(anchorEl: HTMLElement | null, handleClose: () => void) {
-function PositionedMenu(props: PositionedMenuProps) {
-  const open = Boolean(props.anchorEl);
+function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+  const router = useRouter();
+  const appState = useAppStateContext();
+  
+  // Menu stuff
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const open = Boolean(anchorEl);
   const [isFavourite, setIsFavourite] = useState(false);
   const [addedToPlaylist, setAddedToPlaylist] = useState(false);
+  
+  const track = props.track;
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <div>
-      <Menu
-        id="positioned-menu"
-        aria-labelledby="positioned-button"
-        anchorEl={props.anchorEl}
-        open={open}
-        onClose={props.handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <MenuItem onClick={props.handleClose}>
-          {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
-          Favourite
-        </MenuItem>
-        <MenuItem onClick={props.handleClose}>
-          {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
-          Add to playlist
-        </MenuItem>
-      </Menu>
-    </div>
+    <StyledTableRow>
+
+      <TableCell className="trackListPictureCell" sx={{ padding: 0 }}>
+
+        <Grid
+          sx={{
+            padding: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <LazyLoadImage
+            className="trackImage"
+            src={track.thumbnail_src}
+            alt={track.name}
+            style={{ height: '3em'}}
+          />
+        </Grid>
+      
+      </TableCell>
+      
+      <TableCell onClick={() => props.handleTrackClick(track)}>
+        { 
+          (appState.currentTrack && track.id === appState.currentTrack.id) ? <b style={{color: "#01579B"}}>{track.name}</b> : track.name 
+        }
+      </TableCell>
+      
+      {
+        !props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>
+      }
+      
+      <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
+        {track.albums.length > 0 ? track.albums[0].name : ''}
+      </TableCell>
+
+      <TableCell>{track.create_year}</TableCell>
+
+      {/* TODO: onClick for genre */}
+
+      <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
+
+      <TableCell>{format(track.audio_length * 1000)}</TableCell>
+
+      <TableCell onClick={() => {}}>
+        <Button
+          onClick={(event) => handleMenuClick(event, track, anchorRef)}
+          sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
+          id="positioned-button"
+          aria-controls={open ? 'positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <MoreVertOutlined fontSize="small" sx={{color: "#000"}}/>
+        </Button>
+
+        <Menu
+            id="positioned-menu"
+            aria-labelledby="positioned-button"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          >
+            <MenuItem onClick={handleMenuClose}>
+              {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
+              Favourite
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
+              Add to playlist
+            </MenuItem>
+          </Menu>
+      </TableCell>
+    </StyledTableRow>
   );
 }
 
@@ -56,15 +130,6 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortColumn, setSortColumn] = useState('id');
-
-  const StyledTableRow = styled(TableRow)(
-    ({theme}) => ({
-        padding: 0,
-        margin: 0,
-        "&:hover": {backgroundColor: "rgba(0, 0, 0, 0.1)", transition: "all 0.2s ease-in-out"},
-        cursor: "pointer",
-    })
-  );
 
   // Is login state checking required here? I don't think so.
 
@@ -108,26 +173,10 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
     setSortColumn(column);
   };
 
-  // Menu stuff
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const anchorRef = useRef<HTMLButtonElement>(null);
-  const open = Boolean(anchorEl);
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [addedToPlaylist, setAddedToPlaylist] = useState(false);
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
-    // console.log("handleMenuClick: ref.current: ", ref.current);
-    // setAnchorEl(event.currentTarget);
-    setAnchorEl(ref.current);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Grid sx={{paddingX: '1em'}}>
       <Table>
+
         <TableHead>
           <StyledTableRow>
             <TableCell className="trackListPictureCell" />
@@ -194,81 +243,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
         </TableHead>
         <TableBody>
           {sortedData.map((track, index) => (
-            <StyledTableRow key={track.id}>
-              <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
-              <Grid
-                sx={{
-                  padding: 0,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                }}>
-                <LazyLoadImage
-                  className="trackImage"
-                  src={track.thumbnail_src}
-                  alt={track.name}
-                  style={{ height: '3em'}}
-                />
-                </Grid>
-              </TableCell>
-              
-              <TableCell onClick={() => props.handleTrackClick(track)}>
-                { 
-                  (appState.currentTrack && track.id === appState.currentTrack.id) ? <b style={{color: "#01579B"}}>{track.name}</b> : track.name 
-                }
-              </TableCell>
-              
-              {
-                !props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>
-              }
-              
-              <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
-                {track.albums.length > 0 ? track.albums[0].name : ''}
-              </TableCell>
-              <TableCell>{track.create_year}</TableCell>
-              {/* TODO: onClick for genre */}
-              <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
-              <TableCell>{format(track.audio_length * 1000)}</TableCell>
-              <TableCell onClick={() => {}}>
-                <Button
-                  onClick={(event) => handleMenuClick(event, track, anchorRef)}
-                  sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
-                  id="positioned-button"
-                  aria-controls={open ? 'positioned-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  ref={anchorRef}
-                >
-                  <MoreVertOutlined fontSize="small" sx={{color: "#000"}}/>
-                </Button>
-                {/* <PositionedMenu anchorEl={anchorEl} handleClose={handleMenuClose} /> */}
-                <Menu
-                  id="positioned-menu"
-                  aria-labelledby="positioned-button"
-                  // anchorEl={anchorEl}
-                  anchorEl={anchorRef.current}
-                  open={open}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                >
-                  <MenuItem onClick={handleMenuClose}>
-                    {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
-                    Favourite
-                  </MenuItem>
-                  <MenuItem onClick={handleMenuClose}>
-                    {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
-                    Add to playlist
-                  </MenuItem>
-                </Menu>
-              </TableCell>
-            </StyledTableRow>
+            <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} />
           ))}
         </TableBody>
       </Table>
