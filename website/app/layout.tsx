@@ -5,7 +5,8 @@ import AppSidebar from '@/components/appsidebar';
 import { AppStateProvider } from '@/components/appstateprovider';
 import { LoginStateProvider } from '@/components/loginstateprovider';
 import MediaPlayer from '@/components/mediaplayer';
-import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
+// import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
+// import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
 export default function RootLayout({
@@ -31,30 +32,32 @@ export default function RootLayout({
       </head>
       <body>
         {/* <FluentProvider theme={teamsLightTheme}> */}
-        <LoginStateProvider value={{
-          isLoggedIn: false,
-        }}>
-          <AppStateProvider value={{
+        {/* <ThemeProvider theme={getActiveTheme('light')}> */}
+          <LoginStateProvider value={{
             isLoggedIn: false,
-            isPlaying: false,
-            currentTrackId: "",
           }}>
+            <AppStateProvider value={{
+              isLoggedIn: false,
+              isPlaying: false,
+              currentTrackId: "",
+            }}>
 
-            <AppHeader />
-            <AppSidebar />
-            
-            <div style={{ height: "100vh", zIndex: 1 }}>
-              <CssBaseline />
+              <AppHeader />
+              <AppSidebar />
+              
+              <div style={{ height: "100vh", zIndex: 1 }}>
+                <CssBaseline />
 
-              <div style={{ marginLeft: "16em", marginTop: "4.5em", marginBottom: "5em" }}>
-                {children}
+                <div style={{ marginLeft: "16em", marginTop: "4.5em", marginBottom: "5em" }}>
+                  {children}
+                </div>
+                
+                <MediaPlayer />
               </div>
               
-              <MediaPlayer />
-            </div>
-            
-          </AppStateProvider>
-        </LoginStateProvider>
+            </AppStateProvider>
+          </LoginStateProvider>
+        {/* </ThemeProvider> */}
         {/* </FluentProvider> */}
       </body>
     </html>

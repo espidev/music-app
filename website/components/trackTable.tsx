@@ -9,53 +9,13 @@ import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAdd
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 
-interface PositionedMenuProps {
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
-}
-
-// function PositionedMenu(anchorEl: HTMLElement | null, handleClose: () => void) {
-function PositionedMenu(props: PositionedMenuProps) {
-  const open = Boolean(props.anchorEl);
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [addedToPlaylist, setAddedToPlaylist] = useState(false);
-
-  return (
-    <div>
-      <Menu
-        id="positioned-menu"
-        aria-labelledby="positioned-button"
-        anchorEl={props.anchorEl}
-        open={open}
-        onClose={props.handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <MenuItem onClick={props.handleClose}>
-          {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
-          Favourite
-        </MenuItem>
-        <MenuItem onClick={props.handleClose}>
-          {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
-          Add to playlist
-        </MenuItem>
-      </Menu>
-    </div>
-  );
-}
-
 export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
   const router = useRouter();
   const appState = useAppStateContext();
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortColumn, setSortColumn] = useState('id');
+  const theme = appState.theme;
 
   const StyledTableRow = styled(TableRow)(
     ({theme}) => ({
@@ -109,21 +69,26 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
   };
 
   // Menu stuff
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const anchorRef = useRef<HTMLButtonElement>(null);
-  const open = Boolean(anchorEl);
   const [isFavourite, setIsFavourite] = useState(false);
   const [addedToPlaylist, setAddedToPlaylist] = useState(false);
+  // const anchorRef = useRef<HTMLButtonElement>(null);
+  // const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // const open = Boolean(anchorEl);
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
-    // console.log("handleMenuClick: ref.current: ", ref.current);
-    // setAnchorEl(event.currentTarget);
-    setAnchorEl(ref.current);
-  };
+  // useEffect(() => { 
+  //   setTimeout(() => setAnchorEl(anchorRef?.current), 1) 
+  // },  [anchorRef]);
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
+  //   console.log("handleMenuClick: ref.current: ", ref.current);
+  //   // event.preventDefault();
+  //   // setAnchorEl(event.currentTarget);
+  //   setAnchorEl(ref.current);
+  // };
+
+  // const handleMenuClose = () => {
+  //   setAnchorEl(null);
+  // };
 
   return (
     <Grid sx={{paddingX: '1em'}}>
@@ -141,7 +106,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
               </TableSortLabel>
             </TableCell>
             {!props.hideArtistCol ? 
-            <TableCell>
+              <TableCell>
               <TableSortLabel
                 active={sortColumn === 'artist_name'}
                 direction={sortDirection as 'asc' | 'desc'}
@@ -152,6 +117,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
               </TableCell>
               :
               <></>
+              // <TableCell></TableCell>
             }
             <TableCell>
               <TableSortLabel
@@ -189,11 +155,12 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                 Length
               </TableSortLabel>
             </TableCell>
-            <TableCell />
+            <TableCell /> {/* For hearting */}
+            <TableCell /> {/* For adding to playlist */}
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {sortedData.map((track, index) => (
+          {sortedData.map((track) => (
             <StyledTableRow key={track.id}>
               <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
               <Grid
@@ -211,17 +178,19 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                 />
                 </Grid>
               </TableCell>
-              
               <TableCell onClick={() => props.handleTrackClick(track)}>
                 { 
                   (appState.currentTrack && track.id === appState.currentTrack.id) ? <b style={{color: "#01579B"}}>{track.name}</b> : track.name 
                 }
               </TableCell>
-              
               {
-                !props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>
+                !props.hideArtistCol ? 
+                  <TableCell 
+                    onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>
+                      {track.artist_name}
+                  </TableCell>
+                  : <></>
               }
-              
               <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
                 {track.albums.length > 0 ? track.albums[0].name : ''}
               </TableCell>
@@ -229,33 +198,41 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
               {/* TODO: onClick for genre */}
               <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
               <TableCell>{format(track.audio_length * 1000)}</TableCell>
-              <TableCell onClick={() => {}}>
+              <TableCell onClick={() => {setIsFavourite((prevIsFavourite) => !prevIsFavourite);}}>
+                {/* TODO: Not quite right yet because this variable is for ALL rows. */}
+                {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
+              </TableCell>
+              <TableCell onClick={() => {setAddedToPlaylist((prevAddedToPlaylist) => !prevAddedToPlaylist);}}>
+                {/* TODO: Not quite right yet because this variable is for ALL rows. */}
+                {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
+              </TableCell>
+              {/* <TableCell onClick={() => {}}>
                 <Button
                   onClick={(event) => handleMenuClick(event, track, anchorRef)}
                   sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
                   id="positioned-button"
                   aria-controls={open ? 'positioned-menu' : undefined}
-                  aria-haspopup="true"
+                  aria-haspopup="menu"
                   aria-expanded={open ? 'true' : undefined}
                   ref={anchorRef}
                 >
                   <MoreVertOutlined fontSize="small" sx={{color: "#000"}}/>
                 </Button>
-                {/* <PositionedMenu anchorEl={anchorEl} handleClose={handleMenuClose} /> */}
-                <Menu
+
+                {anchorEl && <Menu
                   id="positioned-menu"
-                  aria-labelledby="positioned-button"
+                  aria-labelledby="positioned-menu"
                   // anchorEl={anchorEl}
-                  anchorEl={anchorRef.current}
+                  anchorEl={anchorRef.current ?? anchorEl}
                   open={open}
                   onClose={handleMenuClose}
                   anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: 'bottom',
+                    horizontal: 'right',
                   }}
                   transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: 'bottom',
+                    horizontal: 'right',
                   }}
                 >
                   <MenuItem onClick={handleMenuClose}>
@@ -266,8 +243,8 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                     {addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined />}
                     Add to playlist
                   </MenuItem>
-                </Menu>
-              </TableCell>
+                </Menu>}
+              </TableCell> */}
             </StyledTableRow>
           ))}
         </TableBody>

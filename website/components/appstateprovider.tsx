@@ -20,6 +20,8 @@ const initialState = {
   trackQueue: [] as APITrack[],
   originalTrackQueue: [] as APITrack[],
 
+  theme: 'light' as 'light' | 'dark',
+
   // dispatch
   changeQueue: null as any,
   playCurrentTrack: null as any,
@@ -31,6 +33,8 @@ const initialState = {
   shuffleQueue: null as any,
   unshuffleQueue: null as any,
   toggleRepeat: null as any,
+
+  toggleTheme: null as any,
 };
 
 export const AppStateContext = createContext(initialState);
@@ -50,6 +54,8 @@ export function AppStateProvider({ children }: any) {
   const unshuffleQueue = () => dispatch({type: 'unshuffle-queue'});
   const toggleRepeat = () => dispatch({type: 'toggle-repeat'});
 
+  const toggleTheme = () => dispatch({type: 'toggle-theme'});
+
   return (
     <AppStateContext.Provider value={{
       isPlaying: state.isPlaying,
@@ -59,6 +65,7 @@ export function AppStateProvider({ children }: any) {
       queuePosition: state.queuePosition,
       trackQueue: state.trackQueue,
       originalTrackQueue: state.originalTrackQueue,
+      theme: state.theme,
       changeQueue,
       playCurrentTrack,
       pauseCurrentTrack,
@@ -68,6 +75,7 @@ export function AppStateProvider({ children }: any) {
       shuffleQueue,
       unshuffleQueue,
       toggleRepeat,
+      toggleTheme,
     }}>
       {children}
     </AppStateContext.Provider>
@@ -157,7 +165,12 @@ export default function AppStateReducer(state: any, action: any) {
         ...state,
         repeatType: (state.repeatType === RepeatType.OFF) ? RepeatType.REPEAT : ((state.repeatType === RepeatType.REPEAT) ? RepeatType.REPEAT_ONCE : RepeatType.OFF)
       };
-  }
+    case 'toggle-theme':
+      return {
+        ...state,
+        theme: (state.theme === 'light') ? 'dark' : 'light',
+      };
+    }
 }
 
 function shuffleArray(startIndex: number, array: any[]) {
