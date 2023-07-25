@@ -21,7 +21,7 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       borderRadius: '0.5em',
       }}
       onClick={() => {
-        router.push(`/collection/artists/${props.artist.id}`);
+        router.push(`/collection/genres/${props.artist.id}`);
       }}
       >
         

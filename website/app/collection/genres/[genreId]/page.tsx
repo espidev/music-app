@@ -1,15 +1,14 @@
 "use client";
 import { useLoginStateContext } from "@/components/loginstateprovider";
-import { APIArtist } from "@/util/models/artist";
+import { APIGenre } from "@/util/models/genre";
 import { APIAlbum } from "@/util/models/album";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertEntry } from "@/components/alerts";
 import {
-  apiGetArtist,
-  apiGetArtistTracks,
-  apiGetArtistAlbums,
+  apiGetGenre,
+  apiGetGenreTracks,
 } from "@/components/apiclient";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { APITrack } from "@/util/models/track";
@@ -30,20 +29,19 @@ function formatDuration(duration: number): string {
   }
 }
 
-export default function CollectionArtistPage({
+export default function CollectionGenrePage({
   params,
 }: {
-  params: { artistId: string };
+  params: { genreId: string };
 }) {
   const appState = useAppStateContext();
   const loginState = useLoginStateContext();
   const router = useRouter();
 
-  const artistId = params.artistId;
+  const genreId = params.genreId;
 
-  const [artist, setArtist] = useState<APIArtist>();
+  const [genre, setGenre] = useState<APIGenre>();
   const [tracks, setTracks] = useState([] as APITrack[]);
-  const [albums, setAlbums] = useState([] as APIAlbum[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   useEffect(() => {
@@ -58,19 +56,15 @@ export default function CollectionArtistPage({
       return;
     }
 
-    // load artist content
-    apiGetArtist(artistId)
+    // load genre content
+    apiGetGenre(genreId)
       .then((res) => {
         console.log(res.data);
-        setArtist(res.data as APIArtist);
+        setGenre(res.data as APIGenre);
 
         // Fetch and set the tracks
-        apiGetArtistTracks(artistId).then((res_tracks) => {
+        apiGetGenreTracks(genreId).then((res_tracks) => {
           setTracks(res_tracks.data as APITrack[]);
-        });
-        // Fetch and set the tracks
-        apiGetArtistAlbums(artistId).then((res_albums) => {
-          setAlbums(res_albums.data as APIAlbum[]);
         });
       })
       .catch((err) => {
@@ -78,7 +72,7 @@ export default function CollectionArtistPage({
           ...alerts,
           {
             severity: "error",
-            message: "Error fetching artists, see console for details.",
+            message: "Error fetching genres, see console for details.",
           },
         ]);
         console.error(err);
@@ -90,7 +84,7 @@ export default function CollectionArtistPage({
     return <></>;
   }
 
-  if (!artist) {
+  if (!genre) {
     return <></>;
   }
 
@@ -126,11 +120,11 @@ export default function CollectionArtistPage({
               padding: 2,
               margin: 2,
             }}
-            src={`/api/artist/${artistId}/thumbnail`}
+            src={`/api/genre/${genreId}/thumbnail`}
           />
 
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <Typography variant="h3">{artist.name}</Typography>
+            <Typography variant="h3">{genre.name}</Typography>
             <Typography variant="subtitle2" sx={{marginTop: '1em'}}>
               {trackLength} {suffix} • {totalTime}
             </Typography>
@@ -158,30 +152,8 @@ export default function CollectionArtistPage({
           <TrackTable
             tracks={tracks}
             handleTrackClick={handleTrackClick}
-            hideArtistCol={true}
+            hideGenreCol={true}
           />
-        </Box>
-        <Box
-          sx={{
-            flexDirection: "column",
-            padding: 2,
-            margin: 2,
-            alignItems: "left",
-          }}
-        >
-          <Typography variant="h5">Albums</Typography>
-          <Grid
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "left",
-              marginBottom: "5em",
-            }}
-          >
-            {albums.map((album, index) => {
-              return <AlbumCard album={album} key={index} />;
-            })}
-          </Grid>
         </Box>
       </Box>
     </div>
