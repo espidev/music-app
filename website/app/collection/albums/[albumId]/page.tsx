@@ -51,7 +51,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
     // load album content
     apiGetAlbum(albumId)
       .then(res => {
-          console.log(res.data);
           setAlbum(res.data as APIAlbum);
 
           // Fetch and set the tracks
@@ -74,7 +73,8 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
   }
 
   const handleTrackClick = (track: APITrack) => {
-    appState.changeTrack(track);
+    appState.changeQueue(tracks, tracks.indexOf(track));
+    appState.playCurrentTrack();
   }
 
   const totalTime = formatDuration(tracks.reduce((acc, track) => acc + track.audio_length, 0));
@@ -87,7 +87,6 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
         <div style={
           {
             display: 'flex',
-            // backgroundColor: 'pink',
             margin: 'auto',
             alignItems: 'center',
             zIndex: 2,
@@ -97,15 +96,27 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
             component="img"
             alt="album_cover"
             sx={{ width: "15em", height: "15em", objectFit: "cover", padding: 2, margin: 2 }}
-            src={album.thumbnail_src}
+            src={`/api/album/${album.id}/thumbnail`}
           />
 
           <div style={{ display: 'flex', flexDirection: "column"}}>
             <Typography variant="h3">{album.name}</Typography>
-            <Typography variant="h6">{album.album_artist}</Typography>
+            <Typography
+              variant="h6"
+              sx={{ cursor: 'pointer' }}
+              onClick={() => { router.push(`/collection/artists/${album.album_artist}`); }}>
+                {album.album_artist}
+            </Typography>
             <Typography variant="subtitle2">{trackLength} {suffix} • {totalTime}</Typography>
-            <Button variant="outlined"  style={{ width: '5vw', marginTop: '2em', color: 'black' }}>
-              <PlayArrowIcon fontSize="medium" style={{ color: '#000', marginLeft: '-0.3em' }} />Play
+            <Button 
+              variant="outlined"  
+              style={{ width: '5vw', marginTop: '2em' }}
+              onClick={() => {
+                appState.changeQueue(tracks, 0);
+                appState.playCurrentTrack();
+              }}
+            >
+              <PlayArrowIcon fontSize="medium" style={{ marginLeft: '-0.3em' }} />Play
             </Button>
           </div>
         </div>

@@ -89,7 +89,8 @@ export default function CollectionGenrePage({
   }
 
   const handleTrackClick = (track: APITrack) => {
-    appState.changeTrack(track);
+    appState.changeQueue(tracks, tracks.indexOf(track));
+    appState.playCurrentTrack();
   };
 
   const totalTime = formatDuration(

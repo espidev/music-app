@@ -61,7 +61,6 @@ export default function CollectionArtistPage({
     // load artist content
     apiGetArtist(artistId)
       .then((res) => {
-        console.log(res.data);
         setArtist(res.data as APIArtist);
 
         // Fetch and set the tracks
@@ -83,7 +82,6 @@ export default function CollectionArtistPage({
         ]);
         console.error(err);
       });
-    // load albums
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -95,14 +93,18 @@ export default function CollectionArtistPage({
   }
 
   const handleTrackClick = (track: APITrack) => {
-    appState.changeTrack(track);
+    appState.changeQueue(tracks, tracks.indexOf(track));
+    appState.playCurrentTrack();
   };
 
   const totalTime = formatDuration(
     tracks.reduce((acc, track) => acc + track.audio_length, 0)
   );
+  
   const trackLength = tracks.length;
-  const suffix = trackLength === 1 ? "song" : "songs";
+  const trackSuffix = trackLength === 1 ? "song" : "songs";
+  const albumLength = albums.length;
+  const albumSuffix = albumLength === 1 ? "album" : "albums";
 
   return (
     <div>
@@ -110,7 +112,6 @@ export default function CollectionArtistPage({
         <div
           style={{
             display: "flex",
-            // backgroundColor: 'pink',
             margin: "auto",
             alignItems: "center",
             zIndex: 2,
@@ -126,21 +127,25 @@ export default function CollectionArtistPage({
               padding: 2,
               margin: 2,
             }}
-            src={`/api/artist/${artistId}/thumbnail`}
+            src={albums.length > 0 ? `/api/album/${albums[0].id}/thumbnail` : (tracks.length > 0 ? `/api/track/${tracks[0].id}/thumbnail` : '')}
           />
 
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="h3">{artist.name}</Typography>
             <Typography variant="subtitle2" sx={{marginTop: '1em'}}>
-              {trackLength} {suffix} • {totalTime}
+              {trackLength} {trackSuffix} • {albumLength} {albumSuffix} • {totalTime}
             </Typography>
             <Button
               variant="outlined"
-              style={{ width: "5vw", marginTop: "2em", color: "black" }}
+              style={{ width: "5vw", marginTop: "2em"}}
+              onClick={() => {
+                appState.changeQueue(tracks, 0);
+                appState.playCurrentTrack();
+              }}
             >
               <PlayArrowIcon
                 fontSize="medium"
-                style={{ color: "#000", marginLeft: "-0.3em" }}
+                style={{ marginLeft: "-0.3em" }}
               />
               Play
             </Button>

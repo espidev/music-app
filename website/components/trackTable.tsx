@@ -1,95 +1,159 @@
 import { useState, useEffect, useRef } from "react";
 import format from "format-duration";
 import { APITrack } from "@/util/models/track";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import {
-  Grid,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableSortLabel,
-  Button,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { styled } from "@mui/system";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import {styled} from '@mui/system';
 import React from "react";
-import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-  MoreVertOutlined,
-  PlaylistAddCheckOutlined,
-  PlaylistAddOutlined,
-} from "@mui/icons-material";
+import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import { useAppStateContext } from "./appstateprovider";
+import { lightTheme, darkTheme } from "./themes";
 
-interface PositionedMenuProps {
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
-}
+const StyledTableRow = styled(TableRow)(
+  ({theme}) => ({
+      padding: 0,
+      margin: 0,
+      "&:hover": {backgroundColor: theme.palette.background.paper, transition: "all 0.2s ease-in-out"},
+      cursor: "pointer",
+      color: theme.palette.text.primary,
+  })
+);
 
-// function PositionedMenu(anchorEl: HTMLElement | null, handleClose: () => void) {
-function PositionedMenu(props: PositionedMenuProps) {
-  const open = Boolean(props.anchorEl);
+function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+  const router = useRouter();
+  const appState = useAppStateContext();
+  
+  // Menu stuff
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const open = Boolean(anchorEl);
   const [isFavourite, setIsFavourite] = useState(false);
   const [addedToPlaylist, setAddedToPlaylist] = useState(false);
+  
+  const track = props.track;
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, track: APITrack, ref: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <div>
-      <Menu
-        id="positioned-menu"
-        aria-labelledby="positioned-button"
-        anchorEl={props.anchorEl}
-        open={open}
-        onClose={props.handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
-        <MenuItem onClick={props.handleClose}>
-          {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
-          Favourite
-        </MenuItem>
-        <MenuItem onClick={props.handleClose}>
-          {addedToPlaylist ? (
-            <PlaylistAddCheckOutlined />
-          ) : (
-            <PlaylistAddOutlined />
-          )}
-          Add to playlist
-        </MenuItem>
-      </Menu>
-    </div>
+    <StyledTableRow>
+
+      <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
+        <Grid
+          sx={{
+            padding: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <LazyLoadImage
+            className="trackImage"
+            src={track.thumbnail_src}
+            alt={track.name}
+            style={{ height: '3em'}}
+          />
+        </Grid>
+      </TableCell>
+      
+      <TableCell onClick={() => props.handleTrackClick(track)}>
+        { 
+          (appState.currentTrack && track.id === appState.currentTrack.id) ? <b style={{color: "#01579B"}}>{track.name}</b> : track.name 
+        }
+      </TableCell>
+      
+      {
+        !props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>
+      }
+      
+      <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
+        {track.albums.length > 0 ? track.albums[0].name : ''}
+      </TableCell>
+
+      <TableCell>{track.create_year}</TableCell>
+
+      {/* TODO: onClick for genre */}
+
+      <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
+
+      <TableCell>{format(track.audio_length * 1000)}</TableCell>
+
+      <TableCell onClick={() => {}}>
+        <Button
+          onClick={(event) => handleMenuClick(event, track, anchorRef)}
+          sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
+          id="positioned-button"
+          aria-controls={open ? 'positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <MoreVertOutlined fontSize="small" sx={{color: appState.theme === "dark" ? "whitesmoke" : "#000"}}/>
+        </Button>
+
+        <Menu
+          id="positioned-menu"
+          aria-labelledby="positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          
+          <MenuItem onClick={handleMenuClose}>
+            <ListItemIcon>
+              { isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> }
+            </ListItemIcon>
+            <Typography variant="inherit">
+              Favourite
+            </Typography>
+          </MenuItem>
+
+          <MenuItem onClick={handleMenuClose}>
+            <ListItemIcon>
+              { addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined /> }
+            </ListItemIcon>
+            <Typography variant="inherit">
+              Add to playlist
+            </Typography>
+          </MenuItem>
+          
+          <MenuItem onClick={() => {
+            appState.playTrackNext(track);
+            handleMenuClose();
+          }}>
+            <ListItemIcon>
+              <QueueMusicOutlined />
+            </ListItemIcon>
+            <Typography variant="inherit">
+              Play next
+            </Typography>
+          </MenuItem>
+
+        </Menu>
+      </TableCell>
+    </StyledTableRow>
   );
 }
 
-export default function TrackTable(props: {
-  tracks: APITrack[];
-  handleTrackClick: (track: APITrack) => void;
-  hideArtistCol?: boolean;
-  hideGenreCol?: boolean;
-}) {
-  const router = useRouter();
+export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+  const appState = useAppStateContext();
+  const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState("asc");
   const [sortColumn, setSortColumn] = useState("id");
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    padding: 0,
-    margin: 0,
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.1)",
-      transition: "all 0.2s ease-in-out",
-    },
-    cursor: "pointer",
-  }));
 
   // Is login state checking required here? I don't think so.
 
@@ -139,205 +203,86 @@ export default function TrackTable(props: {
     setSortColumn(column);
   };
 
-  // Menu stuff
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const anchorRef = useRef<HTMLButtonElement>(null);
-  const open = Boolean(anchorEl);
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [addedToPlaylist, setAddedToPlaylist] = useState(false);
 
-  const handleMenuClick = (
-    event: React.MouseEvent<HTMLElement>,
-    track: APITrack,
-    ref: any
-  ) => {
-    // console.log("handleMenuClick: ref.current: ", ref.current);
-    // setAnchorEl(event.currentTarget);
-    setAnchorEl(ref.current);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const color = theme === 'dark' ? 'white' : 'rgb(50, 50, 50)';
 
   return (
-    <Grid sx={{ paddingX: "1em" }}>
-      <Table>
-        <TableHead>
-          <StyledTableRow>
-            <TableCell className="trackListPictureCell" />
-            <TableCell className="trackListNameCell">
-              <TableSortLabel
-                active={sortColumn === "name"}
-                direction={sortDirection as "asc" | "desc"}
-                onClick={() => handleSort("name")}
-              >
-                Name
-              </TableSortLabel>
-            </TableCell>
-            {!props.hideArtistCol ? (
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <Grid sx={{paddingX: '1em', color: color}}>
+        <Table>
+
+          <TableHead>
+            <StyledTableRow>
+              <TableCell className="trackListPictureCell" />
+              <TableCell className="trackListNameCell">
+                <TableSortLabel
+                  active={sortColumn === 'name'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('name')}
+                >
+                  Name
+                </TableSortLabel>
+              </TableCell>
+              {!props.hideArtistCol ? 
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === "artist_name"}
-                  direction={sortDirection as "asc" | "desc"}
-                  onClick={() => handleSort("artist_name")}
+                  active={sortColumn === 'artist_name'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('artist_name')}
                 >
                   Artist
                 </TableSortLabel>
-              </TableCell>
-            ) : (
-              <></>
-            )}
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === "albums"}
-                direction={sortDirection as "asc" | "desc"}
-                onClick={() => handleSort("albums")}
-              >
-                Album
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === "create_year"}
-                direction={sortDirection as "asc" | "desc"}
-                onClick={() => handleSort("create_year")}
-              >
-                Year
-              </TableSortLabel>
-            </TableCell>
-            {!props.hideGenreCol ? (
+                </TableCell>
+                :
+                <></>
+              }
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === "genres"}
-                  direction={sortDirection as "asc" | "desc"}
-                  onClick={() => handleSort("genres")}
+                  active={sortColumn === 'albums'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('albums')}
+                >
+                  Album
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'create_year'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('create_year')}
+                >
+                  Year
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'genres'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('genres')}
                 >
                   Genre
                 </TableSortLabel>
               </TableCell>
-            ) : (
-              <></>
-            )}
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === "length"}
-                direction={sortDirection as "asc" | "desc"}
-                onClick={() => handleSort("audio_length")}
-              >
-                Length
-              </TableSortLabel>
-            </TableCell>
-            <TableCell />
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          {sortedData.map((track, index) => (
-            <StyledTableRow key={track.id}>
-              <TableCell className="trackListPictureCell" sx={{ padding: 0 }}>
-                <Grid
-                  sx={{
-                    padding: 0,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignContent: "center",
-                  }}
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'length'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('audio_length')}
                 >
-                  <LazyLoadImage
-                    className="trackImage"
-                    src={track.thumbnail_src}
-                    alt={track.name}
-                    style={{ height: "3em" }}
-                  />
-                </Grid>
+                  Length
+                </TableSortLabel>
               </TableCell>
-              <TableCell onClick={() => props.handleTrackClick(track)}>
-                {track.name}
-              </TableCell>
-              {!props.hideArtistCol ? (
-                <TableCell
-                  onClick={() => {
-                    router.push(`/collection/artists/${track.artists[0].id}`);
-                  }}
-                >
-                  {track.artist_name}
-                </TableCell>
-              ) : (
-                <></>
-              )}
-              <TableCell
-                onClick={() => {
-                  router.push(`/collection/albums/${track.albums[0].id}`);
-                }}
-              >
-                {track.albums.length > 0 ? track.albums[0].name : ""}
-              </TableCell>
-              <TableCell>{track.create_year}</TableCell>
-              {/* TODO: onClick for genre */}
-              {!props.hideGenreCol ? (
-                <TableCell>
-                  {track.genres.length > 0 ? track.genres[0].name : ""}
-                </TableCell>
-              ) : (
-                <></>
-              )}
-              <TableCell>{format(track.audio_length * 1000)}</TableCell>
-              <TableCell onClick={() => {}}>
-                <Button
-                  onClick={(event) => handleMenuClick(event, track, anchorRef)}
-                  sx={{
-                    borderRadius: "1em",
-                    padding: 0,
-                    margin: 0,
-                    width: "0.5em",
-                  }}
-                  id="positioned-button"
-                  aria-controls={open ? "positioned-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  ref={anchorRef}
-                >
-                  <MoreVertOutlined fontSize="small" sx={{ color: "#000" }} />
-                </Button>
-                {/* <PositionedMenu anchorEl={anchorEl} handleClose={handleMenuClose} /> */}
-                <Menu
-                  id="positioned-menu"
-                  aria-labelledby="positioned-button"
-                  // anchorEl={anchorEl}
-                  anchorEl={anchorRef.current}
-                  open={open}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                >
-                  <MenuItem onClick={handleMenuClose}>
-                    {isFavourite ? (
-                      <FavoriteOutlined />
-                    ) : (
-                      <FavoriteBorderOutlined />
-                    )}
-                    Favourite
-                  </MenuItem>
-                  <MenuItem onClick={handleMenuClose}>
-                    {addedToPlaylist ? (
-                      <PlaylistAddCheckOutlined />
-                    ) : (
-                      <PlaylistAddOutlined />
-                    )}
-                    Add to playlist
-                  </MenuItem>
-                </Menu>
-              </TableCell>
+              <TableCell />
             </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Grid>
+          </TableHead>
+          <TableBody>
+            {sortedData.map((track, index) => (
+              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} />
+            ))}
+          </TableBody>
+        </Table>
+      </Grid>
+    </ThemeProvider>
   );
 }
