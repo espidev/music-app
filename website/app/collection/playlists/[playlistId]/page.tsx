@@ -31,6 +31,7 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
 
   const playlistId = params.playlistId;
 
+  const [playlists, setPlaylists] = useState<APIPlaylist[]>([]);
   const [playlist, setPlaylist] = useState<APIPlaylist>();
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
@@ -94,7 +95,7 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
   const handleCreateButtonClick = async () => {
     try {
       const data = { name: newPlaylistName, description: newPlaylistDescription };
-      const response = await apiPostCreatePlaylist(accountUuid, data);
+      const response = await apiPostCreatePlaylist(playlistId, data);
       const newPlaylist = response.data;
       setPlaylists([...playlists, newPlaylist]);
       handleCloseModal();
