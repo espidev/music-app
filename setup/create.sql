@@ -7,7 +7,9 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS account (
     uuid TEXT PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
-    password_argon2 TEXT
+    password_argon2 TEXT,
+    totp_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+	totp_secret TEXT
 );
 
 CREATE TABLE IF NOT EXISTS artist (

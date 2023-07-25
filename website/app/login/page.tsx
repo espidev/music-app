@@ -11,6 +11,7 @@ import { useState } from "react";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [totp, setTotp] = useState("");
   const [alerts, setAlerts] = useState<AlertEntry[]>([]);
 
   const loginState = useLoginStateContext();
@@ -18,7 +19,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleSubmit = () => {
-    apiPostLogin(username, password)
+    apiPostLogin(username, password, totp)
       .then(res => {
         loginState.setLoggedIn(res.data.account);
         router.push('/');
@@ -66,6 +67,14 @@ export default function LoginPage() {
             fullWidth
             onChange={e => setPassword(e.target.value)}
           />
+
+            <TextField
+            id="totp"
+            label="TOTP code"
+            type="number"
+            fullWidth
+            onChange={e => setTotp(e.target.value)}
+            />
 
           <Button 
             variant="outlined"

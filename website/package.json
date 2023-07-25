@@ -23,6 +23,7 @@
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "@types/tmp": "^0.2.3",
+    "@types/totp-generator": "^0.0.2",
     "@types/uuid": "^9.0.1",
     "argon2": "^0.30.3",
     "autoprefixer": "10.4.14",
@@ -47,6 +48,8 @@
     "react-pro-sidebar": "^1.1.0-alpha.1",
     "tailwindcss": "3.3.2",
     "tmp": "^0.2.1",
+    "thirty-two": "^1.0.0",
+    "totp-generator": "^0.0.14",
     "ts-node": "^10.9.1",
     "typescript": "5.0.4",
     "uuid": "^9.0.0"

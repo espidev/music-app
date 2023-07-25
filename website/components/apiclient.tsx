@@ -1,22 +1,24 @@
 import axios from 'axios';
 
-export function apiPostLogin(username: string, password: string) {
+export function apiPostLogin(username: string, password: string, totp: string) {
   return axios({ 
     method: 'post', 
     url: '/api/login', 
     data: {
       username,
-      password
+      password,
+      totp
   } });
 }
 
-export function apiPostRegister(username: string, password: string) {
+export function apiPostRegister(username: string, password: string, totpSecret: string) {
   return axios({
     method: 'post',
     url: '/api/register',
     data: {
       username,
-      password
+      password,
+      totpSecret
     }
   });
 }

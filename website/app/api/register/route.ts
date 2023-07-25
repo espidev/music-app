@@ -11,6 +11,7 @@ export async function POST(request: Request) {
 
   const username = reqjson.username;
   const password = reqjson.password;
+  const totp = reqjson.totpSecret;
 
   const conn = await getDB();
 
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
 
   // insert account into db
   try {
-    await conn.query("INSERT INTO account (uuid, username, password_argon2) VALUES ($1, $2, $3)", [uuidv4(), username, hash]);
+    await conn.query("INSERT INTO account (uuid, username, password_argon2) VALUES ($1, $2, $3, $4, $5)", [uuidv4(), username, hash, totp != null, totp]);
     await conn.end();
   } catch (err) {
     return NextResponse.json({ error: "internal server error" }, { status: 500 });
