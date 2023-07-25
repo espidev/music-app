@@ -3,10 +3,12 @@ import { APIAlbum } from "@/util/models/album";
 import { Typography, Card, CardActions, CardActionArea, CardContent, CardMedia, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useAppStateContext } from "./appstateprovider";
 
 
 export default function AlbumCard(props: { album: APIAlbum }) {
   const router = useRouter();
+  const {theme} = useAppStateContext();
 
   return (
     <Card sx={{
@@ -15,7 +17,7 @@ export default function AlbumCard(props: { album: APIAlbum }) {
       margin: '0.5em',
       marginLeft: '0.375em',
       marginRight: '0.375em',
-      backgroundColor: 'rgba(235, 250, 252, 0.5)',
+      backgroundColor: theme === "dark" ? 'rgba(220, 220, 255, 0.9)' : 'rgba(235, 250, 252, 0.5)',
       transition: 'all 0.2s ease-in-out',
       position: 'relative',
       overflow: 'hidden',

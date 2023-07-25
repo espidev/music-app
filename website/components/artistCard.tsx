@@ -2,10 +2,12 @@ import React from "react";
 import { APIArtist } from "@/util/models/artist";
 import { Typography, Card, CardActionArea, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useAppStateContext } from "./appstateprovider";
 
 
 export default function ArtistCard(props: { artist: APIArtist }) {
   const router = useRouter();
+  const {theme} = useAppStateContext();
 
   return (
     <Card sx={{ 
@@ -14,7 +16,7 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       margin: '0.5em',
       marginLeft: '0.375em',
       marginRight: '0.375em',
-      backgroundColor: 'rgba(235, 250, 252, 0.5)',
+      backgroundColor: theme === "dark" ? 'rgba(220, 220, 255, 0.9)' : 'rgba(235, 250, 252, 0.5)',
       transition: 'all 0.2s ease-in-out',
       position: 'relative',
       overflow: 'hidden',

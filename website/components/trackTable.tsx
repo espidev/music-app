@@ -2,19 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import format from 'format-duration';
 import { APITrack } from "@/util/models/track";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem, ListItemIcon, Typography } from '@mui/material';
+import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import {styled} from '@mui/system';
 import React from "react";
 import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
+import { lightTheme, darkTheme } from "./themes";
 
 const StyledTableRow = styled(TableRow)(
   ({theme}) => ({
       padding: 0,
       margin: 0,
-      "&:hover": {backgroundColor: "rgba(0, 0, 0, 0.1)", transition: "all 0.2s ease-in-out"},
+      "&:hover": {backgroundColor: theme.palette.background.paper, transition: "all 0.2s ease-in-out"},
       cursor: "pointer",
+      color: theme.palette.text.primary,
   })
 );
 
@@ -42,8 +45,7 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
   return (
     <StyledTableRow>
 
-      <TableCell className="trackListPictureCell" sx={{ padding: 0 }}>
-
+      <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
         <Grid
           sx={{
             padding: 0,
@@ -58,7 +60,6 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
             style={{ height: '3em'}}
           />
         </Grid>
-      
       </TableCell>
       
       <TableCell onClick={() => props.handleTrackClick(track)}>
@@ -92,7 +93,7 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <MoreVertOutlined fontSize="small" sx={{color: "#000"}}/>
+          <MoreVertOutlined fontSize="small" sx={{color: appState.theme === "dark" ? "whitesmoke" : "#000"}}/>
         </Button>
 
         <Menu
@@ -148,8 +149,8 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
 }
 
 export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
-  const router = useRouter();
   const appState = useAppStateContext();
+  const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortColumn, setSortColumn] = useState('id');
@@ -196,80 +197,86 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
     setSortColumn(column);
   };
 
-  return (
-    <Grid sx={{paddingX: '1em'}}>
-      <Table>
 
-        <TableHead>
-          <StyledTableRow>
-            <TableCell className="trackListPictureCell" />
-            <TableCell className="trackListNameCell">
-              <TableSortLabel
-                active={sortColumn === 'name'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('name')}
-              >
-                Name
-              </TableSortLabel>
-            </TableCell>
-            {!props.hideArtistCol ? 
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === 'artist_name'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('artist_name')}
-              >
-                Artist
-              </TableSortLabel>
+  const color = theme === 'dark' ? 'white' : 'rgb(50, 50, 50)';
+
+  return (
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <Grid sx={{paddingX: '1em', color: color}}>
+        <Table>
+
+          <TableHead>
+            <StyledTableRow>
+              <TableCell className="trackListPictureCell" />
+              <TableCell className="trackListNameCell">
+                <TableSortLabel
+                  active={sortColumn === 'name'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('name')}
+                >
+                  Name
+                </TableSortLabel>
               </TableCell>
-              :
-              <></>
-            }
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === 'albums'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('albums')}
-              >
-                Album
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === 'create_year'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('create_year')}
-              >
-                Year
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === 'genres'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('genres')}
-              >
-                Genre
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortColumn === 'length'}
-                direction={sortDirection as 'asc' | 'desc'}
-                onClick={() => handleSort('audio_length')}
-              >
-                Length
-              </TableSortLabel>
-            </TableCell>
-            <TableCell />
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          {sortedData.map((track, index) => (
-            <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} />
-          ))}
-        </TableBody>
-      </Table>
-    </Grid>
+              {!props.hideArtistCol ? 
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'artist_name'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('artist_name')}
+                >
+                  Artist
+                </TableSortLabel>
+                </TableCell>
+                :
+                <></>
+              }
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'albums'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('albums')}
+                >
+                  Album
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'create_year'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('create_year')}
+                >
+                  Year
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'genres'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('genres')}
+                >
+                  Genre
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'length'}
+                  direction={sortDirection as 'asc' | 'desc'}
+                  onClick={() => handleSort('audio_length')}
+                >
+                  Length
+                </TableSortLabel>
+              </TableCell>
+              <TableCell />
+            </StyledTableRow>
+          </TableHead>
+          <TableBody>
+            {sortedData.map((track, index) => (
+              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} />
+            ))}
+          </TableBody>
+        </Table>
+      </Grid>
+    </ThemeProvider>
   );
 }
