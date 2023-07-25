@@ -21,7 +21,7 @@ const StyledTableRow = styled(TableRow)(
   })
 );
 
-function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
   const router = useRouter();
   const appState = useAppStateContext();
   
@@ -69,7 +69,12 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
       </TableCell>
       
       {
-        !props.hideArtistCol ? <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>{track.artist_name}</TableCell> : <></>
+        !props.hideArtistCol ? 
+        <TableCell onClick={() => { router.push(`/collection/artists/${track.artists[0].id}`) }}>
+          {track.artist_name}
+          </TableCell> 
+          : 
+          <></>
       }
       
       <TableCell onClick={() => { router.push(`/collection/albums/${track.albums[0].id}`); }}>
@@ -78,9 +83,14 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
 
       <TableCell>{track.create_year}</TableCell>
 
-      {/* TODO: onClick for genre */}
-
-      <TableCell>{track.genres.length > 0 ? track.genres[0].name : ''}</TableCell>
+      {
+        !props.hideGenreCol ? 
+        <TableCell onClick={() => { router.push(`/collection/artists/${track.genres[0].id}`) }}>
+          {track.genres.length > 0 ? track.genres[0].name : ''}
+          </TableCell> 
+          : 
+          <></>
+      }
 
       <TableCell>{format(track.audio_length * 1000)}</TableCell>
 
@@ -148,7 +158,7 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
   );
 }
 
-export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean }) {
+export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
   const appState = useAppStateContext();
   const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
@@ -255,15 +265,19 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
                   Year
                 </TableSortLabel>
               </TableCell>
+              {!props.hideGenreCol ? 
               <TableCell>
-                <TableSortLabel
-                  active={sortColumn === 'genres'}
-                  direction={sortDirection as 'asc' | 'desc'}
-                  onClick={() => handleSort('genres')}
-                >
-                  Genre
-                </TableSortLabel>
-              </TableCell>
+              <TableSortLabel
+                active={sortColumn === 'genres'}
+                direction={sortDirection as 'asc' | 'desc'}
+                onClick={() => handleSort('genres')}
+              >
+                Genre
+              </TableSortLabel>
+            </TableCell>
+                :
+                <></>
+              }
               <TableCell>
                 <TableSortLabel
                   active={sortColumn === 'length'}
@@ -278,7 +292,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
           </TableHead>
           <TableBody>
             {sortedData.map((track, index) => (
-              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} />
+              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} hideGenreCol={props.hideGenreCol}/>
             ))}
           </TableBody>
         </Table>

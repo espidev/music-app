@@ -105,7 +105,6 @@ export default function CollectionGenrePage({
         <div
           style={{
             display: "flex",
-            // backgroundColor: 'pink',
             margin: "auto",
             alignItems: "center",
             zIndex: 2,

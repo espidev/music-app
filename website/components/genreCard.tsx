@@ -3,9 +3,10 @@ import { APIArtist } from "@/util/models/artist";
 import { Typography, Card, CardActionArea, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
+import { APIGenre } from "@/util/models/genre";
 
 
-export default function ArtistCard(props: { artist: APIArtist }) {
+export default function ArtistCard(props: { genre: APIGenre }) {
   const router = useRouter();
   const {theme} = useAppStateContext();
 
@@ -23,20 +24,20 @@ export default function ArtistCard(props: { artist: APIArtist }) {
       borderRadius: '0.5em',
       }}
       onClick={() => {
-        router.push(`/collection/artists/${props.artist.id}`);
+        router.push(`/collection/genres/${props.genre.id}`);
       }}
       >
         
       <CardActionArea>
         <CardMedia
           component="img"
-          image={`/api/artist/${props.artist.id}/thumbnail`}
+          image={`/api/artist/${props.genre.id}/thumbnail`}
           alt="artist_cover"
           sx={{ height: '10em',  objectFit: 'cover' }}
         />
         <CardContent>
           <Typography gutterBottom variant="subtitle2" component="div">
-            {props.artist.name}
+            {props.genre.name}
           </Typography>
         </CardContent>
       </CardActionArea>

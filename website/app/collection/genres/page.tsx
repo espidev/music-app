@@ -8,7 +8,7 @@ import { APIGenre } from "@/util/models/genre";
 import { Box, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ArtistCard from "@/components/artistCard";
+import GenreCard from "@/components/genreCard";
 
 export default function CollectionGenresPage() {
   const loginState = useLoginStateContext();
@@ -57,7 +57,7 @@ export default function CollectionGenresPage() {
           justifyContent: 'center',
           marginBottom: '4em', }}>
         {genres.map((genre) => (
-          <ArtistCard key={genre.id} artist={genre} />
+          <GenreCard key={genre.id} genre={genre} />
         ))}
       </Grid>
     </Box>
