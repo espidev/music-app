@@ -31,7 +31,7 @@ export default function ArtistCard(props: { genre: APIGenre }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          image={`/api/artist/${props.genre.id}/thumbnail`}
+          image={`/api/artist/${props.genre.id}/thumbnail`} // FIGURE THIS OUT
           alt="artist_cover"
           sx={{ height: '10em',  objectFit: 'cover' }}
         />

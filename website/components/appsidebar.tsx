@@ -1,7 +1,7 @@
 'use client'
 
-import { AlbumOutlined, FolderOutlined, MusicNoteOutlined, PersonOutlineOutlined, QueueMusicOutlined, UploadFileOutlined } from "@mui/icons-material";
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { AlbumOutlined, FolderOutlined, Margin, MusicNoteOutlined, PersonOutlineOutlined, QueueMusicOutlined, UploadFileOutlined, WhatshotOutlined } from "@mui/icons-material";
+import { Divider, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 
@@ -76,6 +76,17 @@ export default function AppSidebar() {
         <ListItemIcon><QueueMusicOutlined style={{color: color}} /></ListItemIcon>
         <ListItemText primary="Playlists" />
       </ListItemButton>
+
+      <ListItemButton 
+        style={sidebar_button}
+        selected={pathname === '/collection/hotcharts'}
+        onClick={() => router.push(`/collection/hotcharts`)}
+      >
+        <ListItemIcon><WhatshotOutlined style={{color: color}} /></ListItemIcon>
+        <ListItemText primary="Hot Charts" />
+      </ListItemButton>
+
+      <Divider style={{marginTop: 10, marginBottom: 10}}></Divider>
 
       <ListItemButton 
         style={sidebar_button}

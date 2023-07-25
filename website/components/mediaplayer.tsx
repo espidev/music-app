@@ -5,6 +5,7 @@ import { useAppStateContext } from "./appstateprovider";
 import { useRef, useState, useEffect } from "react";
 import AudioPlayer from 'react-h5-audio-player';
 
+
 import '@/components/mediaplayer.css';
 import { 
   PauseOutlined, 
@@ -24,7 +25,10 @@ import { useLoginStateContext } from "./loginstateprovider";
 import {styled} from "@mui/system"
 import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from './themes';
-import { CssBaseline } from '@mui/material';
+import { Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline, Popover, Modal } from '@mui/material';
+import TrackTable from './trackTable';
+import QueueTrackTable from './queueTrackTable';
+import { APITrack } from '@/util/models/track';
 
 const FooterPanel = styled('div')(({theme}) => ({
   padding: '1em',
@@ -47,6 +51,20 @@ export default function MediaPlayer() {
   const appState = useAppStateContext();
   const loginState = useLoginStateContext();
   const audioRef = useRef(null);
+
+  // Menu stuff
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const [queueOpen, setQueueOpen] = useState(false);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, ref: any) => {
+    setAnchorEl(event.currentTarget);
+    setQueueOpen(!queueOpen)
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setQueueOpen(false)
+  };
 
   const [audioIsPlaying, setAudioIsPlaying] = useState(false);
 
@@ -107,7 +125,43 @@ export default function MediaPlayer() {
       <li className="media-clickable" onClick={() => appState.goToNextTrack()}><SkipNextOutlined  sx={{color}} /></li>
   );
   const QueueButton = (
-      <li className="media-clickable"><QueueMusicOutlined  sx={{color}} /></li>
+      <li className="media-clickable" onClick={() => {}}>
+        <Button
+          onClick={(event) => handleMenuClick(event, anchorRef)}
+          sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
+          id="positioned-button"
+          aria-controls={queueOpen ? 'positioned-queue' : undefined}
+          aria-haspopup="true"
+          aria-expanded={queueOpen ? 'true' : undefined}
+          aria-selected={queueOpen}
+        >
+          <QueueMusicOutlined fontSize="small" sx={{color}}/>
+        </Button>
+
+        <Popover
+          id="positioned-queue"
+          aria-labelledby="positioned-queue"
+          open={queueOpen}
+          onClose={handleMenuClose}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <div style={{width: "30em", height: "30em", overflow: "hidden"}}>
+            <QueueTrackTable/>
+            </div>
+          
+          
+        </Popover>
+
+        
+      </li>
   );
   const RepeatButton = (
       <li className="media-clickable" onClick={() => appState.toggleRepeat()}>
