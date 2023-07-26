@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { APIPlaylist } from "@/util/models/playlist";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { Typography, Grid } from "@mui/material";
+import PlaylistCard from "@/components/playlistCard";
 
 export default function CollectionPlaylistsPage() {
   const loginState = useLoginStateContext();
@@ -50,7 +51,9 @@ export default function CollectionPlaylistsPage() {
         <Typography variant="h6">Playlists</Typography>
       </Grid>
 
-      {/* Add the playlist cards or list items here */}
+      {playlists.map((playlist) => {
+        return <PlaylistCard key={playlist.id} playlist={playlist} />;
+      })}
     </Grid>
   );
 }
