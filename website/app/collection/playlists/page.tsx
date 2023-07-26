@@ -1,12 +1,12 @@
 'use client'
 
-import { use, useEffect, useState } from "react";
-import { apiGetCollectionPlaylists, apiPostCreatePlaylist } from "@/components/apiclient";
+import { useEffect, useState } from "react";
+import { apiGetCollectionPlaylists } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { useRouter } from "next/navigation";
 import { APIPlaylist } from "@/util/models/playlist";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
-import { Typography, Grid, Modal, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Typography, Grid, Button } from "@mui/material";
 import PlaylistCard from "@/components/playlistCard";
 import CreatePlaylistDialog from "@/components/createPlaylistDialog";
 import { useAppStateContext } from "@/components/appstateprovider";

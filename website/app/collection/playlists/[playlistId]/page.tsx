@@ -6,7 +6,7 @@ import { Box, Typography, Button, TextField, Modal } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertEntry } from "@/components/alerts";
-import { apiGetPlaylist, apiGetPlaylistTracks, apiPostCreatePlaylist } from "@/components/apiclient";
+import { apiGetPlaylist, apiGetPlaylistTracks } from "@/components/apiclient";
 import { APITrack } from "@/util/models/track";
 import TrackTable from "@/components/trackTable";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';

@@ -1,5 +1,4 @@
 import React from "react";
-import { APIArtist } from "@/util/models/artist";
 import { Typography, Card, CardActionArea, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";

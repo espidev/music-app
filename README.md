@@ -32,7 +32,7 @@ It supports the following features:
 - Song queueing
   - https://github.com/Raymo111/cs348/blob/main/website/components/appstateprovider.tsx
 - Song favouriting
-  - To be implemented
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/favourites
 
 ---
 
@@ -40,7 +40,7 @@ The production data is at: https://drive.google.com/file/d/1bCoon3Nj-6nh-_RE9vNY
 
 The testing data is at: https://drive.google.com/file/d/11nd32AImDeLA856__QpqkyL5lRC_An66/view?usp=drive_link
 
-In order to load the data into the web application, please use the **`Upload`` tab** and batch-upload all the song files to be imported into the database.
+In order to load the data into the web application, please use the **`Upload` tab** and batch-upload all the song files to be imported into the database.
 
 ---
 

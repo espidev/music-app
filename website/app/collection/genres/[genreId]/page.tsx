@@ -1,7 +1,7 @@
 "use client";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIGenre } from "@/util/models/genre";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertEntry } from "@/components/alerts";

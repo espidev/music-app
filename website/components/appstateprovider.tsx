@@ -1,7 +1,7 @@
 'use client'
 
 import { APITrack } from "@/util/models/track";
-import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 export enum RepeatType {
   OFF,

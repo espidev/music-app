@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { apiGetCollectionFavourites, apiGetCollectionTracks, apiGetCollectionTracksSearch } from "@/components/apiclient";
+import { apiGetCollectionFavourites } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
-import {Grid, TextField, Typography, InputAdornment, CssBaseline} from "@mui/material";
-import { Search } from "@mui/icons-material";
+import {Grid, Typography, CssBaseline} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
