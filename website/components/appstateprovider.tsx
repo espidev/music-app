@@ -20,8 +20,11 @@ const initialState = {
   trackQueue: [] as APITrack[],
   originalTrackQueue: [] as APITrack[],
 
+  theme: 'light' as 'light' | 'dark',
+
   // dispatch
   changeQueue: null as any,
+  playTrackNext: null as any,
   playCurrentTrack: null as any,
   pauseCurrentTrack: null as any,
   stopCurrentTrack: null as any,
@@ -31,6 +34,8 @@ const initialState = {
   shuffleQueue: null as any,
   unshuffleQueue: null as any,
   toggleRepeat: null as any,
+
+  toggleTheme: null as any,
 };
 
 export const AppStateContext = createContext(initialState);
@@ -40,6 +45,7 @@ export function AppStateProvider({ children }: any) {
   const [state, dispatch] = useReducer(AppStateReducer, initialState);
 
   const changeQueue = (queue: APITrack[], position: number) => dispatch({type: 'change-queue', queue, position});
+  const playTrackNext = (track: APITrack) => dispatch({type: 'play-track-next', track});
   const playCurrentTrack = () => dispatch({type: 'play'});
   const pauseCurrentTrack = () => dispatch({type: 'pause'});
   const stopCurrentTrack = () => dispatch({type: 'stop'});
@@ -50,6 +56,8 @@ export function AppStateProvider({ children }: any) {
   const unshuffleQueue = () => dispatch({type: 'unshuffle-queue'});
   const toggleRepeat = () => dispatch({type: 'toggle-repeat'});
 
+  const toggleTheme = () => dispatch({type: 'toggle-theme'});
+
   return (
     <AppStateContext.Provider value={{
       isPlaying: state.isPlaying,
@@ -59,7 +67,9 @@ export function AppStateProvider({ children }: any) {
       queuePosition: state.queuePosition,
       trackQueue: state.trackQueue,
       originalTrackQueue: state.originalTrackQueue,
+      theme: state.theme,
       changeQueue,
+      playTrackNext,
       playCurrentTrack,
       pauseCurrentTrack,
       stopCurrentTrack,
@@ -68,6 +78,7 @@ export function AppStateProvider({ children }: any) {
       shuffleQueue,
       unshuffleQueue,
       toggleRepeat,
+      toggleTheme,
     }}>
       {children}
     </AppStateContext.Provider>
@@ -91,6 +102,19 @@ export default function AppStateReducer(state: any, action: any) {
         trackQueue: action.queue,
         originalTrackQueue: action.queue,
       };
+    case 'play-track-next':
+      
+      let cloneQueue = [...state.trackQueue];
+      cloneQueue.splice(state.queuePosition + 1, 0, action.track);
+
+      let cloneOriginalQueue = [...state.originalTrackQueue];
+      cloneOriginalQueue.splice(state.queuePosition + 1, 0, action.track);
+
+      return {
+        ...state,
+        trackQueue: cloneQueue,
+        originalTrackQueue: cloneOriginalQueue,
+      }
     case 'play':
       return {
         ...state,
@@ -156,6 +180,11 @@ export default function AppStateReducer(state: any, action: any) {
       return {
         ...state,
         repeatType: (state.repeatType === RepeatType.OFF) ? RepeatType.REPEAT : ((state.repeatType === RepeatType.REPEAT) ? RepeatType.REPEAT_ONCE : RepeatType.OFF)
+      };
+    case 'toggle-theme':
+      return {
+        ...state,
+        theme: (state.theme === 'light') ? 'dark' : 'light',
       };
   }
 }

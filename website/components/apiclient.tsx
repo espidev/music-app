@@ -126,3 +126,23 @@ export function apiGetPlaylistTracks(playlistId: string) {
 export function apiPostCreatePlaylist(playlistId: string, data: { name: string, description: string }) {
   return axios.post(`/api/collection/${playlistId}/playlists`, data);
 }
+export function apiGetCollectionGenres(accountUuid: string) {
+  return axios({
+    method: 'get',
+    url: `/api/collection/${accountUuid}/genres`
+  });
+}
+
+export function apiGetGenre(genreId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/genre/${genreId}/`
+  });
+}
+
+export function apiGetGenreTracks(genreId: string) {
+  return axios({
+    method: 'get',
+    url: `/api/genre/${genreId}/tracks`
+  });
+}

@@ -1,9 +1,10 @@
 'use client'
 
 import { RepeatType } from '@/components/appstateprovider';
-import { AppStateContext, useAppStateContext } from "./appstateprovider";
-import { useContext, useRef, useState, useEffect } from "react";
+import { useAppStateContext } from "./appstateprovider";
+import { useRef, useState, useEffect } from "react";
 import AudioPlayer from 'react-h5-audio-player';
+
 
 import '@/components/mediaplayer.css';
 import { 
@@ -21,11 +22,49 @@ import {
   RepeatOneOnOutlined
 } from "@mui/icons-material";
 import { useLoginStateContext } from "./loginstateprovider";
+import {styled} from "@mui/system"
+import { ThemeProvider } from '@mui/material/styles';
+import { lightTheme, darkTheme } from './themes';
+import { Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline, Popover, Modal } from '@mui/material';
+import TrackTable from './trackTable';
+import QueueTrackTable from './queueTrackTable';
+import { APITrack } from '@/util/models/track';
+
+const FooterPanel = styled('div')(({theme}) => ({
+  padding: '1em',
+  boxShadow: '10px 10px 10px 10px #aaaaaa',
+  display: 'flex',
+  flexDirection: 'row',
+  backgroundColor: theme.palette.mode === 'dark' ? 'rgb(3,3,3)' : 'rgb(250, 250, 250)',
+  backdropFilter: 'blur(3px)',
+  overflow: 'hidden',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  position: 'fixed',
+  bottom: 0,
+  width: '100%',
+  height: '5em',
+  zIndex: 9999,
+}));
 
 export default function MediaPlayer() {
   const appState = useAppStateContext();
   const loginState = useLoginStateContext();
   const audioRef = useRef(null);
+
+  // Menu stuff
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const [queueOpen, setQueueOpen] = useState(false);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, ref: any) => {
+    setAnchorEl(event.currentTarget);
+    setQueueOpen(!queueOpen)
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setQueueOpen(false)
+  };
 
   const [audioIsPlaying, setAudioIsPlaying] = useState(false);
 
@@ -70,61 +109,103 @@ export default function MediaPlayer() {
     return <></>;
   }
 
+  const color = appState.theme === 'dark' ? 'white' : '';
+
   const PreviousButton = (
-    <li className="media-clickable" onClick={() => appState.goToPreviousTrack()}><SkipPreviousOutlined /></li>
+    <li className="media-clickable" onClick={() => appState.goToPreviousTrack()}><SkipPreviousOutlined sx={{color}} /></li>
   );
 
   const PlayPauseButton = (
       <li className="media-clickable" onClick={() => appState.isPlaying ? appState.pauseCurrentTrack() : appState.playCurrentTrack()}>
-          {appState.isPlaying ? <PauseOutlined /> : <PlayArrowOutlined />}
+          {appState.isPlaying ? <PauseOutlined  sx={{color}} /> : <PlayArrowOutlined  sx={{color}} />}
       </li>
   );
 
   const NextButton = (
-      <li className="media-clickable" onClick={() => appState.goToNextTrack()}><SkipNextOutlined /></li>
+      <li className="media-clickable" onClick={() => appState.goToNextTrack()}><SkipNextOutlined  sx={{color}} /></li>
   );
   const QueueButton = (
-      <li className="media-clickable"><QueueMusicOutlined /></li>
+      <li className="media-clickable" onClick={() => {}}>
+        <Button
+          onClick={(event) => handleMenuClick(event, anchorRef)}
+          sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
+          id="positioned-button"
+          aria-controls={queueOpen ? 'positioned-queue' : undefined}
+          aria-haspopup="true"
+          aria-expanded={queueOpen ? 'true' : undefined}
+          aria-selected={queueOpen}
+        >
+          <QueueMusicOutlined fontSize="small" sx={{color}}/>
+        </Button>
+
+        <Popover
+          id="positioned-queue"
+          aria-labelledby="positioned-queue"
+          open={queueOpen}
+          onClose={handleMenuClose}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <div style={{width: "30em", height: "30em", overflow: "hidden"}}>
+            <QueueTrackTable/>
+            </div>
+          
+          
+        </Popover>
+
+        
+      </li>
   );
   const RepeatButton = (
       <li className="media-clickable" onClick={() => appState.toggleRepeat()}>
         {
-          appState.repeatType === RepeatType.OFF ? <RepeatOutlined /> :
-            appState.repeatType === RepeatType.REPEAT ? <RepeatOnOutlined /> : <RepeatOneOnOutlined />
+          appState.repeatType === RepeatType.OFF ? <RepeatOutlined  sx={{color}} /> :
+            appState.repeatType === RepeatType.REPEAT ? <RepeatOnOutlined  sx={{color}} /> : <RepeatOneOnOutlined  sx={{color}} />
         }
       </li>
   );
   const ShuffleButton = (
       <li className="media-clickable" onClick={() => {appState.isShuffled ? appState.unshuffleQueue() : appState.shuffleQueue()}}>
-          {appState.isShuffled ? <ShuffleOnOutlined /> : <ShuffleOutlined />}
+          {appState.isShuffled ? <ShuffleOnOutlined  sx={{color}} /> : <ShuffleOutlined  sx={{color}} />}
       </li>
   );
 
   return (
-    <nav className="footer-panel">
-      <div className="left-side">
-        <span className="track-image-span">
-          <img
-            className="track-image"
-            src={appState.currentTrack ? appState.currentTrack.thumbnail_src : 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Stylized_uwu_emoticon.svg/2880px-Stylized_uwu_emoticon.svg.png'} 
-          />
-        </span>
+    <ThemeProvider theme={appState.theme === 'dark' ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <FooterPanel className='footer-panel'>
+        <div className="left-side">
+          <span className="track-image-span">
+            <img
+              className="track-image"
+              src={appState.currentTrack ? appState.currentTrack.thumbnail_src : 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Stylized_uwu_emoticon.svg/2880px-Stylized_uwu_emoticon.svg.png'} 
+            />
+          </span>
 
-        <div className="track-info">
-          <div className="track-title">{appState.currentTrack ? appState.currentTrack.name : 'No track selected'}</div>
-          <div className="track-artist">{appState.currentTrack?.artist_name}</div>
+          <div className="track-info">
+            <div className="track-title">{appState.currentTrack ? appState.currentTrack.name : 'No track selected'}</div>
+            <div className="track-artist">{appState.currentTrack?.artist_name}</div>
+          </div>
         </div>
-      </div>
 
-      <AudioPlayer 
-        layout={"horizontal"}
-        ref={audioRef}
-        src={streamLink}
-        onPlay={() => appState.playCurrentTrack()}
-        onPause={() => appState.pauseCurrentTrack()}
-        onEnded={() => appState.goToNextTrack()}
-        customControlsSection={[PreviousButton, PlayPauseButton, NextButton, QueueButton, RepeatButton, ShuffleButton]}
-      />
-    </nav>
+        <AudioPlayer 
+          layout={"horizontal"}
+          ref={audioRef}
+          src={streamLink}
+          onPlay={() => appState.playCurrentTrack()}
+          onPause={() => appState.pauseCurrentTrack()}
+          onEnded={() => appState.goToNextTrack()}
+          customControlsSection={[PreviousButton, PlayPauseButton, NextButton, QueueButton, RepeatButton, ShuffleButton]}
+          className={`${appState.theme === "dark" ? "dark-mode" : ""} rhap_time`}
+        />
+      </FooterPanel>
+    </ThemeProvider>
   );
 }

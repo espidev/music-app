@@ -110,13 +110,13 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
             <Typography variant="subtitle2">{trackLength} {suffix} • {totalTime}</Typography>
             <Button 
               variant="outlined"  
-              style={{ width: '5vw', marginTop: '2em', color: 'black' }}
+              style={{ width: '5vw', marginTop: '2em' }}
               onClick={() => {
                 appState.changeQueue(tracks, 0);
                 appState.playCurrentTrack();
               }}
             >
-              <PlayArrowIcon fontSize="medium" style={{ color: '#000', marginLeft: '-0.3em' }} />Play
+              <PlayArrowIcon fontSize="medium" style={{ marginLeft: '-0.3em' }} />Play
             </Button>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { Search } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
-import TrackTable from "@/components/trackTable";
+import TopTrackTable from "@/components/topTrackTable";
 import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from '@/components/themes';
 import {styled} from '@mui/system';
@@ -19,7 +19,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? 'rgb(5, 10, 25)' : 'rgb(255, 245, 245)',
 }));
 
-export default function CollectionPage() {
+export default function CollectionHotChartsPage() {
   const appState = useAppStateContext();
   const theme = appState.theme;
   const loginState = useLoginStateContext();
@@ -85,7 +85,7 @@ export default function CollectionPage() {
         <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
         <Grid sx={{ padding: 2, color: color }} container direction="row" justifyContent="space-between">
-          <Typography variant="h6">Tracks</Typography>
+          <Typography variant="h6">Your Top Tracks</Typography>
           <TextField id="Search" label="Search" variant="outlined" 
             sx={{borderBlockColor: theme === "dark" ? "red" : "rgb(50, 50, 50)",}}
             InputProps={{
@@ -99,7 +99,7 @@ export default function CollectionPage() {
 
         {/* Weird. paddingBottom works but not marginBottom. */}
         <Grid sx={{ paddingBottom: '5em' }}>
-          <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+          <TopTrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
         </Grid>
       </StyledGrid>
     </ThemeProvider>

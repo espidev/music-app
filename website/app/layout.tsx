@@ -2,10 +2,9 @@
 
 import AppHeader from '@/components/appheader';
 import AppSidebar from '@/components/appsidebar';
-import { AppStateProvider } from '@/components/appstateprovider';
+import { AppStateProvider, useAppStateContext } from '@/components/appstateprovider';
 import { LoginStateProvider } from '@/components/loginstateprovider';
 import MediaPlayer from '@/components/mediaplayer';
-import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
 import { CssBaseline } from '@mui/material';
 
 export default function RootLayout({
@@ -30,7 +29,6 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* <FluentProvider theme={teamsLightTheme}> */}
         <LoginStateProvider value={{
           isLoggedIn: false,
         }}>
@@ -55,7 +53,6 @@ export default function RootLayout({
             
           </AppStateProvider>
         </LoginStateProvider>
-        {/* </FluentProvider> */}
       </body>
     </html>
   )

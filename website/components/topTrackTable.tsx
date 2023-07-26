@@ -21,7 +21,7 @@ const StyledTableRow = styled(TableRow)(
   })
 );
 
-function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
+function TopTrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean, ranking?: number }) {
   const router = useRouter();
   const appState = useAppStateContext();
   
@@ -44,6 +44,14 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
 
   return (
     <StyledTableRow>
+
+      {props.ranking ? 
+        <TableCell>
+          {props.ranking}
+          </TableCell> 
+          : 
+          <></>
+      }
 
       <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
         <Grid
@@ -158,7 +166,7 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
   );
 }
 
-export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
+export default function TopTrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
   const appState = useAppStateContext();
   const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
@@ -224,6 +232,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
 
           <TableHead>
             <StyledTableRow>
+              <TableCell className="trackListRankCell" />
               <TableCell className="trackListPictureCell" />
               <TableCell className="trackListNameCell">
                 <TableSortLabel
@@ -292,7 +301,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
           </TableHead>
           <TableBody>
             {sortedData.map((track, index) => (
-              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} hideGenreCol={props.hideGenreCol}/>
+              <TopTrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} ranking={index + 1}/>
             ))}
           </TableBody>
         </Table>
