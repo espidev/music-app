@@ -84,11 +84,19 @@ export default function CollectionPlaylistsPage() {
         </Button>
       </Grid>
 
-      {
-        playlists.map((playlist, index) => {
-          return <PlaylistCard key={index} playlist={playlist} />;
-        })
-      }
+      <Grid sx={{
+          display: "flex",
+          flexWrap: 'wrap',
+          justifyContent: 'start',
+          marginBottom: '5em',
+          padding: 2
+        }}>
+        {
+          playlists.map((playlist, index) => {
+            return <PlaylistCard key={index} playlist={playlist} />;
+          })
+        }
+      </Grid>
     </Grid>
   );
 }

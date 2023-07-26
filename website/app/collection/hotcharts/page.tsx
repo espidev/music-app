@@ -110,7 +110,6 @@ export default function CollectionHotChartsPage() {
           }} onChange={handleSearch}/>
         </Grid>
 
-        {/* TODO: Top artists section? */}
         <Grid sx={{ display: "flex", padding: 2 }}>
           {albums.map((album, index) => {
             if (album)
