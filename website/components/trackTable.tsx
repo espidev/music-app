@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import format from "format-duration";
 import { APITrack } from "@/util/models/track";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline } from '@mui/material';
+import { Grid, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Button, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import {styled} from '@mui/system';
 import React from "react";
-import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
+import { MoreVertOutlined } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 import { lightTheme, darkTheme } from "./themes";
@@ -22,7 +22,7 @@ const StyledTableRow = styled(TableRow)(
   })
 );
 
-function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
+function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean, showRankingCol?: boolean, ranking?: number }) {
   const router = useRouter();
   const appState = useAppStateContext();
   
@@ -40,6 +40,14 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
 
   return (
     <StyledTableRow>
+
+      {props.showRankingCol && props.ranking ? 
+        <TableCell>
+          {props.ranking}
+          </TableCell> 
+          : 
+          <></>
+      }
 
       <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
         <Grid
@@ -105,7 +113,12 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
   );
 }
 
-export default function TrackTable(props: { tracks: APITrack[], handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean }) {
+export default function TrackTable(props: { 
+                                            tracks: APITrack[], 
+                                            handleTrackClick: (track: APITrack) => void,
+                                            hideArtistCol?: boolean,
+                                            hideGenreCol?: boolean,
+                                            showRankingCol?: boolean }) {
   const appState = useAppStateContext();
   const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
@@ -171,6 +184,7 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
 
           <TableHead>
             <StyledTableRow>
+              {props.showRankingCol ? <TableCell className="trackListRankCell" /> : <></>}
               <TableCell className="trackListPictureCell" />
               <TableCell className="trackListNameCell">
                 <TableSortLabel
@@ -239,7 +253,15 @@ export default function TrackTable(props: { tracks: APITrack[], handleTrackClick
           </TableHead>
           <TableBody>
             {sortedData.map((track, index) => (
-              <TrackTableRow key={index} track={track} handleTrackClick={props.handleTrackClick} hideArtistCol={props.hideArtistCol} hideGenreCol={props.hideGenreCol}/>
+              <TrackTableRow
+                key={index}
+                track={track}
+                handleTrackClick={props.handleTrackClick}
+                hideArtistCol={props.hideArtistCol}
+                hideGenreCol={props.hideGenreCol}
+                showRankingCol={props.showRankingCol}
+                ranking={index + 1}
+              />
             ))}
           </TableBody>
         </Table>

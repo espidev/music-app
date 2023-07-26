@@ -9,10 +9,10 @@ import { Search } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
-import TopTrackTable from "@/components/topTrackTable";
 import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from '@/components/themes';
 import {styled} from '@mui/system';
+import TrackTable from "@/components/trackTable";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   height: 1,
@@ -99,7 +99,7 @@ export default function CollectionHotChartsPage() {
 
         {/* Weird. paddingBottom works but not marginBottom. */}
         <Grid sx={{ paddingBottom: '5em' }}>
-          <TopTrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+          <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} showRankingCol={true} />
         </Grid>
       </StyledGrid>
     </ThemeProvider>
