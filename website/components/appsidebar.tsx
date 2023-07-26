@@ -28,7 +28,7 @@ export default function AppSidebar() {
       left: 0,
       padding: "1em",
       zIndex: 1,
-      borderRightColor: "rgba(230, 230, 230)",
+      borderRightColor: theme === 'dark' ? 'rgb(30,30,30)' : "rgba(230, 230, 230)",
       borderRightWidth: "thin",
       borderRightStyle: "solid",
     }}>

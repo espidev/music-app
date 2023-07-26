@@ -165,6 +165,7 @@ export default function MediaPlayer() {
           onPlay={() => appState.playCurrentTrack()}
           onPause={() => appState.pauseCurrentTrack()}
           onEnded={() => appState.goToNextTrack()}
+          timeFormat='mm:ss'
           customControlsSection={[PreviousButton, PlayPauseButton, NextButton, QueueButton, RepeatButton, ShuffleButton]}
           className={`${appState.theme === "dark" ? "dark-mode" : ""} rhap_time`}
         />

@@ -17,9 +17,9 @@ It supports the following features:
 - Searching for tracks by name, artist, creation year, genre, etc.
   - https://github.com/Raymo111/cs348/blob/main/website/app/api/collection/%5BaccountUuid%5D/tracks/search/route.ts
 - Playlists
-  - To be implemented
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/playlists
 - Hot charts
-  - To be implemented
+  - https://github.com/Raymo111/cs348/blob/main/website/app/collection/hotcharts
 - Music player applet in the webpage footer
   - https://github.com/Raymo111/cs348/blob/main/website/components/mediaplayer.tsx
   - https://github.com/Raymo111/cs348/blob/main/website/components/appstateprovider.tsx
@@ -30,17 +30,17 @@ It supports the following features:
 - Asset storage service
   - https://github.com/Raymo111/cs348/tree/main/filestore
 - Song queueing
-  - To be implemented
+  - https://github.com/Raymo111/cs348/blob/main/website/components/appstateprovider.tsx
 - Song favouriting
   - To be implemented
- 
+
 ---
 
 The production data is at: https://drive.google.com/file/d/1bCoon3Nj-6nh-_RE9vNY4kQnDKoq9Fye/view?usp=sharing
 
 The testing data is at: https://drive.google.com/file/d/11nd32AImDeLA856__QpqkyL5lRC_An66/view?usp=drive_link
 
-In order to load the data into the web application, please use the **upload tab** and batch upload all of the song files to be imported into the database.
+In order to load the data into the web application, please use the **`Upload`` tab** and batch-upload all the song files to be imported into the database.
 
 ---
 
@@ -64,6 +64,7 @@ $ cd ..
 ```
 
 Start the filestore server:
+
 ```bash
 $ cd filestore
 $ npm install
