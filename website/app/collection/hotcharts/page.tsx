@@ -13,6 +13,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from '@/components/themes';
 import {styled} from '@mui/system';
 import TrackTable from "@/components/trackTable";
+import { APIAlbum } from "@/util/models/album";
+import AlbumCard from "@/components/albumCard";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   height: 1,
@@ -28,6 +30,7 @@ export default function CollectionHotChartsPage() {
   const color = theme === 'dark' ? 'white' : 'rgb(50, 50, 50)';
 
   const [tracks, setTracks] = useState([] as APITrack[]);
+  const [albums, setAlbums] = useState([] as APIAlbum[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   useEffect(() => {
@@ -45,7 +48,13 @@ export default function CollectionHotChartsPage() {
     // load tracks
     apiGetCollectionTracks(loginState.loggedInUserUuid)
       .then((res) => {
-        setTracks(res.data as APITrack[]);
+        // Only show top 10 tracks
+        const topTracks = res.data.slice(0, Math.min(10, res.data?.length)) as APITrack[];
+        let topAlbums = topTracks.map((track: APITrack) => track.albums[0]);
+        topAlbums = topAlbums.filter((album: APIAlbum) => album !== undefined);
+        topAlbums = topAlbums.slice(0, Math.min(5, topAlbums.length));
+        setTracks(res.data.slice(0, Math.min(10, res.data?.length)) as APITrack[]);
+        setAlbums(topAlbums as APIAlbum[]);
       })
       .catch(err => {
         setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
@@ -85,7 +94,7 @@ export default function CollectionHotChartsPage() {
         <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
         <Grid sx={{ padding: 2, color: color }} container direction="row" justifyContent="space-between">
-          <Typography variant="h6">Your Top Tracks</Typography>
+          <Typography variant="h6">Your Top Albums & Tracks</Typography>
           <TextField id="Search" label="Search" variant="outlined" 
             sx={{borderBlockColor: theme === "dark" ? "red" : "rgb(50, 50, 50)",}}
             InputProps={{
@@ -95,6 +104,14 @@ export default function CollectionHotChartsPage() {
                 </InputAdornment>
             ),
           }} onChange={handleSearch}/>
+        </Grid>
+
+        {/* TODO: Top artists section? */}
+        <Grid sx={{ display: "flex", padding: 2 }}>
+          {albums.map((album, index) => {
+            if (album)
+              return <AlbumCard album={album} key={index} />;
+          })}
         </Grid>
 
         {/* Weird. paddingBottom works but not marginBottom. */}
