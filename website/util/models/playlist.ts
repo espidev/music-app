@@ -1,5 +1,3 @@
-import { APITrack } from "@/util/models/track";
-
 export type DBPlaylist = {
   id: number
   name: string

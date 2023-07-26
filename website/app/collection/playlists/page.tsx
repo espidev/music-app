@@ -39,8 +39,8 @@ export default function CollectionPlaylistsPage() {
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
-    return <></>;
-  }
+  return <></>;
+}
 
   return (
     <Grid sx={{ position: 'absolute', width: 0.83 }}>
