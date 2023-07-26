@@ -5,6 +5,7 @@ import { getAPIArtist } from "@/util/models/artist";
 import { getAPIAlbum } from "@/util/models/album";
 import { getAPITrack } from "@/util/models/track";
 import { NextResponse } from "next/server";
+import { getAPIPlaylist } from "@/util/models/playlist";
 
 // GET /api/genre/[genreId]/tracks
 // get an genre's track list
@@ -38,7 +39,8 @@ export async function GET(request: Request, { params }: { params: { genreId: str
       t.*,
       JSON_AGG(genre.*) as genres,
       JSON_AGG(artist.*) as artists, 
-      JSON_AGG(album.*) as albums
+      JSON_AGG(album.*) as albums,
+      JSON_AGG(playlist.*) as playlists
       FROM track_to_genre
       INNER JOIN track as t ON t.id = track_to_genre.track_id
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
@@ -46,6 +48,8 @@ export async function GET(request: Request, { params }: { params: { genreId: str
       LEFT OUTER JOIN album ON track_to_album.album_id = album.id
       LEFT OUTER JOIN track_to_artist ON t.id = track_to_artist.track_id
       LEFT OUTER JOIN artist ON track_to_artist.artist_id = artist.id
+      FULL OUTER JOIN playlist_tracks ON t.id = playlist_tracks.track_id
+      FULL OUTER JOIN playlist ON playlist_tracks.playlist_id = playlist.id
       WHERE track_to_genre.genre_id = $1
       GROUP BY t.id, track_to_album.album_id
       ORDER BY track_to_album.album_id ASC
@@ -58,6 +62,7 @@ export async function GET(request: Request, { params }: { params: { genreId: str
     apiTrack.albums = track.albums.filter((album: any) => album).map((album: any) => getAPIAlbum(album));
     apiTrack.artists = track.artists.filter((artist: any) => artist).map((artist: any) => getAPIArtist(artist));
     apiTrack.genres = track.genres.filter((genre: any) => genre).map((genre: any) => getAPIGenre(genre));
+    apiTrack.playlists = track.playlists.filter((playlist: any) => playlist).map((playlist: any) => getAPIPlaylist(playlist));
 
     return apiTrack;
   });

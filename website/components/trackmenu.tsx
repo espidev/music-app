@@ -1,6 +1,6 @@
 import { APITrack } from "@/util/models/track";
-import { FavoriteBorderOutlined, FavoriteOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
-import { ListItemIcon, Menu, MenuItem, Typography } from "@mui/material";
+import { AddOutlined, FavoriteBorderOutlined, FavoriteOutlined, PlaylistAddCheckOutlined, PlaylistAddOutlined, QueueMusicOutlined } from "@mui/icons-material";
+import { Avatar, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
 import { useAppStateContext } from "./appstateprovider";
 
@@ -13,10 +13,33 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
 
   const track = props.track;
 
+  const [isPlaylistDialogOpen, setIsPlaylistDialogOpen] = useState(false);
+  
+  const handlePlaylistDialogClose = () => {
+    setIsPlaylistDialogOpen(false);
+  };
+
+  const playlistDialog = (
+    <Dialog onClose={handlePlaylistDialogClose} open={isPlaylistDialogOpen}>
+      <DialogTitle>Select playlists for {track.name}</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        <ListItem disableGutters>
+          <ListItemButton>
+            <ListItemAvatar>
+              <Avatar>
+                <AddOutlined />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Add playlist" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Dialog>
+  );
+
   return (
     <Menu
       id="positioned-menu"
-      aria-labelledby="positioned-button"
       anchorEl={props.anchorEl}
       open={open}
       onClose={props.requestClose}
@@ -39,7 +62,7 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
         </Typography>
       </MenuItem>
 
-      <MenuItem onClick={props.requestClose}>
+      <MenuItem onClick={() => setIsPlaylistDialogOpen(true)}>
         <ListItemIcon>
           { addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined /> }
         </ListItemIcon>
@@ -59,6 +82,8 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
           Play next
         </Typography>
       </MenuItem>
+
+      {playlistDialog}
 
     </Menu>
   );

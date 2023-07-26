@@ -1,6 +1,7 @@
-import { DBAlbum } from "./album";
-import { DBArtist } from "./artist";
-import { DBGenre } from "./genre";
+import { APIAlbum } from "./album";
+import { APIArtist } from "./artist";
+import { APIGenre } from "./genre";
+import { APIPlaylist } from "./playlist";
 
 export type DBTrack = {
   id: number
@@ -23,9 +24,10 @@ export type APITrack = {
   create_year: number
 
   // optional to be filled
-  albums: DBAlbum[]
-  artists: DBArtist[]
-  genres: DBGenre[]
+  albums: APIAlbum[]
+  artists: APIArtist[]
+  genres: APIGenre[]
+  playlists: APIPlaylist[]
 };
 
 export function getAPITrack(track: DBTrack) {

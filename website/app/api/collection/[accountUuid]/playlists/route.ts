@@ -56,7 +56,7 @@ export async function POST(request: Request, { params }: { params: { accountUuid
   const conn = await getDB();
 
   // Get the playlist data from the request body
-  const { name, description } = await request.json();
+  const { name } = await request.json();
 
   // Validate
   if (!name || name.trim() === "") {
