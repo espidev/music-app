@@ -1,6 +1,6 @@
 import { checkAuthenticated } from "@/util/api";
 import { getDB } from "@/util/db";
-import { getDBPlaylist, getAPIPlaylistTrack } from "@/util/models/playlist";
+import { getAPIPlaylist } from "@/util/models/playlist";
 import { NextResponse } from "next/server";
 
 // GET /collections/[accountUuid]/playlists
@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     await conn.end();
 
     // Convert the database result into the API format
-    const playlists = playlistRes.rows.map((playlist) => getDBPlaylist(playlist));
+    const playlists = playlistRes.rows.map((playlist) => getAPIPlaylist(playlist));
 
     return NextResponse.json(playlists, { status: 200 });
   } catch (error) {
@@ -77,7 +77,7 @@ export async function POST(request: Request, { params }: { params: { accountUuid
     await conn.end();
 
     // Convert the database result into the API format
-    const playlist = getDBPlaylist(playlistRes.rows[0]);
+    const playlist = getAPIPlaylist(playlistRes.rows[0]);
 
     return NextResponse.json(playlist, { status: 201 });
   } catch (error) {

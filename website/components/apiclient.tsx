@@ -126,6 +126,7 @@ export function apiGetPlaylistTracks(playlistId: string) {
 export function apiPostCreatePlaylist(playlistId: string, data: { name: string, description: string }) {
   return axios.post(`/api/collection/${playlistId}/playlists`, data);
 }
+
 export function apiGetCollectionGenres(accountUuid: string) {
   return axios({
     method: 'get',
