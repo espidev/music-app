@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 // GET /playlist/[playlistId]
 // Get playlist details
 
-export async function GET(request: Request, { params }: { params: { playlistId: string } }) {
-  const playlistId = params.playlistId;
+export async function GET(request: Request, { params }: { params: { accountUuid: string } }) {
+  const playlistId = params.accountUuid;
 
   // Check authorization
   const tokenUuid = await checkAuthenticated();
