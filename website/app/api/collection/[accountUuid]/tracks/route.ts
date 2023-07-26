@@ -46,8 +46,6 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
       FULL OUTER JOIN playlist_tracks ON t.id = playlist_tracks.track_id
       FULL OUTER JOIN playlist ON playlist_tracks.playlist_id = playlist.id
-      FULL OUTER JOIN playlist_tracks ON t.id = playlist_tracks.track_id
-      FULL OUTER JOIN playlist ON playlist_tracks.playlist_id = playlist.id
       WHERE t.account_uuid = $1::text 
       GROUP BY t.id
       ORDER BY t.name ASC
