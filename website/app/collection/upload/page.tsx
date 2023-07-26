@@ -70,11 +70,20 @@ export default function CollectionUploadPage() {
           {
             isDragActive ?
               <p>Drop files here...</p> :
-              <p>Drag and drop files here, or click to select files</p>
+              <p>
+                Drag and drop files here, or click to select files
+
+                <br />
+              </p>
           }
 
         </div>
-        <Button variant="contained" onClick={handleUpload}>Upload</Button>
+
+        {
+          files.length > 0 ?
+            <Button variant="outlined" onClick={handleUpload} size="large">Upload</Button> :
+            <></>
+        }
 
         <ul>
           {
