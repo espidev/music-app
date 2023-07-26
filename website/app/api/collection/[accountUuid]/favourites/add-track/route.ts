@@ -1,33 +1,44 @@
 import { checkAuthenticated } from "@/util/api";
+import { FAVOURITES_PLAYLIST_NAME } from "@/util/constants";
 import { getDB } from "@/util/db";
 import { NextResponse } from "next/server";
 
-// POST /playlist/[playlistId]/add-track
-// Add a track to the playlist
+// POST /collection/[accountUuid]/favourites/add-track
+// Add a track to the favourites
 // Request body:
 // { trackId }
 
-export async function POST(request: Request, { params }: { params: { playlistId: string } }) {
-  const playlistId = params.playlistId;
+export async function POST(request: Request, { params }: { params: { accountUuid: string } }) {
   const { trackId } = await request.json();
 
   // check authorization
   const tokenUuid = await checkAuthenticated();
-  if (tokenUuid === null) {
+  if (tokenUuid === null || tokenUuid !== params.accountUuid) {
     return NextResponse.json({ error: "not authorized" }, { status: 401 });
   }
 
   const conn = await getDB();
 
   try {
+
+    let playlistId = 0;
+
     // check if playlist exists
     const playlistRes = await conn.query(`
-      SELECT id FROM playlist WHERE id = $1 AND account_uuid = $2
-    `, [playlistId, tokenUuid]);
+      SELECT id FROM playlist WHERE name = $1 AND account_uuid = $2
+    `, [FAVOURITES_PLAYLIST_NAME, tokenUuid]);
 
     if (playlistRes.rowCount === 0) {
-      await conn.end();
-      return NextResponse.json({ error: "playlist not found or not authorized to update" }, { status: 404 });
+    
+      // add favourites playlist if it doesn't exist
+      const insertQuery = await conn.query(`
+        INSERT INTO playlist (name, account_uuid) VALUES ($1, $2) RETURNING *
+      `, [FAVOURITES_PLAYLIST_NAME, tokenUuid]);
+
+      playlistId = insertQuery.rows[0].id;
+    
+    } else {
+      playlistId = playlistRes.rows[0].id;
     }
 
     // check if track exists

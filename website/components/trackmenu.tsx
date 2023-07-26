@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { useAppStateContext } from "./appstateprovider";
 import CreatePlaylistDialog from "./createPlaylistDialog";
 import { APIPlaylist } from "@/util/models/playlist";
-import { apiGetCollectionPlaylists, apiPostPlaylistAddTrack, apiPostPlaylistRemoveTrack } from "./apiclient";
+import { apiGetCollectionPlaylists, apiPostCollectionAddFavouritesTrack, apiPostCollectionRemoveFavouritesTrack, apiPostPlaylistAddTrack, apiPostPlaylistRemoveTrack } from "./apiclient";
 import { useLoginStateContext } from "./loginstateprovider";
+import { FAVOURITES_PLAYLIST_NAME } from "@/util/constants";
 
 type PlaylistEntry = {
   playlist: APIPlaylist
@@ -18,7 +19,6 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
   const loginState = useLoginStateContext();
   const open = Boolean(props.anchorEl as HTMLElement | null);
 
-  const isFavourite = useState(false);
   const addedToPlaylist = useState(false);
 
   const track = props.track;
@@ -110,6 +110,15 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
     }
   }
 
+  // determine if the song is favourited
+  let isFavourited = false;
+  for (const trackPlaylist of track.playlists) {
+    if (trackPlaylist.name === FAVOURITES_PLAYLIST_NAME) {
+      isFavourited = true;
+      break;
+    }
+  }
+
   // playlist selection dialog
   const playlistDialog = (
     <Dialog onClose={handlePlaylistDialogClose} open={isPlaylistDialogOpen}>
@@ -145,6 +154,26 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
     </Dialog>
   );
 
+  const handleFavouriteToggle = () => {
+    if (isFavourited) {
+      apiPostCollectionRemoveFavouritesTrack(loginState.loggedInUserUuid, track.id)
+        .then(() => {
+          requestReload();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else {
+      apiPostCollectionAddFavouritesTrack(loginState.loggedInUserUuid, track.id)
+        .then(() => {
+          requestReload();
+        })
+        .catch(err => {
+          console.error(err);
+        })
+    }
+  }
+
   return (
     <Menu
       id="positioned-menu"
@@ -161,9 +190,9 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
       }}
     >
       
-      <MenuItem onClick={props.requestClose}>
+      <MenuItem onClick={handleFavouriteToggle}>
         <ListItemIcon>
-          { isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> }
+          { isFavourited ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> }
         </ListItemIcon>
         <Typography variant="inherit">
           Favourite

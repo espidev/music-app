@@ -167,3 +167,26 @@ export function apiGetGenreTracks(genreId: string) {
     url: `/api/genre/${genreId}/tracks`
   });
 }
+
+export function apiGetCollectionFavourites(accountUuid: string) {
+  return axios({
+    method: 'get',
+    url: `/api/collection/${accountUuid}/favourites`
+  });
+}
+
+export function apiPostCollectionAddFavouritesTrack(accountUuid: string, trackId: number) {
+  return axios({
+    method: 'post',
+    url: `/api/collection/${accountUuid}/favourites/add-track`,
+    data: { trackId }
+  });
+}
+
+export function apiPostCollectionRemoveFavouritesTrack(accountUuid: string, trackId: number) {
+  return axios({
+    method: 'post',
+    url: `/api/collection/${accountUuid}/favourites/remove-track`,
+    data: { trackId }
+  });
+}
