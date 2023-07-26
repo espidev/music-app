@@ -24,7 +24,7 @@ export default function PlaylistCard(props: { playlist: APIPlaylist }) {
       onClick={() => {
         router.push(`/collection/playlists/${props.playlist.id}`);
       }}
-      >
+    >
       <CardActionArea>
         <CardMedia
           component="img"

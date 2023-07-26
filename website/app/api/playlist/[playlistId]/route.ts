@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 // GET /playlist/[playlistId]
 // Get playlist details
 
-export async function GET(request: Request, { params }: { params: { accountUuid: string } }) {
-  const playlistId = params.accountUuid;
+export async function GET(request: Request, { params }: { params: { playlistId: string } }) {
+  const playlistId = params.playlistId;
 
   // Check authorization
   const tokenUuid = await checkAuthenticated();
@@ -25,7 +25,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     await conn.end();
 
     if (playlistRes.rowCount === 0) {
-      return NextResponse.json({ error: "Playlist not found or not authorized to access" }, { status: 404 });
+      return NextResponse.json({ error: "playlist not found or not authorized to access" }, { status: 404 });
     }
 
     const playlist = playlistRes.rows[0];
@@ -34,7 +34,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
   } catch (error) {
     await conn.end();
     console.error("Error fetching playlist:", error);
-    return NextResponse.json({ error: "An error occurred while fetching the playlist" }, { status: 500 });
+    return NextResponse.json({ error: "an error occurred while fetching the playlist" }, { status: 500 });
   }
 }
 

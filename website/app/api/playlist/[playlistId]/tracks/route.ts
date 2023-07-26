@@ -10,8 +10,8 @@ import { NextResponse } from "next/server";
 // GET /api/playlist/[playlistId]/tracks
 // get a playlist's track list
 
-export async function GET(request: Request, { params }: { params: { albumId: string } }) {
-  const albumId = params.albumId;
+export async function GET(request: Request, { params }: { params: { playlistId: string } }) {
+  const albumId = params.playlistId;
   
   // check authorization
   const tokenUuid = await checkAuthenticated();
@@ -43,6 +43,7 @@ export async function GET(request: Request, { params }: { params: { albumId: str
       INNER JOIN track as t ON t.id = playlist_tracks.track_id
       LEFT OUTER JOIN track_to_artist ON t.id = track_to_artist.track_id
       LEFT OUTER JOIN artist ON track_to_artist.artist_id = artist.id
+      LEFT OUTER JOIN track_to_album ON t.id = track_to_album.album_id
       LEFT OUTER JOIN album ON track_to_album.album_id = album.id
       LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id

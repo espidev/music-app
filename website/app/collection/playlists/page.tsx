@@ -106,9 +106,11 @@ export default function CollectionPlaylistsPage() {
         </Button>
       </Grid>
 
-      {playlists.map((playlist) => {
-        return <PlaylistCard key={playlist.id} playlist={playlist} />;
-      })}
+      {
+        playlists.map((playlist, index) => {
+          return <PlaylistCard key={index} playlist={playlist} />;
+        })
+      }
     </Grid>
   );
 }
