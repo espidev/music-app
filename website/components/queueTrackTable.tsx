@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import format from "format-duration";
 import { APITrack } from "@/util/models/track";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -9,11 +9,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TableSortLabel,
   Button,
-  Menu,
-  MenuItem,
-  ListItemIcon,
   Typography,
   CssBaseline,
 } from "@mui/material";
@@ -21,22 +17,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import React from "react";
 import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
   MoreVertOutlined,
-  PlaylistAddCheckOutlined,
-  PlaylistAddOutlined,
-  QueueMusicOutlined,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 import { lightTheme, darkTheme } from "./themes";
-import {
-  apiGetCollectionTracks,
-  apiGetCollectionTracksSearch,
-} from "@/components/apiclient";
-import { AlertEntry } from "./alerts";
 import { useLoginStateContext } from "./loginstateprovider";
+import TrackMenu from "./trackmenu";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   padding: 0,
@@ -58,24 +45,18 @@ function QueueTrackTableRow(props: {
   const appState = useAppStateContext();
 
   // Menu stuff
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const anchorRef = useRef<HTMLButtonElement>(null);
-  const open = Boolean(anchorEl);
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [addedToPlaylist, setAddedToPlaylist] = useState(false);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const track = props.track;
 
   const handleMenuClick = (
-    event: React.MouseEvent<HTMLElement>,
-    track: APITrack,
-    ref: any
+    event: React.MouseEvent<HTMLElement>
   ) => {
-    setAnchorEl(event.currentTarget);
+    setMenuAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setMenuAnchorEl(null);
   };
 
   return (
@@ -141,12 +122,9 @@ function QueueTrackTableRow(props: {
 
       <TableCell onClick={() => {}}>
         <Button
-          onClick={(event) => handleMenuClick(event, track, anchorRef)}
+          onClick={(event) => handleMenuClick(event)}
           sx={{ borderRadius: "1em", padding: 0, margin: 0, width: "0.5em" }}
           id="positioned-button"
-          aria-controls={open ? "positioned-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
         >
           <MoreVertOutlined
             fontSize="small"
@@ -154,51 +132,8 @@ function QueueTrackTableRow(props: {
           />
         </Button>
 
-        <Menu
-          id="positioned-menu"
-          aria-labelledby="positioned-button"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-        >
-          <MenuItem onClick={handleMenuClose}>
-            <ListItemIcon>
-              {isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
-            </ListItemIcon>
-            <Typography variant="inherit">Favourite</Typography>
-          </MenuItem>
+        <TrackMenu track={track} anchorEl={menuAnchorEl} requestClose={handleMenuClose}/>
 
-          <MenuItem onClick={handleMenuClose}>
-            <ListItemIcon>
-              {addedToPlaylist ? (
-                <PlaylistAddCheckOutlined />
-              ) : (
-                <PlaylistAddOutlined />
-              )}
-            </ListItemIcon>
-            <Typography variant="inherit">Add to playlist</Typography>
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              appState.playTrackNext(track);
-              handleMenuClose();
-            }}
-          >
-            <ListItemIcon>
-              <QueueMusicOutlined />
-            </ListItemIcon>
-            <Typography variant="inherit">Play next</Typography>
-          </MenuItem>
-        </Menu>
       </TableCell>
     </StyledTableRow>
   );
@@ -211,7 +146,6 @@ export default function QueueTrackTable() {
   const router = useRouter();
 
   const [tracks, setTracks] = useState([] as APITrack[]);
-  const [alerts, setAlerts] = useState([] as AlertEntry[]);
   const [sortedData, setSortedData] = useState(tracks);
 
   // Is login state checking required here? I don't think so.
@@ -245,12 +179,6 @@ export default function QueueTrackTable() {
   useEffect(() => {
     setSortedData(tracks);
   }, [tracks]);
-
-  const strCmp = (a: string, b: string, isAsc: Boolean) => {
-    return (
-      (isAsc ? 1 : -1) * a.localeCompare(b, undefined, { sensitivity: "base" })
-    );
-  };
 
   const color = theme === "dark" ? "white" : "rgb(50, 50, 50)";
 

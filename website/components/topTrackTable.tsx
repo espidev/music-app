@@ -10,6 +10,7 @@ import { FavoriteBorderOutlined, FavoriteOutlined, MoreVertOutlined, PlaylistAdd
 import { useRouter } from "next/navigation";
 import { useAppStateContext } from "./appstateprovider";
 import { lightTheme, darkTheme } from "./themes";
+import TrackMenu from "./trackmenu";
 
 const StyledTableRow = styled(TableRow)(
   ({theme}) => ({
@@ -26,11 +27,8 @@ function TopTrackTableRow(props: { track: APITrack, handleTrackClick: (track: AP
   const appState = useAppStateContext();
   
   // Menu stuff
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [menuAnchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const open = Boolean(anchorEl);
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [addedToPlaylist, setAddedToPlaylist] = useState(false);
   
   const track = props.track;
 
@@ -107,60 +105,11 @@ function TopTrackTableRow(props: { track: APITrack, handleTrackClick: (track: AP
           onClick={(event) => handleMenuClick(event, track, anchorRef)}
           sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
           id="positioned-button"
-          aria-controls={open ? 'positioned-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
         >
           <MoreVertOutlined fontSize="small" sx={{color: appState.theme === "dark" ? "whitesmoke" : "#000"}}/>
         </Button>
 
-        <Menu
-          id="positioned-menu"
-          aria-labelledby="positioned-button"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        >
-          
-          <MenuItem onClick={handleMenuClose}>
-            <ListItemIcon>
-              { isFavourite ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> }
-            </ListItemIcon>
-            <Typography variant="inherit">
-              Favourite
-            </Typography>
-          </MenuItem>
-
-          <MenuItem onClick={handleMenuClose}>
-            <ListItemIcon>
-              { addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined /> }
-            </ListItemIcon>
-            <Typography variant="inherit">
-              Add to playlist
-            </Typography>
-          </MenuItem>
-          
-          <MenuItem onClick={() => {
-            appState.playTrackNext(track);
-            handleMenuClose();
-          }}>
-            <ListItemIcon>
-              <QueueMusicOutlined />
-            </ListItemIcon>
-            <Typography variant="inherit">
-              Play next
-            </Typography>
-          </MenuItem>
-
-        </Menu>
+        <TrackMenu track={track} anchorEl={menuAnchorEl} requestClose={handleMenuClose}/>
       </TableCell>
     </StyledTableRow>
   );

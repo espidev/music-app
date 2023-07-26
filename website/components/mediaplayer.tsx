@@ -48,18 +48,19 @@ export default function MediaPlayer() {
   const loginState = useLoginStateContext();
   const audioRef = useRef(null);
 
-  // Menu stuff
+  // Queue popover
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [queueOpen, setQueueOpen] = useState(false);
+
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>, ref: any) => {
     setAnchorEl(event.currentTarget);
     setQueueOpen(!queueOpen)
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (event: any, reason: any) => {
     setAnchorEl(null);
-    setQueueOpen(false)
+    setQueueOpen(false);
   };
 
   const [audioIsPlaying, setAudioIsPlaying] = useState(false);
@@ -123,28 +124,6 @@ export default function MediaPlayer() {
   const QueueButton = (
       <li className="media-clickable" onClick={(event) => handleMenuClick(event, anchorRef)}>
         <QueueMusicOutlined fontSize="small" sx={{color}}/>
-
-        <Popover
-          id="positioned-queue"
-          aria-labelledby="positioned-queue"
-          open={queueOpen}
-          onClose={handleMenuClose}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <div style={{width: "30em", height: "30em", overflow: "hidden"}}>
-            <QueueTrackTable/>
-          </div>
-        </Popover>
-
-        
       </li>
   );
   const RepeatButton = (
@@ -189,6 +168,26 @@ export default function MediaPlayer() {
           customControlsSection={[PreviousButton, PlayPauseButton, NextButton, QueueButton, RepeatButton, ShuffleButton]}
           className={`${appState.theme === "dark" ? "dark-mode" : ""} rhap_time`}
         />
+
+        <Popover
+          id="positioned-queue"
+          aria-labelledby="positioned-queue"
+          open={queueOpen}
+          onClose={handleMenuClose}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <div style={{width: "30em", height: "30em", overflow: "hidden"}}>
+            <QueueTrackTable/>
+          </div>
+        </Popover>
       </FooterPanel>
     </ThemeProvider>
   );
