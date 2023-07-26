@@ -1,4 +1,5 @@
 import { checkAuthenticated } from "@/util/api";
+import { FAVOURITES_PLAYLIST_NAME } from "@/util/constants";
 import { getDB } from "@/util/db";
 import { getAPIPlaylist } from "@/util/models/playlist";
 import { NextResponse } from "next/server";
@@ -31,7 +32,7 @@ export async function GET(request: Request, { params }: { params: { accountUuid:
     await conn.end();
 
     // Convert the database result into the API format
-    const playlists = playlistRes.rows.map((playlist) => getAPIPlaylist(playlist));
+    const playlists = playlistRes.rows.filter(playlist => playlist.name !== FAVOURITES_PLAYLIST_NAME).map((playlist) => getAPIPlaylist(playlist));
 
     return NextResponse.json(playlists, { status: 200 });
   } catch (error) {
