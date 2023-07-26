@@ -28,9 +28,22 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
   const [isPlaylistDialogOpen, setIsPlaylistDialogOpen] = useState(false);
   const [isCreatePlaylistDialogOpen, setIsCreatePlaylistDialogOpen] = useState(false);
 
+  const handlePlaylistDialogOpen = () => {
+    setIsPlaylistDialogOpen(true);
+  };
+
   const handlePlaylistDialogClose = () => {
     setIsPlaylistDialogOpen(false);
   };
+
+  const handleCreatePlaylistDialogOpen = () => {
+    setIsPlaylistDialogOpen(false);
+    setIsCreatePlaylistDialogOpen(true);
+  }
+
+  const handleCreatePlaylistDialogClose = () => {
+    setIsCreatePlaylistDialogOpen(false);
+  }
 
   const loadPlaylists = () => {
     if (!loginState.isLoggedIn) {
@@ -118,7 +131,7 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
           ))
         }
 
-        <ListItem disableGutters onClick={() => setIsCreatePlaylistDialogOpen(true)}>
+        <ListItem disableGutters onClick={handleCreatePlaylistDialogOpen}>
           <ListItemButton>
             <ListItemAvatar>
               <Avatar>
@@ -157,7 +170,7 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
         </Typography>
       </MenuItem>
 
-      <MenuItem onClick={() => setIsPlaylistDialogOpen(true)}>
+      <MenuItem onClick={handlePlaylistDialogOpen}>
         <ListItemIcon>
           { addedToPlaylist ? <PlaylistAddCheckOutlined /> : <PlaylistAddOutlined /> }
         </ListItemIcon>
@@ -182,7 +195,7 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
 
       <CreatePlaylistDialog 
         isOpen={isCreatePlaylistDialogOpen}
-        handleClose={() => setIsCreatePlaylistDialogOpen(false)} 
+        handleClose={handleCreatePlaylistDialogClose} 
         alerts={[]}
         setAlerts={(alerts: any) => {}} 
         refreshPlaylists={() => {}}
