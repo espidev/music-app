@@ -67,11 +67,11 @@ export async function POST(request: Request, { params }: { params: { accountUuid
   try {
     const playlistRes = await conn.query(
       `
-      INSERT INTO playlist (name, description, account_uuid)
-      VALUES ($1::text, $2::text, $3::text)
+      INSERT INTO playlist (name, account_uuid)
+      VALUES ($1::text, $2::text)
       RETURNING *
       `,
-      [name, description, accountUuid]
+      [name, accountUuid]
     );
 
     await conn.end();

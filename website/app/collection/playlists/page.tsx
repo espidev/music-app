@@ -6,7 +6,7 @@ import { useLoginStateContext } from "@/components/loginstateprovider";
 import { useRouter } from "next/navigation";
 import { APIPlaylist } from "@/util/models/playlist";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
-import { Typography, Grid, Modal, TextField, Button } from "@mui/material";
+import { Typography, Grid, Modal, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PlaylistCard from "@/components/playlistCard";
 
 export default function CollectionPlaylistsPage() {
@@ -18,30 +18,17 @@ export default function CollectionPlaylistsPage() {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
-  const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
 
-  const handleCreatePlaylist = () => {
-    setShowCreateModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowCreateModal(false);
-    setNewPlaylistName('');
-    setNewPlaylistDescription('');
-  };
-
-  const handleCreateButtonClick = async () => {
-    try {
-      const data = { name: newPlaylistName, description: newPlaylistDescription };
-      const response = await apiPostCreatePlaylist(loginState.loggedInUserUuid, data);
-      const newPlaylist = response.data;
-      setPlaylists([...playlists, newPlaylist]);
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error creating playlist:', error);
-      // Handle error and show error message
-    }
-  };
+  const loadPlaylists = () => {
+    apiGetCollectionPlaylists(loginState.loggedInUserUuid)
+      .then((res) => {
+        setPlaylists(res.data as APIPlaylist[]);
+      })
+      .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching playlists, see console for details." }]);
+        console.error(err);
+      });
+  }
 
   useEffect(() => {
     // wait for credentials to be loaded
@@ -56,52 +43,65 @@ export default function CollectionPlaylistsPage() {
     }
 
     // load playlists
-    apiGetCollectionPlaylists(loginState.loggedInUserUuid)
-      .then((res) => {
-        setPlaylists(res.data as APIPlaylist[]);
-      })
-      .catch(err => {
-        setAlerts([...alerts, { severity: "error", message: "Error fetching playlists, see console for details." }]);
-        console.error(err);
-      })
+    loadPlaylists();
+
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
-  return <></>;
-}
+    return <></>;
+  }
+
+  const handleCreatePlaylist = () => {
+    setShowCreateModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    setNewPlaylistName('');
+  };
+
+  const handleCreateButtonClick = async () => {
+    try {
+      await apiPostCreatePlaylist(loginState.loggedInUserUuid, newPlaylistName);
+      loadPlaylists();
+      handleCloseModal();
+    } catch (error) {
+      setAlerts([...alerts, { severity: "error", message: "Error creating playlist, see console for details." }]);
+      console.error('Error creating playlist:', error);
+    }
+  };
+
+  // create playlist dialog
+  const createPlaylistDialog = (
+    <Dialog open={showCreateModal} onClose={handleCloseModal}>
+      <DialogTitle>Create New Playlist</DialogTitle>
+      <DialogContent>
+      <TextField
+          label="Playlist Name"
+          value={newPlaylistName}
+          onChange={(e) => setNewPlaylistName(e.target.value)}
+          fullWidth
+          autoFocus
+          margin="normal"
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseModal}>Cancel</Button>
+        <Button onClick={handleCreateButtonClick}>Create</Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   return (
     <Grid sx={{ position: 'absolute', width: 0.83 }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
-            
-      {/* Create Playlist Modal */}
-      <Modal open={showCreateModal} onClose={handleCloseModal}>
-        <div style={{ padding: '1rem', background: 'white' }}>
-          <Typography variant="h6">Create New Playlist</Typography>
-          <TextField
-            label="Playlist Name"
-            value={newPlaylistName}
-            onChange={(e) => setNewPlaylistName(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Playlist Description"
-            value={newPlaylistDescription}
-            onChange={(e) => setNewPlaylistDescription(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" onClick={handleCreateButtonClick}>
-            Create
-          </Button>
-        </div>
-      </Modal>
+
+      {createPlaylistDialog}
 
       <Grid sx={{ padding: 2 }} container direction="row" justifyContent="space-between">
         <Typography variant="h6">Playlists</Typography>
 
-        <Button variant="contained" onClick={handleCreatePlaylist}>
+        <Button variant="outlined" onClick={handleCreatePlaylist}>
           Create Playlist
         </Button>
       </Grid>
