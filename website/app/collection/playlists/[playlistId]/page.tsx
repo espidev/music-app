@@ -31,13 +31,9 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
 
   const playlistId = params.playlistId;
 
-  const [playlists, setPlaylists] = useState<APIPlaylist[]>([]);
   const [playlist, setPlaylist] = useState<APIPlaylist>();
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newPlaylistName, setNewPlaylistName] = useState('');
-  const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
 
   useEffect(() => {
     // wait for credentials to be loaded
@@ -82,29 +78,6 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
 
   const totalTime = tracks.reduce((acc, track) => acc + track.audio_length, 0);
 
-  const handleCreatePlaylist = () => {
-    setShowCreateModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowCreateModal(false);
-    setNewPlaylistName('');
-    setNewPlaylistDescription('');
-  };
-
-  const handleCreateButtonClick = async () => {
-    try {
-      const data = { name: newPlaylistName, description: newPlaylistDescription };
-      const response = await apiPostCreatePlaylist(playlistId, data);
-      const newPlaylist = response.data;
-      setPlaylists([...playlists, newPlaylist]);
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error creating playlist:', error);
-      // Handle error and show error message
-    }
-  };
-
   return (
     <div>
       <Box>
@@ -122,37 +95,10 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
               {tracks.length} songs • Total duration: {formatDuration(totalTime)}
             </Typography>
           </div>
-          <Button variant="contained" onClick={handleCreatePlaylist}>
-            Create Playlist
-          </Button>
         </div>
 
         <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
       </Box>
-
-      {/* Create Playlist Modal */}
-      <Modal open={showCreateModal} onClose={handleCloseModal}>
-        <div style={{ padding: '1rem', background: 'white' }}>
-          <Typography variant="h6">Create New Playlist</Typography>
-          <TextField
-            label="Playlist Name"
-            value={newPlaylistName}
-            onChange={(e) => setNewPlaylistName(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Playlist Description"
-            value={newPlaylistDescription}
-            onChange={(e) => setNewPlaylistDescription(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" onClick={handleCreateButtonClick}>
-            Create
-          </Button>
-        </div>
-      </Modal>
     </div>
   );
 }

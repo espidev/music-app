@@ -123,8 +123,8 @@ export function apiGetPlaylistTracks(playlistId: string) {
   });
 }
 
-export function apiPostCreatePlaylist(playlistId: string, data: { name: string, description: string }) {
-  return axios.post(`/api/collection/${playlistId}/playlists`, data);
+export function apiPostCreatePlaylist(accountUuid: string, data: { name: string, description: string }) {
+  return axios.post(`/api/collection/${accountUuid}/playlists`, data);
 }
 
 export function apiGetCollectionGenres(accountUuid: string) {

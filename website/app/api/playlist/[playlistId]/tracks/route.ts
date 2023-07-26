@@ -8,7 +8,7 @@ import { getAPITrack } from "@/util/models/track";
 import { NextResponse } from "next/server";
 
 // GET /api/playlist/[playlistId]/tracks
-// get an playlist's track list
+// get a playlist's track list
 
 export async function GET(request: Request, { params }: { params: { albumId: string } }) {
   const albumId = params.albumId;
