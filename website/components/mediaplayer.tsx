@@ -16,8 +16,6 @@ import {
   SkipNextOutlined, 
   SkipPreviousOutlined, 
   QueueMusicOutlined, 
-  RepeatOn,
-  RepeatOneOn,
   RepeatOnOutlined,
   RepeatOneOnOutlined
 } from "@mui/icons-material";
@@ -25,10 +23,8 @@ import { useLoginStateContext } from "./loginstateprovider";
 import {styled} from "@mui/system"
 import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from './themes';
-import { Button, Menu, MenuItem, ListItemIcon, Typography, CssBaseline, Popover, Modal } from '@mui/material';
-import TrackTable from './trackTable';
+import { CssBaseline, Popover } from '@mui/material';
 import QueueTrackTable from './queueTrackTable';
-import { APITrack } from '@/util/models/track';
 
 const FooterPanel = styled('div')(({theme}) => ({
   padding: '1em',
@@ -125,18 +121,8 @@ export default function MediaPlayer() {
       <li className="media-clickable" onClick={() => appState.goToNextTrack()}><SkipNextOutlined  sx={{color}} /></li>
   );
   const QueueButton = (
-      <li className="media-clickable" onClick={() => {}}>
-        <Button
-          onClick={(event) => handleMenuClick(event, anchorRef)}
-          sx={{ borderRadius: '1em', padding: 0, margin: 0, width: "0.5em" }}
-          id="positioned-button"
-          aria-controls={queueOpen ? 'positioned-queue' : undefined}
-          aria-haspopup="true"
-          aria-expanded={queueOpen ? 'true' : undefined}
-          aria-selected={queueOpen}
-        >
-          <QueueMusicOutlined fontSize="small" sx={{color}}/>
-        </Button>
+      <li className="media-clickable" onClick={(event) => handleMenuClick(event, anchorRef)}>
+        <QueueMusicOutlined fontSize="small" sx={{color}}/>
 
         <Popover
           id="positioned-queue"
@@ -155,9 +141,7 @@ export default function MediaPlayer() {
         >
           <div style={{width: "30em", height: "30em", overflow: "hidden"}}>
             <QueueTrackTable/>
-            </div>
-          
-          
+          </div>
         </Popover>
 
         
