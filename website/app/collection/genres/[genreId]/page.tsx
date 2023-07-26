@@ -1,7 +1,6 @@
 "use client";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { APIGenre } from "@/util/models/genre";
-import { APIAlbum } from "@/util/models/album";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { APITrack } from "@/util/models/track";
 import TrackTable from "@/components/trackTable";
 import { useAppStateContext } from "@/components/appstateprovider";
-import AlbumCard from "@/components/albumCard";
 
 function formatDuration(duration: number): string {
   const minutes = Math.floor(duration / 60);
@@ -44,19 +42,7 @@ export default function CollectionGenrePage({
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
-  useEffect(() => {
-    // wait for credentials to be loaded
-    if (!loginState.loggedInStateValid) {
-      return;
-    }
-
-    // if not logged in, go to login page
-    if (!loginState.isLoggedIn) {
-      router.push("/login");
-      return;
-    }
-
-    // load genre content
+  const loadGenre = () => {
     apiGetGenre(genreId)
       .then((res) => {
         console.log(res.data);
@@ -77,7 +63,23 @@ export default function CollectionGenrePage({
         ]);
         console.error(err);
       });
-    // load albums
+  }
+
+  useEffect(() => {
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
+    }
+
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
+    // load genre content
+    loadGenre();
+    
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -153,6 +155,7 @@ export default function CollectionGenrePage({
             tracks={tracks}
             handleTrackClick={handleTrackClick}
             hideGenreCol={true}
+            handleTrackUpdate={loadGenre}
           />
         </Box>
       </Box>

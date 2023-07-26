@@ -9,6 +9,14 @@ export type APIPlaylist = {
   name: string
 };
 
+export type DBPlaylistTrack = {
+  account_uuid: string,
+  playlist_id: number,
+  track_id: number,
+  position: number,
+  added_on: string,
+};
+
 export function getAPIPlaylist(playlist: DBPlaylist) {
   if (!playlist) {
     return null;

@@ -50,7 +50,8 @@ export async function GET(request: Request, { params }: { params: { playlistId: 
       LEFT OUTER JOIN album ON track_to_album.album_id = album.id
       LEFT OUTER JOIN track_to_genre ON t.id = track_to_genre.track_id
       LEFT OUTER JOIN genre ON track_to_genre.genre_id = genre.id
-      FULL OUTER JOIN playlist ON playlist_tracks.playlist_id = playlist.id
+      FULL OUTER JOIN playlist_tracks AS pt2 ON t.id = pt2.track_id
+      FULL OUTER JOIN playlist ON pt2.playlist_id = playlist.id
       WHERE playlist_tracks.playlist_id = $1
       GROUP BY t.id, playlist_tracks.position
       ORDER BY playlist_tracks.position ASC

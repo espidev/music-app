@@ -131,6 +131,22 @@ export function apiPostCreatePlaylist(accountUuid: string, name: string) {
   });
 }
 
+export function apiPostPlaylistAddTrack(playlistId: string, trackId: number) {
+  return axios({
+    method: 'post',
+    url: `/api/playlist/${playlistId}/add-track`,
+    data: { trackId }
+  });
+}
+
+export function apiPostPlaylistRemoveTrack(playlistId: string, trackId: number) {
+  return axios({
+    method: 'post',
+    url: `/api/playlist/${playlistId}/remove-track`,
+    data: { trackId }
+  });
+}
+
 export function apiGetCollectionGenres(accountUuid: string) {
   return axios({
     method: 'get',
@@ -141,7 +157,7 @@ export function apiGetCollectionGenres(accountUuid: string) {
 export function apiGetGenre(genreId: string) {
   return axios({
     method: 'get',
-    url: `/api/genre/${genreId}/`
+    url: `/api/genre/${genreId}`
   });
 }
 

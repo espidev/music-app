@@ -40,6 +40,7 @@ function QueueTrackTableRow(props: {
   track: APITrack;
   handleTrackClick: (track: APITrack) => void;
   ranking: number;
+  handleTrackUpdate: () => void;
 }) {
   const router = useRouter();
   const appState = useAppStateContext();
@@ -132,7 +133,12 @@ function QueueTrackTableRow(props: {
           />
         </Button>
 
-        <TrackMenu track={track} anchorEl={menuAnchorEl} requestClose={handleMenuClose}/>
+        <TrackMenu 
+          track={track} 
+          anchorEl={menuAnchorEl} 
+          requestClose={handleMenuClose}
+          handleTrackUpdate={props.handleTrackUpdate}
+        />
 
       </TableCell>
     </StyledTableRow>
@@ -209,6 +215,7 @@ export default function QueueTrackTable() {
                 track={track}
                 handleTrackClick={handleTrackClick}
                 ranking={index + 1}
+                handleTrackUpdate={() => {}}
               />
             ))}
           </TableBody>

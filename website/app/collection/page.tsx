@@ -30,6 +30,17 @@ export default function CollectionPage() {
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
+  const loadTracks = () => {
+    apiGetCollectionTracks(loginState.loggedInUserUuid)
+      .then((res) => {
+        setTracks(res.data as APITrack[]);
+      })
+      .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
+        console.error(err);
+      });
+  };
+
   useEffect(() => {
     // wait for credentials to be loaded
     if (!loginState.loggedInStateValid) {
@@ -43,14 +54,7 @@ export default function CollectionPage() {
     }
 
     // load tracks
-    apiGetCollectionTracks(loginState.loggedInUserUuid)
-      .then((res) => {
-        setTracks(res.data as APITrack[]);
-      })
-      .catch(err => {
-        setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
-        console.error(err);
-      });
+    loadTracks();
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -99,7 +103,11 @@ export default function CollectionPage() {
 
         {/* Weird. paddingBottom works but not marginBottom. */}
         <Grid sx={{ paddingBottom: '5em' }}>
-          <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+          <TrackTable 
+            tracks={tracks} 
+            handleTrackClick={handleTrackClick}
+            handleTrackUpdate={loadTracks}
+          />
         </Grid>
       </StyledGrid>
     </ThemeProvider>

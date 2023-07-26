@@ -36,6 +36,22 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
+  const loadAlbum = () => {
+    apiGetAlbum(albumId)
+      .then(res => {
+          setAlbum(res.data as APIAlbum);
+
+          // Fetch and set the tracks
+          apiGetAlbumTracks(albumId).then(res_tracks => {
+            setTracks(res_tracks.data as APITrack[]);
+          })
+      })
+      .catch(err => {
+        setAlerts([...alerts, { severity: "error", message: "Error fetching artists, see console for details." }]);
+        console.error(err);
+      });
+  }
+
   useEffect(() => {
     // wait for credentials to be loaded
     if (!loginState.loggedInStateValid) {
@@ -49,19 +65,7 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
     }
 
     // load album content
-    apiGetAlbum(albumId)
-      .then(res => {
-          setAlbum(res.data as APIAlbum);
-
-          // Fetch and set the tracks
-          apiGetAlbumTracks(albumId).then(res_tracks => {
-            setTracks(res_tracks.data as APITrack[]);
-          })
-      })
-      .catch(err => {
-        setAlerts([...alerts, { severity: "error", message: "Error fetching artists, see console for details." }]);
-        console.error(err);
-      })
+    loadAlbum();
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -125,7 +129,11 @@ export default function CollectionAlbumPage({params} : {params: {albumId: string
           </div>
         </div>
 
-        <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+        <TrackTable 
+          tracks={tracks} 
+          handleTrackClick={handleTrackClick}
+          handleTrackUpdate={loadAlbum} 
+        />
       </Box>
     </div>
   );

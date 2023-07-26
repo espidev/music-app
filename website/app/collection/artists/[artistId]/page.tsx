@@ -46,19 +46,7 @@ export default function CollectionArtistPage({
   const [albums, setAlbums] = useState([] as APIAlbum[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
-  useEffect(() => {
-    // wait for credentials to be loaded
-    if (!loginState.loggedInStateValid) {
-      return;
-    }
-
-    // if not logged in, go to login page
-    if (!loginState.isLoggedIn) {
-      router.push("/login");
-      return;
-    }
-
-    // load artist content
+  const loadArtist = () => {
     apiGetArtist(artistId)
       .then((res) => {
         setArtist(res.data as APIArtist);
@@ -82,6 +70,22 @@ export default function CollectionArtistPage({
         ]);
         console.error(err);
       });
+  }
+
+  useEffect(() => {
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
+    }
+
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
+    // load artist content
+    loadArtist();
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -169,6 +173,7 @@ export default function CollectionArtistPage({
             tracks={tracks}
             handleTrackClick={handleTrackClick}
             hideArtistCol={true}
+            handleTrackUpdate={loadArtist}
           />
         </Box>
         <Box

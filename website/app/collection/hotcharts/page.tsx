@@ -33,19 +33,7 @@ export default function CollectionHotChartsPage() {
   const [albums, setAlbums] = useState([] as APIAlbum[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
-  useEffect(() => {
-    // wait for credentials to be loaded
-    if (!loginState.loggedInStateValid) {
-      return;
-    }
-
-    // if not logged in, go to login page
-    if (!loginState.isLoggedIn) {
-      router.push('/login');
-      return;
-    }
-
-    // load tracks
+  const loadTracks = () => {
     apiGetCollectionTracks(loginState.loggedInUserUuid)
       .then((res) => {
         // Only show top 10 tracks
@@ -60,6 +48,22 @@ export default function CollectionHotChartsPage() {
         setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
         console.error(err);
       });
+  };
+
+  useEffect(() => {
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
+    }
+
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+
+    // load tracks
+    loadTracks();
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -116,7 +120,12 @@ export default function CollectionHotChartsPage() {
 
         {/* Weird. paddingBottom works but not marginBottom. */}
         <Grid sx={{ paddingBottom: '5em' }}>
-          <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} showRankingCol={true} />
+          <TrackTable 
+            tracks={tracks} 
+            handleTrackClick={handleTrackClick} 
+            showRankingCol={true}
+            handleTrackUpdate={loadTracks} 
+          />
         </Grid>
       </StyledGrid>
     </ThemeProvider>

@@ -36,19 +36,7 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
   const [tracks, setTracks] = useState([] as APITrack[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
-  useEffect(() => {
-    // wait for credentials to be loaded
-    if (!loginState.loggedInStateValid) {
-      return;
-    }
-
-    // if not logged in, go to login page
-    if (!loginState.isLoggedIn) {
-      router.push('/login');
-      return;
-    }
-
-    // load playlist content
+  const loadPlaylistData = () => {
     apiGetPlaylist(playlistId)
       .then(res => {
         setPlaylist(res.data as APIPlaylist);
@@ -67,6 +55,22 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
         setAlerts([...alerts, { severity: "error", message: "Error fetching playlist, see console for details." }]);
         console.error(err);
       })
+  };
+
+  useEffect(() => {
+    // wait for credentials to be loaded
+    if (!loginState.loggedInStateValid) {
+      return;
+    }
+
+    // if not logged in, go to login page
+    if (!loginState.isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+
+    // load playlist content
+    loadPlaylistData();
   }, [loginState]);
 
   if (!loginState.loggedInStateValid) {
@@ -124,7 +128,11 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
           </div>
         </div>
 
-        <TrackTable tracks={tracks} handleTrackClick={handleTrackClick} />
+        <TrackTable 
+          tracks={tracks} 
+          handleTrackClick={handleTrackClick}
+          handleTrackUpdate={loadPlaylistData} 
+        />
       </Box>
     </div>
   );

@@ -22,7 +22,15 @@ const StyledTableRow = styled(TableRow)(
   })
 );
 
-function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITrack) => void, hideArtistCol?: boolean, hideGenreCol?: boolean, showRankingCol?: boolean, ranking?: number }) {
+function TrackTableRow(props: { 
+    track: APITrack, 
+    handleTrackClick: (track: APITrack) => void, 
+    hideArtistCol?: boolean, 
+    hideGenreCol?: boolean, 
+    showRankingCol?: boolean, 
+    ranking?: number,
+    handleTrackUpdate: () => void,
+  }) {
   const router = useRouter();
   const appState = useAppStateContext();
   
@@ -107,7 +115,12 @@ function TrackTableRow(props: { track: APITrack, handleTrackClick: (track: APITr
           <MoreVertOutlined fontSize="small" sx={{color: appState.theme === "dark" ? "whitesmoke" : "#000"}}/>
         </Button>
 
-        <TrackMenu track={track} anchorEl={menuAnchorEl} requestClose={handleMenuClose}/>
+        <TrackMenu 
+          track={track} 
+          anchorEl={menuAnchorEl} 
+          requestClose={handleMenuClose}
+          handleTrackUpdate={props.handleTrackUpdate}
+        />
       </TableCell>
     </StyledTableRow>
   );
@@ -118,7 +131,8 @@ export default function TrackTable(props: {
                                             handleTrackClick: (track: APITrack) => void,
                                             hideArtistCol?: boolean,
                                             hideGenreCol?: boolean,
-                                            showRankingCol?: boolean }) {
+                                            showRankingCol?: boolean,
+                                            handleTrackUpdate: () => void }) {
   const appState = useAppStateContext();
   const theme = appState.theme;
   const [sortedData, setSortedData] = useState(props.tracks);
@@ -261,6 +275,7 @@ export default function TrackTable(props: {
                 hideGenreCol={props.hideGenreCol}
                 showRankingCol={props.showRankingCol}
                 ranking={index + 1}
+                handleTrackUpdate={props.handleTrackUpdate}
               />
             ))}
           </TableBody>
