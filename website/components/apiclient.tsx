@@ -102,30 +102,6 @@ export function apiPostCollectionTracks(accountUuid: string, formData: FormData)
   })
 }
 
-export function apiGetCollectionPlaylists(accountUuid: string) {
-  return axios({
-    method: 'get',
-    url: `/api/collection/${accountUuid}/playlists`
-  });
-}
-
-export function apiGetPlaylist(playlistId: string) {
-  return axios({
-    method: 'get',
-    url: `/api/playlist/${playlistId}`
-  });
-}
-
-export function apiGetPlaylistTracks(playlistId: string) {
-  return axios({
-    method: 'get',
-    url: `/api/playlist/${playlistId}/tracks`
-  });
-}
-
-export function apiPostCreatePlaylist(playlistId: string, data: { name: string, description: string }) {
-  return axios.post(`/api/collection/${playlistId}/playlists`, data);
-}
 export function apiGetCollectionGenres(accountUuid: string) {
   return axios({
     method: 'get',
