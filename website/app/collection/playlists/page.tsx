@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { apiGetCollectionPlaylists, apiPostCreatePlaylist } from "@/components/apiclient";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import { useRouter } from "next/navigation";
@@ -9,9 +9,11 @@ import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { Typography, Grid, Modal, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PlaylistCard from "@/components/playlistCard";
 import CreatePlaylistDialog from "@/components/createPlaylistDialog";
+import { useAppStateContext } from "@/components/appstateprovider";
 
 export default function CollectionPlaylistsPage() {
   const loginState = useLoginStateContext();
+  const appState = useAppStateContext();
   const router = useRouter();
 
   const [playlists, setPlaylists] = useState([] as APIPlaylist[]);
@@ -74,7 +76,10 @@ export default function CollectionPlaylistsPage() {
       <Grid sx={{ padding: 2 }} container direction="row" justifyContent="space-between">
         <Typography variant="h6">Playlists</Typography>
 
-        <Button variant="outlined" onClick={handleCreatePlaylist}>
+        <Button variant="outlined" onClick={handleCreatePlaylist}
+          sx={{
+            color: appState.theme === "dark" ? "white" : "",
+            borderColor: appState.theme === "dark" ? "white" : ""}}>
           Create Playlist
         </Button>
       </Grid>

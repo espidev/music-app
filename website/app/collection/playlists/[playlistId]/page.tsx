@@ -108,7 +108,12 @@ export default function CollectionPlaylistPage({params} : {params: {playlistId: 
             <Typography variant="subtitle2">{tracks.length} {suffix} • {totalTime}</Typography>
             <Button 
               variant="outlined"  
-              style={{ width: '5vw', marginTop: '2em' }}
+              style={{
+                width: "5vw",
+                marginTop: "2em",
+                color: appState.theme === "dark" ? "white" : "",
+                borderColor: appState.theme === "dark" ? "white" : ""
+              }}
               onClick={() => {
                 appState.changeQueue(tracks, 0);
                 appState.playCurrentTrack();
