@@ -8,6 +8,7 @@ import { APIPlaylist } from "@/util/models/playlist";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
 import { Typography, Grid, Modal, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PlaylistCard from "@/components/playlistCard";
+import CreatePlaylistDialog from "@/components/createPlaylistDialog";
 
 export default function CollectionPlaylistsPage() {
   const loginState = useLoginStateContext();
@@ -17,7 +18,6 @@ export default function CollectionPlaylistsPage() {
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newPlaylistName, setNewPlaylistName] = useState('');
 
   const loadPlaylists = () => {
     apiGetCollectionPlaylists(loginState.loggedInUserUuid)
@@ -57,46 +57,19 @@ export default function CollectionPlaylistsPage() {
 
   const handleCloseModal = () => {
     setShowCreateModal(false);
-    setNewPlaylistName('');
   };
-
-  const handleCreateButtonClick = async () => {
-    try {
-      await apiPostCreatePlaylist(loginState.loggedInUserUuid, newPlaylistName);
-      loadPlaylists();
-      handleCloseModal();
-    } catch (error) {
-      setAlerts([...alerts, { severity: "error", message: "Error creating playlist, see console for details." }]);
-      console.error('Error creating playlist:', error);
-    }
-  };
-
-  // create playlist dialog
-  const createPlaylistDialog = (
-    <Dialog open={showCreateModal} onClose={handleCloseModal}>
-      <DialogTitle>Create New Playlist</DialogTitle>
-      <DialogContent>
-      <TextField
-          label="Playlist Name"
-          value={newPlaylistName}
-          onChange={(e) => setNewPlaylistName(e.target.value)}
-          fullWidth
-          autoFocus
-          margin="normal"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseModal}>Cancel</Button>
-        <Button onClick={handleCreateButtonClick}>Create</Button>
-      </DialogActions>
-    </Dialog>
-  );
 
   return (
     <Grid sx={{ position: 'absolute', width: 0.83 }}>
       <AlertComponent alerts={alerts} setAlerts={setAlerts} />
 
-      {createPlaylistDialog}
+      <CreatePlaylistDialog 
+        isOpen={showCreateModal} 
+        handleClose={handleCloseModal} 
+        alerts={alerts} 
+        setAlerts={setAlerts} 
+        refreshPlaylists={loadPlaylists}
+      />
 
       <Grid sx={{ padding: 2 }} container direction="row" justifyContent="space-between">
         <Typography variant="h6">Playlists</Typography>

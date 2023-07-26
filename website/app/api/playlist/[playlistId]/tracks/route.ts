@@ -23,12 +23,14 @@ export async function GET(request: Request, { params }: { params: { playlistId: 
 
   const playlistRes = await conn.query(`SELECT * FROM playlist WHERE playlist.id = $1 LIMIT 1`, [albumId]);
   if (playlistRes.rowCount < 1) {
+    await conn.end();
     return NextResponse.json({ error: "playlist not found" }, { status: 404 });
   }
 
   const dbPlaylist = playlistRes.rows[0] as DBPlaylist;
 
   if (tokenUuid !== dbPlaylist.account_uuid) {
+    await conn.end();
     return NextResponse.json({ error: "not authorized" }, { status: 401 });
   }
 

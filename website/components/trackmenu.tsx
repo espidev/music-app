@@ -3,6 +3,7 @@ import { AddOutlined, FavoriteBorderOutlined, FavoriteOutlined, PlaylistAddCheck
 import { Avatar, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
 import { useAppStateContext } from "./appstateprovider";
+import CreatePlaylistDialog from "./createPlaylistDialog";
 
 export default function TrackMenu(props: { track: APITrack, anchorEl: any, requestClose: any }) {
   const appState = useAppStateContext();
@@ -12,9 +13,11 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
   const addedToPlaylist = useState(false);
 
   const track = props.track;
+  const trackPlaylists = track.playlists;
 
   const [isPlaylistDialogOpen, setIsPlaylistDialogOpen] = useState(false);
-  
+  const [isCreatePlaylistDialogOpen, setIsCreatePlaylistDialogOpen] = useState(false);
+
   const handlePlaylistDialogClose = () => {
     setIsPlaylistDialogOpen(false);
   };
@@ -23,7 +26,12 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
     <Dialog onClose={handlePlaylistDialogClose} open={isPlaylistDialogOpen}>
       <DialogTitle>Select playlists for {track.name}</DialogTitle>
       <List sx={{ pt: 0 }}>
-        <ListItem disableGutters>
+
+        {
+          
+        }
+
+        <ListItem disableGutters onClick={() => setIsCreatePlaylistDialogOpen(true)}>
           <ListItemButton>
             <ListItemAvatar>
               <Avatar>
@@ -84,6 +92,14 @@ export default function TrackMenu(props: { track: APITrack, anchorEl: any, reque
       </MenuItem>
 
       {playlistDialog}
+
+      <CreatePlaylistDialog 
+        isOpen={isCreatePlaylistDialogOpen}
+        handleClose={() => setIsCreatePlaylistDialogOpen(false)} 
+        alerts={[]}
+        setAlerts={(alerts: any) => {}} 
+        refreshPlaylists={() => {}}
+      />
 
     </Menu>
   );

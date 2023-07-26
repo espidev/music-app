@@ -60,6 +60,7 @@ export async function POST(request: Request, { params }: { params: { accountUuid
 
   // Validate
   if (!name || name.trim() === "") {
+    await conn.end();
     return NextResponse.json({ error: "Playlist name must not be empty." }, { status: 400 });
   }
 
