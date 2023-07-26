@@ -2,7 +2,7 @@
 
 import AppHeader from '@/components/appheader';
 import AppSidebar from '@/components/appsidebar';
-import { AppStateProvider, useAppStateContext } from '@/components/appstateprovider';
+import { AppStateProvider } from '@/components/appstateprovider';
 import { LoginStateProvider } from '@/components/loginstateprovider';
 import MediaPlayer from '@/components/mediaplayer';
 import { CssBaseline } from '@mui/material';
