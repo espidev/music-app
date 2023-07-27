@@ -57,7 +57,7 @@ function TrackTableRow(props: {
           <></>
       }
 
-      <TableCell className="trackListPictureCell" sx={{ padding: 0}}>
+      <TableCell className="trackListPictureCell" sx={{ padding: 0 }}>
         <Grid
           sx={{
             padding: 0,

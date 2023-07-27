@@ -11,6 +11,7 @@ export type DBTrack = {
   uploaded_on: number
   create_year: number
   audio_length: number
+  num_of_times_played: number
 };
 
 export type APITrack = {
@@ -22,6 +23,7 @@ export type APITrack = {
   audio_src: string
   audio_length: number
   create_year: number
+  num_of_times_played: number
 
   // optional to be filled
   albums: APIAlbum[]
@@ -44,5 +46,6 @@ export function getAPITrack(track: DBTrack) {
     audio_src: `/api/track/${track.id}/stream`,
     create_year: track.create_year,
     audio_length: track.audio_length,
+    num_of_times_played: track.num_of_times_played,
   } as APITrack;
 }

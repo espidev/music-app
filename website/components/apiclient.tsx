@@ -190,3 +190,9 @@ export function apiPostCollectionRemoveFavouritesTrack(accountUuid: string, trac
     data: { trackId }
   });
 }
+export function apiGetCollectionHotCharts(accountUuid: string) {
+  return axios({
+    method: 'get',
+    url: `/api/collection/${accountUuid}/hotcharts`
+  });
+}

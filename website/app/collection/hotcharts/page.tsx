@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { apiGetCollectionTracks, apiGetCollectionTracksSearch } from "@/components/apiclient";
+import { apiGetCollectionHotCharts, apiGetCollectionTracks, apiGetCollectionTracksSearch } from "@/components/apiclient";
 import { useAppStateContext } from "@/components/appstateprovider";
 import { APITrack } from "@/util/models/track";
-import {Grid, TextField, Typography, InputAdornment, CssBaseline} from "@mui/material";
-import { Search } from "@mui/icons-material";
+import { Grid, Typography, CssBaseline } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useLoginStateContext } from "@/components/loginstateprovider";
 import AlertComponent, { AlertEntry } from "@/components/alerts";
@@ -13,8 +12,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from '@/components/themes';
 import {styled} from '@mui/system';
 import TrackTable from "@/components/trackTable";
-import { APIAlbum } from "@/util/models/album";
-import AlbumCard from "@/components/albumCard";
+import { APIArtist } from "@/util/models/artist";
+import ArtistCard from "@/components/artistCard";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   height: 1,
@@ -30,22 +29,20 @@ export default function CollectionHotChartsPage() {
   const color = theme === 'dark' ? 'white' : 'rgb(50, 50, 50)';
 
   const [tracks, setTracks] = useState([] as APITrack[]);
-  const [albums, setAlbums] = useState([] as APIAlbum[]);
+  const [artists, setArtists] = useState([] as APIArtist[]);
   const [alerts, setAlerts] = useState([] as AlertEntry[]);
 
   const loadTracks = () => {
-    apiGetCollectionTracks(loginState.loggedInUserUuid)
+    apiGetCollectionHotCharts(loginState.loggedInUserUuid)
       .then((res) => {
-        // Only show top 10 tracks
-        const topTracks = res.data.slice(0, Math.min(10, res.data?.length)) as APITrack[];
-        let topAlbums = topTracks.map((track: APITrack) => track.albums[0]);
-        topAlbums = topAlbums.filter((album: APIAlbum) => album !== undefined);
-        topAlbums = topAlbums.slice(0, Math.min(5, topAlbums.length));
-        setTracks(res.data.slice(0, Math.min(10, res.data?.length)) as APITrack[]);
-        setAlbums(topAlbums as APIAlbum[]);
+        const topTracks = res.data.top_tracks;
+        const topArtists = res.data.top_artists;
+
+        setTracks(topTracks);
+        setArtists(topArtists);
       })
       .catch(err => {
-        setAlerts([...alerts, { severity: "error", message: "Error fetching tracks, see console for details." }]);
+        setAlerts([...alerts, { severity: "error", message: "Error fetching hot charts, see console for details." }]);
         console.error(err);
       });
   };
@@ -75,22 +72,6 @@ export default function CollectionHotChartsPage() {
     appState.playCurrentTrack();
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Reset if empty
-    if (event.target.value === '') {
-        apiGetCollectionTracks(loginState.loggedInUserUuid)
-            .then((res) => {
-                setTracks(res.data as APITrack[]);
-            });
-        return;
-    }
-
-    // Call API to search for tracks
-    apiGetCollectionTracksSearch(loginState.loggedInUserUuid, event.target.value).then((res) => {
-      setTracks(res.data as APITrack[]);
-    });
-  }
-
   return (
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -99,22 +80,14 @@ export default function CollectionHotChartsPage() {
 
         <Grid sx={{ padding: 2, color: color }} container direction="row" justifyContent="space-between">
           <Typography variant="h6">Your Top Albums & Tracks</Typography>
-          <TextField id="Search" label="Search" variant="outlined" 
-            sx={{borderBlockColor: theme === "dark" ? "red" : "rgb(50, 50, 50)",}}
-            InputProps={{
-            startAdornment: (
-                <InputAdornment position="start" sx={{color: color}}>
-                  <Search />
-                </InputAdornment>
-            ),
-          }} onChange={handleSearch}/>
         </Grid>
 
         <Grid sx={{ display: "flex", padding: 2 }}>
-          {albums.map((album, index) => {
-            if (album)
-              return <AlbumCard album={album} key={index} />;
-          })}
+          {
+            artists.filter(artist => artist).map((artist, index) => (
+              <ArtistCard artist={artist} key={index} />
+            ))
+          }
         </Grid>
 
         {/* Weird. paddingBottom works but not marginBottom. */}
